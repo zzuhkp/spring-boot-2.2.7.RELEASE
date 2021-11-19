@@ -49,6 +49,7 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 
 	/**
 	 * Set the name of this registration. If not specified the bean name will be used.
+	 *
 	 * @param name the name of the registration
 	 */
 	public void setName(String name) {
@@ -59,6 +60,7 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 	/**
 	 * Sets if asynchronous operations are supported for this registration. If not
 	 * specified defaults to {@code true}.
+	 *
 	 * @param asyncSupported if async is supported
 	 */
 	public void setAsyncSupported(boolean asyncSupported) {
@@ -67,6 +69,7 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 
 	/**
 	 * Returns if asynchronous operations are supported for this registration.
+	 *
 	 * @return if async is supported
 	 */
 	public boolean isAsyncSupported() {
@@ -76,6 +79,7 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 	/**
 	 * Set init-parameters for this registration. Calling this method will replace any
 	 * existing init-parameters.
+	 *
 	 * @param initParameters the init parameters
 	 * @see #getInitParameters
 	 * @see #addInitParameter
@@ -87,6 +91,7 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 
 	/**
 	 * Returns a mutable Map of the registration init-parameters.
+	 *
 	 * @return the init parameters
 	 */
 	public Map<String, String> getInitParameters() {
@@ -95,7 +100,8 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 
 	/**
 	 * Add a single init-parameter, replacing any existing parameter with the same name.
-	 * @param name the init-parameter name
+	 *
+	 * @param name  the init-parameter name
 	 * @param value the init-parameter value
 	 */
 	public void addInitParameter(String name, String value) {
@@ -125,6 +131,7 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 	/**
 	 * Deduces the name for this registration. Will return user specified name or fallback
 	 * to convention based naming.
+	 *
 	 * @param value the object used for convention based names
 	 * @return the deduced name
 	 */

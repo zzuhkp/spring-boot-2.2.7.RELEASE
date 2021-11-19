@@ -52,8 +52,7 @@ class TomcatStarter implements ServletContainerInitializer {
 			for (ServletContextInitializer initializer : this.initializers) {
 				initializer.onStartup(servletContext);
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			this.startUpException = ex;
 			// Prevent Tomcat from logging and re-throwing when we know we can
 			// deal with it in the main thread, but log for information here.

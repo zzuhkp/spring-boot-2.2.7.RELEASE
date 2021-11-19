@@ -29,11 +29,11 @@ import org.springframework.util.StringUtils;
  * Base class for Servlet 3.0+ based registration beans.
  *
  * @author Phillip Webb
- * @since 1.4.0
  * @see ServletRegistrationBean
  * @see FilterRegistrationBean
  * @see DelegatingFilterProxyRegistrationBean
  * @see ServletListenerRegistrationBean
+ * @since 1.4.0
  */
 public abstract class RegistrationBean implements ServletContextInitializer, Ordered {
 
@@ -55,19 +55,24 @@ public abstract class RegistrationBean implements ServletContextInitializer, Ord
 
 	/**
 	 * Return a description of the registration. For example "Servlet resourceServlet"
+	 *
 	 * @return a description of the registration
 	 */
 	protected abstract String getDescription();
 
 	/**
+	 * 注册 bean
+	 * <p>
 	 * Register this bean with the servlet context.
-	 * @param description a description of the item being registered
+	 *
+	 * @param description    a description of the item being registered
 	 * @param servletContext the servlet context
 	 */
 	protected abstract void register(String description, ServletContext servletContext);
 
 	/**
 	 * Flag to indicate that the registration is enabled.
+	 *
 	 * @param enabled the enabled to set
 	 */
 	public void setEnabled(boolean enabled) {
@@ -76,6 +81,7 @@ public abstract class RegistrationBean implements ServletContextInitializer, Ord
 
 	/**
 	 * Return if the registration is enabled.
+	 *
 	 * @return if enabled (default {@code true})
 	 */
 	public boolean isEnabled() {
@@ -84,6 +90,7 @@ public abstract class RegistrationBean implements ServletContextInitializer, Ord
 
 	/**
 	 * Set the order of the registration bean.
+	 *
 	 * @param order the order
 	 */
 	public void setOrder(int order) {
@@ -92,6 +99,7 @@ public abstract class RegistrationBean implements ServletContextInitializer, Ord
 
 	/**
 	 * Get the order of the registration bean.
+	 *
 	 * @return the order
 	 */
 	@Override

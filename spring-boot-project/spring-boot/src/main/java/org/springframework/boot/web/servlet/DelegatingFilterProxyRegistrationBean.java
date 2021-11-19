@@ -45,11 +45,11 @@ import org.springframework.web.filter.DelegatingFilterProxy;
  * be used as the filter name if not otherwise specified.
  *
  * @author Phillip Webb
- * @since 1.4.0
  * @see ServletContextInitializer
  * @see ServletContext#addFilter(String, Filter)
  * @see FilterRegistrationBean
  * @see DelegatingFilterProxy
+ * @since 1.4.0
  */
 public class DelegatingFilterProxyRegistrationBean extends AbstractFilterRegistrationBean<DelegatingFilterProxy>
 		implements ApplicationContextAware {
@@ -61,12 +61,13 @@ public class DelegatingFilterProxyRegistrationBean extends AbstractFilterRegistr
 	/**
 	 * Create a new {@link DelegatingFilterProxyRegistrationBean} instance to be
 	 * registered with the specified {@link ServletRegistrationBean}s.
-	 * @param targetBeanName name of the target filter bean to look up in the Spring
-	 * application context (must not be {@code null}).
+	 *
+	 * @param targetBeanName           name of the target filter bean to look up in the Spring
+	 *                                 application context (must not be {@code null}).
 	 * @param servletRegistrationBeans associate {@link ServletRegistrationBean}s
 	 */
 	public DelegatingFilterProxyRegistrationBean(String targetBeanName,
-			ServletRegistrationBean<?>... servletRegistrationBeans) {
+												 ServletRegistrationBean<?>... servletRegistrationBeans) {
 		super(servletRegistrationBeans);
 		Assert.hasLength(targetBeanName, "TargetBeanName must not be null or empty");
 		this.targetBeanName = targetBeanName;

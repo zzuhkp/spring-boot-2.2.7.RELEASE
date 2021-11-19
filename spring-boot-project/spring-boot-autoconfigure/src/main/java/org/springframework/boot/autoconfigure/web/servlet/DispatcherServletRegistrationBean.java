@@ -16,13 +16,15 @@
 
 package org.springframework.boot.autoconfigure.web.servlet;
 
-import java.util.Collection;
-
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import java.util.Collection;
+
 /**
+ * DispatcherServlet 注册
+ * <p>
  * {@link ServletRegistrationBean} for the auto-configured {@link DispatcherServlet}. Both
  * registers the servlet and exposes {@link DispatcherServletPath} information.
  *
@@ -37,8 +39,9 @@ public class DispatcherServletRegistrationBean extends ServletRegistrationBean<D
 	/**
 	 * Create a new {@link DispatcherServletRegistrationBean} instance for the given
 	 * servlet and path.
+	 *
 	 * @param servlet the dispatcher servlet
-	 * @param path the dispatcher servlet path
+	 * @param path    the dispatcher servlet path
 	 */
 	public DispatcherServletRegistrationBean(DispatcherServlet servlet, String path) {
 		super(servlet);

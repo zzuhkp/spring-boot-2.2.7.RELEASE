@@ -24,6 +24,8 @@ import org.springframework.web.SpringServletContainerInitializer;
 import org.springframework.web.WebApplicationInitializer;
 
 /**
+ * 容器初始化回调接口
+ * <p>
  * Interface used to configure a Servlet 3.0+ {@link ServletContext context}
  * programmatically. Unlike {@link WebApplicationInitializer}, classes that implement this
  * interface (and do not implement {@link WebApplicationInitializer}) will <b>not</b> be
@@ -37,18 +39,21 @@ import org.springframework.web.WebApplicationInitializer;
  * For configuration examples see {@link WebApplicationInitializer}.
  *
  * @author Phillip Webb
- * @since 1.4.0
  * @see WebApplicationInitializer
+ * @since 1.4.0
  */
 @FunctionalInterface
 public interface ServletContextInitializer {
 
 	/**
+	 * 使用给定的 ServletContext 配置 Servlet、Filter、ServletContextListener 等等
+	 * <p>
 	 * Configure the given {@link ServletContext} with any servlets, filters, listeners
 	 * context-params and attributes necessary for initialization.
+	 *
 	 * @param servletContext the {@code ServletContext} to initialize
 	 * @throws ServletException if any call against the given {@code ServletContext}
-	 * throws a {@code ServletException}
+	 *                          throws a {@code ServletException}
 	 */
 	void onStartup(ServletContext servletContext) throws ServletException;
 
