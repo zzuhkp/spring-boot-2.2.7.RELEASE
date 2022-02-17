@@ -19,11 +19,13 @@ package org.springframework.boot.web.reactive.context;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
+ * 基于 Reactive 的可配置的 Web 环境变量
+ *
  * Specialization of {@link ConfigurableEnvironment} for reactive application contexts.
  *
  * @author Phillip Webb
- * @since 2.0.0
  * @see ConfigurableReactiveWebApplicationContext#getEnvironment()
+ * @since 2.0.0
  */
 public interface ConfigurableReactiveWebEnvironment extends ConfigurableEnvironment {
 

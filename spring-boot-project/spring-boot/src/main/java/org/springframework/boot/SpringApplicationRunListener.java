@@ -22,6 +22,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 
 /**
+ * SpringApplication 监听器，实现类需要定义参数类型分别为 SpringApplication 和 String[] 的构造方法
+ *
  * Listener for the {@link SpringApplication} {@code run} method.
  * {@link SpringApplicationRunListener}s are loaded via the {@link SpringFactoriesLoader}
  * and should declare a public constructor that accepts a {@link SpringApplication}

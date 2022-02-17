@@ -170,6 +170,9 @@ public class SpringApplication {
 
 	private static final Log logger = LogFactory.getLog(SpringApplication.class);
 
+	/**
+	 * 主要的配置类，一般为标注了 @SpringAppliction 的类
+	 */
 	private Set<Class<?>> primarySources;
 
 	private Set<String> sources = new LinkedHashSet<>();
@@ -183,20 +186,32 @@ public class SpringApplication {
 
 	private boolean logStartupInfo = true;
 
+	/**
+	 * 是否将 #run 方法中的参数作为属性源
+	 */
 	private boolean addCommandLineProperties = true;
 
 	private boolean addConversionService = true;
 
 	private Banner banner;
 
+	/**
+	 * 资源加载器
+	 */
 	private ResourceLoader resourceLoader;
 
 	private BeanNameGenerator beanNameGenerator;
 
+	/**
+	 * 环境变量
+	 */
 	private ConfigurableEnvironment environment;
 
 	private Class<? extends ConfigurableApplicationContext> applicationContextClass;
 
+	/**
+	 * web 应用类型
+	 */
 	private WebApplicationType webApplicationType;
 
 	private boolean headless = true;
@@ -213,8 +228,14 @@ public class SpringApplication {
 	 */
 	private List<ApplicationListener<?>> listeners;
 
+	/**
+	 * 默认的属性
+	 */
 	private Map<String, Object> defaultProperties;
 
+	/**
+	 * 附加的 profile
+	 */
 	private Set<String> additionalProfiles = new HashSet<>();
 
 	private boolean allowBeanDefinitionOverriding;
@@ -326,7 +347,7 @@ public class SpringApplication {
 	}
 
 	private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners listeners,
-													   ApplicationArguments applicationArguments) {
+			ApplicationArguments applicationArguments) {
 		// Create and configure the environment
 		ConfigurableEnvironment environment = getOrCreateEnvironment();
 		configureEnvironment(environment, applicationArguments.getSourceArgs());
@@ -353,7 +374,7 @@ public class SpringApplication {
 	}
 
 	private void prepareContext(ConfigurableApplicationContext context, ConfigurableEnvironment environment,
-								SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
+			SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
 		context.setEnvironment(environment);
 		postProcessApplicationContext(context);
 		applyInitializers(context);
@@ -393,11 +414,20 @@ public class SpringApplication {
 		}
 	}
 
+	/**
+	 * 设置 headless 系统属性
+	 */
 	private void configureHeadlessProperty() {
 		System.setProperty(SYSTEM_PROPERTY_JAVA_AWT_HEADLESS,
 				System.getProperty(SYSTEM_PROPERTY_JAVA_AWT_HEADLESS, Boolean.toString(this.headless)));
 	}
 
+	/**
+	 * 获取 spring.factories 文件中 SpringApplicationRunListener 实现类组成的 SpringApplicationRunListeners
+	 *
+	 * @param args
+	 * @return
+	 */
 	private SpringApplicationRunListeners getRunListeners(String[] args) {
 		Class<?>[] types = new Class<?>[]{SpringApplication.class, String[].class};
 		return new SpringApplicationRunListeners(logger,
@@ -446,7 +476,7 @@ public class SpringApplication {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> List<T> createSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes,
-													   ClassLoader classLoader, Object[] args, Set<String> names) {
+			ClassLoader classLoader, Object[] args, Set<String> names) {
 		List<T> instances = new ArrayList<>(names.size());
 		for (String name : names) {
 			try {
@@ -462,6 +492,11 @@ public class SpringApplication {
 		return instances;
 	}
 
+	/**
+	 * 获取或创建环境变量
+	 *
+	 * @return
+	 */
 	private ConfigurableEnvironment getOrCreateEnvironment() {
 		if (this.environment != null) {
 			return this.environment;
@@ -477,6 +512,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 环境配置
+	 *
 	 * Template method delegating to
 	 * {@link #configurePropertySources(ConfigurableEnvironment, String[])} and
 	 * {@link #configureProfiles(ConfigurableEnvironment, String[])} in that order.
@@ -498,6 +535,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 配置当前应用环境中的属性源
+	 *
 	 * Add, remove or re-order any {@link PropertySource}s in this application's
 	 * environment.
 	 *
@@ -526,6 +565,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 配置当前应用环境中激活的 profile
+	 *
 	 * Configure which profiles are active (or active by default) for this application
 	 * environment. Additional profiles may be activated during configuration file
 	 * processing via the {@code spring.profiles.active} property.
@@ -814,7 +855,7 @@ public class SpringApplication {
 	}
 
 	private void handleRunFailure(ConfigurableApplicationContext context, Throwable exception,
-								  Collection<SpringBootExceptionReporter> exceptionReporters, SpringApplicationRunListeners listeners) {
+			Collection<SpringBootExceptionReporter> exceptionReporters, SpringApplicationRunListeners listeners) {
 		try {
 			try {
 				handleExitCode(context, exception);

@@ -27,6 +27,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.ReflectionUtils;
 
 /**
+ * SpringApplicationRunListener 集合
+ *
  * A collection of {@link SpringApplicationRunListener}.
  *
  * @author Phillip Webb
@@ -88,15 +90,13 @@ class SpringApplicationRunListeners {
 			Throwable exception) {
 		try {
 			listener.failed(context, exception);
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			if (exception == null) {
 				ReflectionUtils.rethrowRuntimeException(ex);
 			}
 			if (this.log.isDebugEnabled()) {
 				this.log.error("Error handling failed", ex);
-			}
-			else {
+			} else {
 				String message = ex.getMessage();
 				message = (message != null) ? message : "no error message";
 				this.log.warn("Error handling failed (" + message + ")");

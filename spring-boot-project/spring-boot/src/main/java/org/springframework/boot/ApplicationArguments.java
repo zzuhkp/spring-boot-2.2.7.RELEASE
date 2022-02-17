@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * SpringApplication#run 方法参数
+ *
  * Provides access to the arguments that were used to run a {@link SpringApplication}.
  *
  * @author Phillip Webb
