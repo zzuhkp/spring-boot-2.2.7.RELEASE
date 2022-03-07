@@ -16,13 +16,6 @@
 
 package org.springframework.boot.context.properties.source;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.function.Function;
-
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
@@ -31,7 +24,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.util.ConcurrentReferenceHashMap.ReferenceType;
 
+import java.util.*;
+import java.util.function.Function;
+
 /**
+ * MutablePropertySources 适配为 ConfigurationPropertySource
+ * <p>
  * Adapter to convert Spring's {@link MutablePropertySources} to
  * {@link ConfigurationPropertySource ConfigurationPropertySources}.
  *
@@ -54,6 +52,12 @@ class SpringConfigurationPropertySources implements Iterable<ConfigurationProper
 		return new SourcesIterator(this.sources.iterator(), this::adapt);
 	}
 
+	/**
+	 * 适配
+	 *
+	 * @param source
+	 * @return
+	 */
 	private ConfigurationPropertySource adapt(PropertySource<?> source) {
 		ConfigurationPropertySource result = this.cache.get(source);
 		// Most PropertySources test equality only using the source name, so we need to
@@ -75,7 +79,7 @@ class SpringConfigurationPropertySources implements Iterable<ConfigurationProper
 		private final Function<PropertySource<?>, ConfigurationPropertySource> adapter;
 
 		SourcesIterator(Iterator<PropertySource<?>> iterator,
-				Function<PropertySource<?>, ConfigurationPropertySource> adapter) {
+						Function<PropertySource<?>, ConfigurationPropertySource> adapter) {
 			this.iterators = new ArrayDeque<>(4);
 			this.iterators.push(iterator);
 			this.adapter = adapter;

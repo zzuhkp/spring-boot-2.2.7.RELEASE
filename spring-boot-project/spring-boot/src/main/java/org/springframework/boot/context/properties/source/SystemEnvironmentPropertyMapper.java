@@ -16,11 +16,13 @@
 
 package org.springframework.boot.context.properties.source;
 
-import java.util.Locale;
-
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName.Form;
 
+import java.util.Locale;
+
 /**
+ * 系统变量属性映射
+ * <p>
  * {@link PropertyMapper} for system environment variables. Names are mapped by removing
  * invalid characters, converting to lower case and replacing "{@code _}" with
  * "{@code .}". For example, "{@code SERVER_PORT}" is mapped to "{@code server.port}". In
@@ -41,10 +43,10 @@ final class SystemEnvironmentPropertyMapper implements PropertyMapper {
 		String name = convertName(configurationPropertyName);
 		String legacyName = convertLegacyName(configurationPropertyName);
 		if (name.equals(legacyName)) {
-			return new PropertyMapping[] { new PropertyMapping(name, configurationPropertyName) };
+			return new PropertyMapping[]{new PropertyMapping(name, configurationPropertyName)};
 		}
-		return new PropertyMapping[] { new PropertyMapping(name, configurationPropertyName),
-				new PropertyMapping(legacyName, configurationPropertyName) };
+		return new PropertyMapping[]{new PropertyMapping(name, configurationPropertyName),
+				new PropertyMapping(legacyName, configurationPropertyName)};
 	}
 
 	@Override
@@ -53,22 +55,34 @@ final class SystemEnvironmentPropertyMapper implements PropertyMapper {
 		if (name == null || name.isEmpty()) {
 			return NO_MAPPINGS;
 		}
-		return new PropertyMapping[] { new PropertyMapping(propertySourceName, name) };
+		return new PropertyMapping[]{new PropertyMapping(propertySourceName, name)};
 	}
 
 	private ConfigurationPropertyName convertName(String propertySourceName) {
 		try {
 			return ConfigurationPropertyName.adapt(propertySourceName, '_', this::processElementValue);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return null;
 		}
 	}
 
+	/**
+	 * 转换名称
+	 *
+	 * @param name
+	 * @return
+	 */
 	private String convertName(ConfigurationPropertyName name) {
 		return convertName(name, name.getNumberOfElements());
 	}
 
+	/**
+	 * 转换名称
+	 *
+	 * @param name
+	 * @param numberOfElements
+	 * @return
+	 */
 	private String convertName(ConfigurationPropertyName name, int numberOfElements) {
 		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < numberOfElements; i++) {
@@ -80,6 +94,12 @@ final class SystemEnvironmentPropertyMapper implements PropertyMapper {
 		return result.toString();
 	}
 
+	/**
+	 * 转换名称
+	 *
+	 * @param name
+	 * @return
+	 */
 	private String convertLegacyName(ConfigurationPropertyName name) {
 		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < name.getNumberOfElements(); i++) {
@@ -91,6 +111,12 @@ final class SystemEnvironmentPropertyMapper implements PropertyMapper {
 		return result.toString();
 	}
 
+	/**
+	 * 转换名称
+	 *
+	 * @param element
+	 * @return
+	 */
 	private Object convertLegacyNameElement(String element) {
 		return element.replace('-', '_').toUpperCase(Locale.ENGLISH);
 	}

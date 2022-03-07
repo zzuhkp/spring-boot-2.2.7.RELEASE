@@ -21,21 +21,24 @@ import org.springframework.http.client.ClientHttpRequestInitializer;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * ClientHttpRequest 自定义
+ *
  * Callback interface that can be used to customize the {@link ClientHttpRequest} sent
  * from a {@link RestTemplate}.
  *
  * @param <T> the {@link ClientHttpRequest} type
  * @author Ilya Lukyanovich
  * @author Phillip Webb
- * @since 2.2.0
  * @see RestTemplateBuilder
  * @see ClientHttpRequestInitializer
+ * @since 2.2.0
  */
 @FunctionalInterface
 public interface RestTemplateRequestCustomizer<T extends ClientHttpRequest> {
 
 	/**
 	 * Customize the specified {@link ClientHttpRequest}.
+	 *
 	 * @param request the request to customize
 	 */
 	void customize(T request);

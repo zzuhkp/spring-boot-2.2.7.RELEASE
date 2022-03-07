@@ -21,20 +21,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.Manifest;
 
 /**
+ * 文件系统 Archive
+ * <p>
  * {@link Archive} implementation backed by an exploded archive directory.
  *
  * @author Phillip Webb
@@ -45,16 +37,26 @@ public class ExplodedArchive implements Archive {
 
 	private static final Set<String> SKIPPED_NAMES = new HashSet<>(Arrays.asList(".", ".."));
 
+	/**
+	 * 根目录
+	 */
 	private final File root;
 
 	private final boolean recursive;
 
+	/**
+	 * MANIFEST 文件
+	 */
 	private File manifestFile;
 
+	/**
+	 * MANIFEST 文件
+	 */
 	private Manifest manifest;
 
 	/**
 	 * Create a new {@link ExplodedArchive} instance.
+	 *
 	 * @param root the root folder
 	 */
 	public ExplodedArchive(File root) {
@@ -63,11 +65,12 @@ public class ExplodedArchive implements Archive {
 
 	/**
 	 * Create a new {@link ExplodedArchive} instance.
-	 * @param root the root folder
+	 *
+	 * @param root      the root folder
 	 * @param recursive if recursive searching should be used to locate the manifest.
-	 * Defaults to {@code true}, folders with a large tree might want to set this to
-	 * {@code
-	 * false}.
+	 *                  Defaults to {@code true}, folders with a large tree might want to set this to
+	 *                  {@code
+	 *                  false}.
 	 */
 	public ExplodedArchive(File root, boolean recursive) {
 		if (!root.exists() || !root.isDirectory()) {
@@ -78,6 +81,12 @@ public class ExplodedArchive implements Archive {
 		this.manifestFile = getManifestFile(root);
 	}
 
+	/**
+	 * 获取根目录下的 MANIFEST 文件
+	 *
+	 * @param root
+	 * @return
+	 */
 	private File getManifestFile(File root) {
 		File metaInf = new File(root, "META-INF");
 		return new File(metaInf, "MANIFEST.MF");
@@ -114,6 +123,13 @@ public class ExplodedArchive implements Archive {
 		return new FileEntryIterator(this.root, this.recursive);
 	}
 
+	/**
+	 * 获取嵌套的 Archive
+	 *
+	 * @param entry
+	 * @return
+	 * @throws IOException
+	 */
 	protected Archive getNestedArchive(Entry entry) throws IOException {
 		File file = ((FileEntry) entry).getFile();
 		return (file.isDirectory() ? new ExplodedArchive(file) : new JarFileArchive(file));
@@ -123,8 +139,7 @@ public class ExplodedArchive implements Archive {
 	public String toString() {
 		try {
 			return getUrl().toString();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return "exploded archive";
 		}
 	}
@@ -136,10 +151,16 @@ public class ExplodedArchive implements Archive {
 
 		private final Comparator<File> entryComparator = new EntryComparator();
 
+		/**
+		 * 根目录
+		 */
 		private final File root;
 
 		private final boolean recursive;
 
+		/**
+		 * 文件列表
+		 */
 		private final Deque<Iterator<File>> stack = new LinkedList<>();
 
 		private File current;
@@ -170,6 +191,12 @@ public class ExplodedArchive implements Archive {
 			return new FileEntry(name, file);
 		}
 
+		/**
+		 * 文件列表
+		 *
+		 * @param file
+		 * @return
+		 */
 		private Iterator<File> listFiles(File file) {
 			File[] files = file.listFiles();
 			if (files == null) {
@@ -198,6 +225,8 @@ public class ExplodedArchive implements Archive {
 		}
 
 		/**
+		 * File 比较
+		 * <p>
 		 * {@link Comparator} that orders {@link File} entries by their absolute paths.
 		 */
 		private static class EntryComparator implements Comparator<File> {
@@ -212,12 +241,20 @@ public class ExplodedArchive implements Archive {
 	}
 
 	/**
+	 * 文件
+	 * <p>
 	 * {@link Entry} backed by a File.
 	 */
 	private static class FileEntry implements Entry {
 
+		/**
+		 * 文件名称
+		 */
 		private final String name;
 
+		/**
+		 * 文件
+		 */
 		private final File file;
 
 		FileEntry(String name, File file) {

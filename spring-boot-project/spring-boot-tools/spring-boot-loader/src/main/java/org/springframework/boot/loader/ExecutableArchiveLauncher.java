@@ -16,12 +16,12 @@
 
 package org.springframework.boot.loader;
 
+import org.springframework.boot.loader.archive.Archive;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.Manifest;
-
-import org.springframework.boot.loader.archive.Archive;
 
 /**
  * Base class for executable archive {@link Launcher}s.
@@ -37,8 +37,7 @@ public abstract class ExecutableArchiveLauncher extends Launcher {
 	public ExecutableArchiveLauncher() {
 		try {
 			this.archive = createArchive();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new IllegalStateException(ex);
 		}
 	}
@@ -74,6 +73,7 @@ public abstract class ExecutableArchiveLauncher extends Launcher {
 	/**
 	 * Determine if the specified {@link JarEntry} is a nested item that should be added
 	 * to the classpath. The method is called once for each entry.
+	 *
 	 * @param entry the jar entry
 	 * @return {@code true} if the entry is a nested item (jar or folder)
 	 */
@@ -82,6 +82,7 @@ public abstract class ExecutableArchiveLauncher extends Launcher {
 	/**
 	 * Called to post-process archive entries before they are used. Implementations can
 	 * add and remove entries.
+	 *
 	 * @param archives the archives
 	 * @throws Exception if the post processing fails
 	 */

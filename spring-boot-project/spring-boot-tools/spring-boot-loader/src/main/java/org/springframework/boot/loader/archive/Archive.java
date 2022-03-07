@@ -28,27 +28,36 @@ import org.springframework.boot.loader.Launcher;
  * An archive that can be launched by the {@link Launcher}.
  *
  * @author Phillip Webb
- * @since 1.0.0
  * @see JarFileArchive
+ * @since 1.0.0
  */
 public interface Archive extends Iterable<Archive.Entry>, AutoCloseable {
 
 	/**
+	 * 获取可以加载 Archive 的 URL
+	 * <p>
 	 * Returns a URL that can be used to load the archive.
+	 *
 	 * @return the archive URL
 	 * @throws MalformedURLException if the URL is malformed
 	 */
 	URL getUrl() throws MalformedURLException;
 
 	/**
+	 * 获取 Archive 清单
+	 * <p>
 	 * Returns the manifest of the archive.
+	 *
 	 * @return the manifest
 	 * @throws IOException if the manifest cannot be read
 	 */
 	Manifest getManifest() throws IOException;
 
 	/**
+	 * 获取嵌套的 Archive
+	 * <p>
 	 * Returns nested {@link Archive}s for entries that match the specified filter.
+	 *
 	 * @param filter the filter used to limit entries
 	 * @return nested archives
 	 * @throws IOException if nested archives cannot be read
@@ -56,7 +65,10 @@ public interface Archive extends Iterable<Archive.Entry>, AutoCloseable {
 	List<Archive> getNestedArchives(EntryFilter filter) throws IOException;
 
 	/**
+	 * 关闭资源
+	 * <p>
 	 * Closes the {@code Archive}, releasing any open resources.
+	 *
 	 * @throws Exception if an error occurs during close processing
 	 * @since 2.2.0
 	 */
@@ -71,13 +83,19 @@ public interface Archive extends Iterable<Archive.Entry>, AutoCloseable {
 	interface Entry {
 
 		/**
+		 * 是否表示目录
+		 * <p>
 		 * Returns {@code true} if the entry represents a directory.
+		 *
 		 * @return if the entry is a directory
 		 */
 		boolean isDirectory();
 
 		/**
+		 * 名称
+		 * <p>
 		 * Returns the name of the entry.
+		 *
 		 * @return the name of the entry
 		 */
 		String getName();
@@ -85,12 +103,17 @@ public interface Archive extends Iterable<Archive.Entry>, AutoCloseable {
 	}
 
 	/**
+	 * Entity 过滤
+	 * <p>
 	 * Strategy interface to filter {@link Entry Entries}.
 	 */
 	interface EntryFilter {
 
 		/**
+		 * 是否匹配
+		 * <p>
 		 * Apply the jar entry filter.
+		 *
 		 * @param entry the entry to filter
 		 * @return {@code true} if the filter matches
 		 */

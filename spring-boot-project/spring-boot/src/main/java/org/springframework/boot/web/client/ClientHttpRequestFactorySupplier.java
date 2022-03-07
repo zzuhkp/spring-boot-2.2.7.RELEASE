@@ -27,6 +27,8 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.ClassUtils;
 
 /**
+ * ClientHttpRequestFactory 获取
+ * <p>
  * A supplier for {@link ClientHttpRequestFactory} that detects the preferred candidate
  * based on the available implementations on the classpath.
  *

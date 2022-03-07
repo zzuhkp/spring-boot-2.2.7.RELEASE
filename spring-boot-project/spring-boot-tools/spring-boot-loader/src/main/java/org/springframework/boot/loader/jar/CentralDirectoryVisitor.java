@@ -19,6 +19,8 @@ package org.springframework.boot.loader.jar;
 import org.springframework.boot.loader.data.RandomAccessData;
 
 /**
+ * 由 CentralDirectoryParser 触发的访问器
+ * <p>
  * Callback visitor triggered by {@link CentralDirectoryParser}.
  *
  * @author Phillip Webb

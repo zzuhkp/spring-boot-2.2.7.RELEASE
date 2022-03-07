@@ -19,6 +19,8 @@ package org.springframework.boot.context.properties.source;
 import org.springframework.util.Assert;
 
 /**
+ * 支持别名的 ConfigurationPropertySource
+ *
  * A {@link ConfigurationPropertySource} supporting name aliases.
  *
  * @author Phillip Webb

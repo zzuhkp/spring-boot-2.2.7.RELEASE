@@ -25,28 +25,34 @@ import org.springframework.boot.origin.OriginTrackedValue;
  *
  * @author Phillip Webb
  * @author Madhura Bhave
- * @since 2.0.0
  * @see ConfigurationPropertyName
  * @see OriginTrackedValue
  * @see #getConfigurationProperty(ConfigurationPropertyName)
+ * @since 2.0.0
  */
 @FunctionalInterface
 public interface ConfigurationPropertySource {
 
 	/**
+	 * 获取配置属性
+	 * <p>
 	 * Return a single {@link ConfigurationProperty} from the source or {@code null} if no
 	 * property can be found.
+	 *
 	 * @param name the name of the property (must not be {@code null})
 	 * @return the associated object or {@code null}.
 	 */
 	ConfigurationProperty getConfigurationProperty(ConfigurationPropertyName name);
 
 	/**
+	 * 指定名称的属性状态
+	 * <p>
 	 * Returns if the source contains any descendants of the specified name. May return
 	 * {@link ConfigurationPropertyState#PRESENT} or
 	 * {@link ConfigurationPropertyState#ABSENT} if an answer can be determined or
 	 * {@link ConfigurationPropertyState#UNKNOWN} if it's not possible to determine a
 	 * definitive answer.
+	 *
 	 * @param name the name to check
 	 * @return if the source contains any descendants
 	 */
@@ -55,8 +61,11 @@ public interface ConfigurationPropertySource {
 	}
 
 	/**
+	 * 过滤 ConfigurationPropertySource
+	 * <p>
 	 * Return a filtered variant of this source, containing only names that match the
 	 * given {@link Predicate}.
+	 *
 	 * @param filter the filter to match
 	 * @return a filtered {@link ConfigurationPropertySource} instance
 	 */
@@ -65,7 +74,10 @@ public interface ConfigurationPropertySource {
 	}
 
 	/**
+	 * 支持别名的 ConfigurationPropertySource
+	 * <p>
 	 * Return a variant of this source that supports name aliases.
+	 *
 	 * @param aliases a function that returns a stream of aliases for any given name
 	 * @return a {@link ConfigurationPropertySource} instance supporting name aliases
 	 */
@@ -75,6 +87,7 @@ public interface ConfigurationPropertySource {
 
 	/**
 	 * Return the underlying source that is actually providing the properties.
+	 *
 	 * @return the underlying property source or {@code null}.
 	 */
 	default Object getUnderlyingSource() {

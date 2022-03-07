@@ -16,25 +16,18 @@
 
 package org.springframework.boot.loader.archive;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import org.springframework.boot.loader.jar.JarFile;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.Manifest;
 
-import org.springframework.boot.loader.jar.JarFile;
-
 /**
+ * 基于 JarFile 的 Archive
+ * <p>
  * {@link Archive} implementation backed by a {@link JarFile}.
  *
  * @author Phillip Webb
@@ -47,10 +40,19 @@ public class JarFileArchive implements Archive {
 
 	private static final int BUFFER_SIZE = 32 * 1024;
 
+	/**
+	 * jar 文件
+	 */
 	private final JarFile jarFile;
 
+	/**
+	 * 表示 jar 文件的 url
+	 */
 	private URL url;
 
+	/**
+	 * 临时目录
+	 */
 	private File tempUnpackFolder;
 
 	public JarFileArchive(File file) throws IOException {
@@ -108,8 +110,7 @@ public class JarFileArchive implements Archive {
 		try {
 			JarFile jarFile = this.jarFile.getNestedJarFile(jarEntry);
 			return new JarFileArchive(jarFile);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new IllegalStateException("Failed to get nested archive for entry " + entry.getName(), ex);
 		}
 	}
@@ -126,6 +127,11 @@ public class JarFileArchive implements Archive {
 		return new JarFileArchive(file, file.toURI().toURL());
 	}
 
+	/**
+	 * 获取临时目录
+	 *
+	 * @return
+	 */
 	private File getTempUnpackFolder() {
 		if (this.tempUnpackFolder == null) {
 			File tempFolder = new File(System.getProperty("java.io.tmpdir"));
@@ -134,6 +140,12 @@ public class JarFileArchive implements Archive {
 		return this.tempUnpackFolder;
 	}
 
+	/**
+	 * 创建目录
+	 *
+	 * @param parent
+	 * @return
+	 */
 	private File createUnpackFolder(File parent) {
 		int attempts = 0;
 		while (attempts++ < 1000) {
@@ -146,9 +158,16 @@ public class JarFileArchive implements Archive {
 		throw new IllegalStateException("Failed to create unpack folder in directory '" + parent + "'");
 	}
 
+	/**
+	 * 解包
+	 *
+	 * @param entry
+	 * @param file
+	 * @throws IOException
+	 */
 	private void unpack(JarEntry entry, File file) throws IOException {
 		try (InputStream inputStream = this.jarFile.getInputStream(entry);
-				OutputStream outputStream = new FileOutputStream(file)) {
+			 OutputStream outputStream = new FileOutputStream(file)) {
 			byte[] buffer = new byte[BUFFER_SIZE];
 			int bytesRead;
 			while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -162,8 +181,7 @@ public class JarFileArchive implements Archive {
 	public String toString() {
 		try {
 			return getUrl().toString();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return "jar archive";
 		}
 	}

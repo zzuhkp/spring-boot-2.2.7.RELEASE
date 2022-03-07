@@ -346,8 +346,15 @@ public class SpringApplication {
 		return context;
 	}
 
+	/**
+	 * 准备环境
+	 *
+	 * @param listeners
+	 * @param applicationArguments
+	 * @return
+	 */
 	private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners listeners,
-			ApplicationArguments applicationArguments) {
+													   ApplicationArguments applicationArguments) {
 		// Create and configure the environment
 		ConfigurableEnvironment environment = getOrCreateEnvironment();
 		configureEnvironment(environment, applicationArguments.getSourceArgs());
@@ -374,7 +381,7 @@ public class SpringApplication {
 	}
 
 	private void prepareContext(ConfigurableApplicationContext context, ConfigurableEnvironment environment,
-			SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
+								SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
 		context.setEnvironment(environment);
 		postProcessApplicationContext(context);
 		applyInitializers(context);
@@ -476,7 +483,7 @@ public class SpringApplication {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> List<T> createSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes,
-			ClassLoader classLoader, Object[] args, Set<String> names) {
+													   ClassLoader classLoader, Object[] args, Set<String> names) {
 		List<T> instances = new ArrayList<>(names.size());
 		for (String name : names) {
 			try {
@@ -513,7 +520,7 @@ public class SpringApplication {
 
 	/**
 	 * 环境配置
-	 *
+	 * <p>
 	 * Template method delegating to
 	 * {@link #configurePropertySources(ConfigurableEnvironment, String[])} and
 	 * {@link #configureProfiles(ConfigurableEnvironment, String[])} in that order.
@@ -536,7 +543,7 @@ public class SpringApplication {
 
 	/**
 	 * 配置当前应用环境中的属性源
-	 *
+	 * <p>
 	 * Add, remove or re-order any {@link PropertySource}s in this application's
 	 * environment.
 	 *
@@ -566,7 +573,7 @@ public class SpringApplication {
 
 	/**
 	 * 配置当前应用环境中激活的 profile
-	 *
+	 * <p>
 	 * Configure which profiles are active (or active by default) for this application
 	 * environment. Additional profiles may be activated during configuration file
 	 * processing via the {@code spring.profiles.active} property.
@@ -855,7 +862,7 @@ public class SpringApplication {
 	}
 
 	private void handleRunFailure(ConfigurableApplicationContext context, Throwable exception,
-			Collection<SpringBootExceptionReporter> exceptionReporters, SpringApplicationRunListeners listeners) {
+								  Collection<SpringBootExceptionReporter> exceptionReporters, SpringApplicationRunListeners listeners) {
 		try {
 			try {
 				handleExitCode(context, exception);
@@ -1299,6 +1306,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 运行 SpringApplication 的静态方法
+	 * <p>
 	 * Static helper that can be used to run a {@link SpringApplication} from the
 	 * specified source using default settings.
 	 *
@@ -1311,6 +1320,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 运行 SpringApplication 的静态方法
+	 * <p>
 	 * Static helper that can be used to run a {@link SpringApplication} from the
 	 * specified sources using default settings and user supplied arguments.
 	 *

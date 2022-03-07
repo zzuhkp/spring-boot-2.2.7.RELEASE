@@ -16,23 +16,21 @@
 
 package org.springframework.boot.context.properties.source;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.*;
+
 /**
+ * ConfigurationPropertyName 别名
+ * <p>
  * Maintains a mapping of {@link ConfigurationPropertyName} aliases.
  *
  * @author Phillip Webb
  * @author Madhura Bhave
- * @since 2.0.0
  * @see ConfigurationPropertySource#withAliases(ConfigurationPropertyNameAliases)
+ * @since 2.0.0
  */
 public final class ConfigurationPropertyNameAliases implements Iterable<ConfigurationPropertyName> {
 

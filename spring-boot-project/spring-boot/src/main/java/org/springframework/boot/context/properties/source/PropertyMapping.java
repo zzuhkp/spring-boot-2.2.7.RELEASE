@@ -19,6 +19,8 @@ package org.springframework.boot.context.properties.source;
 import org.springframework.core.env.PropertySource;
 
 /**
+ * PropertySource 和 ConfigurationPropertySource 之间的映射
+ * <p>
  * Details a mapping between a {@link PropertySource} item and a
  * {@link ConfigurationPropertySource} item.
  *
@@ -34,9 +36,10 @@ class PropertyMapping {
 
 	/**
 	 * Create a new {@link PropertyMapper} instance.
-	 * @param propertySourceName the {@link PropertySource} name
+	 *
+	 * @param propertySourceName        the {@link PropertySource} name
 	 * @param configurationPropertyName the {@link ConfigurationPropertySource}
-	 * {@link ConfigurationPropertyName}
+	 *                                  {@link ConfigurationPropertyName}
 	 */
 	PropertyMapping(String propertySourceName, ConfigurationPropertyName configurationPropertyName) {
 		this.propertySourceName = propertySourceName;
@@ -45,6 +48,7 @@ class PropertyMapping {
 
 	/**
 	 * Return the mapped {@link PropertySource} name.
+	 *
 	 * @return the property source name (never {@code null})
 	 */
 	String getPropertySourceName() {
@@ -54,6 +58,7 @@ class PropertyMapping {
 	/**
 	 * Return the mapped {@link ConfigurationPropertySource}
 	 * {@link ConfigurationPropertyName}.
+	 *
 	 * @return the configuration property source name (never {@code null})
 	 */
 	ConfigurationPropertyName getConfigurationPropertyName() {
@@ -63,6 +68,7 @@ class PropertyMapping {
 	/**
 	 * Return if this mapping is applicable for the given
 	 * {@link ConfigurationPropertyName}.
+	 *
 	 * @param name the name to check
 	 * @return if the mapping is applicable
 	 */

@@ -28,33 +28,48 @@ import java.util.zip.ZipEntry;
 interface FileHeader {
 
 	/**
+	 * 是否具有给定名称
+	 * <p>
 	 * Returns {@code true} if the header has the given name.
-	 * @param name the name to test
+	 *
+	 * @param name   the name to test
 	 * @param suffix an additional suffix (or {@code 0})
 	 * @return {@code true} if the header has the given name
 	 */
 	boolean hasName(CharSequence name, char suffix);
 
 	/**
+	 * 偏移量
+	 * <p>
 	 * Return the offset of the load file header within the archive data.
+	 *
 	 * @return the local header offset
 	 */
 	long getLocalHeaderOffset();
 
 	/**
+	 * 压缩后的大小
+	 * <p>
 	 * Return the compressed size of the entry.
+	 *
 	 * @return the compressed size.
 	 */
 	long getCompressedSize();
 
 	/**
+	 * 未压缩的大小
+	 * <p>
 	 * Return the uncompressed size of the entry.
+	 *
 	 * @return the uncompressed size.
 	 */
 	long getSize();
 
 	/**
+	 * 压缩方式
+	 * <p>
 	 * Return the method used to compress the data.
+	 *
 	 * @return the zip compression method
 	 * @see ZipEntry#STORED
 	 * @see ZipEntry#DEFLATED

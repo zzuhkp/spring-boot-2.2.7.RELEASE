@@ -35,14 +35,23 @@ import org.springframework.http.client.ClientHttpRequestInitializer;
  */
 class RestTemplateBuilderClientHttpRequestInitializer implements ClientHttpRequestInitializer {
 
+	/**
+	 * 鉴权
+	 */
 	private final BasicAuthentication basicAuthentication;
 
+	/**
+	 * 请求头
+	 */
 	private final Map<String, List<String>> defaultHeaders;
 
+	/**
+	 * 自定义 ClientHttpRequest
+	 */
 	private final Set<RestTemplateRequestCustomizer<?>> requestCustomizers;
 
 	RestTemplateBuilderClientHttpRequestInitializer(BasicAuthentication basicAuthentication,
-			Map<String, List<String>> defaultHeaders, Set<RestTemplateRequestCustomizer<?>> requestCustomizers) {
+													Map<String, List<String>> defaultHeaders, Set<RestTemplateRequestCustomizer<?>> requestCustomizers) {
 		this.basicAuthentication = basicAuthentication;
 		this.defaultHeaders = defaultHeaders;
 		this.requestCustomizers = requestCustomizers;

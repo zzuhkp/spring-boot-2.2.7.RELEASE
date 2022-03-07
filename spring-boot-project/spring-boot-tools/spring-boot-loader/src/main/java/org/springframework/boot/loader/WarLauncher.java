@@ -19,6 +19,8 @@ package org.springframework.boot.loader;
 import org.springframework.boot.loader.archive.Archive;
 
 /**
+ * war 包启动
+ * <p>
  * {@link Launcher} for WAR based archives. This launcher for standard WAR archives.
  * Supports dependencies in {@code WEB-INF/lib} as well as {@code WEB-INF/lib-provided},
  * classes are loaded from {@code WEB-INF/classes}.
@@ -48,8 +50,7 @@ public class WarLauncher extends ExecutableArchiveLauncher {
 	public boolean isNestedArchive(Archive.Entry entry) {
 		if (entry.isDirectory()) {
 			return entry.getName().equals(WEB_INF_CLASSES);
-		}
-		else {
+		} else {
 			return entry.getName().startsWith(WEB_INF_LIB) || entry.getName().startsWith(WEB_INF_LIB_PROVIDED);
 		}
 	}

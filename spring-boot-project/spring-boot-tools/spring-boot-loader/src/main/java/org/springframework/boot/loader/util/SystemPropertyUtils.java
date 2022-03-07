@@ -33,8 +33,8 @@ import java.util.Set;
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @author Dave Syer
- * @since 1.0.0
  * @see System#getProperty(String)
+ * @since 1.0.0
  */
 public abstract class SystemPropertyUtils {
 
@@ -58,6 +58,7 @@ public abstract class SystemPropertyUtils {
 	/**
 	 * Resolve ${...} placeholders in the given text, replacing them with corresponding
 	 * system property values.
+	 *
 	 * @param text the String to resolve
 	 * @return the resolved String
 	 * @throws IllegalArgumentException if there is an unresolvable placeholder
@@ -74,8 +75,9 @@ public abstract class SystemPropertyUtils {
 	/**
 	 * Resolve ${...} placeholders in the given text, replacing them with corresponding
 	 * system property values.
+	 *
 	 * @param properties a properties instance to use in addition to System
-	 * @param text the String to resolve
+	 * @param text       the String to resolve
 	 * @return the resolved String
 	 * @throws IllegalArgumentException if there is an unresolvable placeholder
 	 * @see #PLACEHOLDER_PREFIX
@@ -89,7 +91,7 @@ public abstract class SystemPropertyUtils {
 	}
 
 	private static String parseStringValue(Properties properties, String value, String current,
-			Set<String> visitedPlaceholders) {
+										   Set<String> visitedPlaceholders) {
 
 		StringBuilder buf = new StringBuilder(current);
 
@@ -126,14 +128,12 @@ public abstract class SystemPropertyUtils {
 					propVal = parseStringValue(properties, value, propVal, visitedPlaceholders);
 					buf.replace(startIndex, endIndex + PLACEHOLDER_SUFFIX.length(), propVal);
 					startIndex = buf.indexOf(PLACEHOLDER_PREFIX, startIndex + propVal.length());
-				}
-				else {
+				} else {
 					// Proceed with unprocessed value.
 					startIndex = buf.indexOf(PLACEHOLDER_PREFIX, endIndex + PLACEHOLDER_SUFFIX.length());
 				}
 				visitedPlaceholders.remove(originalPlaceholder);
-			}
-			else {
+			} else {
 				startIndex = -1;
 			}
 		}
@@ -161,10 +161,11 @@ public abstract class SystemPropertyUtils {
 	 * Search the System properties and environment variables for a value with the
 	 * provided key. Environment variables in {@code UPPER_CASE} style are allowed where
 	 * System properties would normally be {@code lower.case}.
-	 * @param key the key to resolve
+	 *
+	 * @param key          the key to resolve
 	 * @param defaultValue the default value
-	 * @param text optional extra context for an error message if the key resolution fails
-	 * (e.g. if System properties are not accessible)
+	 * @param text         optional extra context for an error message if the key resolution fails
+	 *                     (e.g. if System properties are not accessible)
 	 * @return a static property value or null of not found
 	 */
 	public static String getProperty(String key, String defaultValue, String text) {
@@ -187,8 +188,7 @@ public abstract class SystemPropertyUtils {
 			if (propVal != null) {
 				return propVal;
 			}
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			System.err.println("Could not resolve key '" + key + "' in '" + text
 					+ "' as system property or in environment: " + ex);
 		}
@@ -203,16 +203,13 @@ public abstract class SystemPropertyUtils {
 				if (withinNestedPlaceholder > 0) {
 					withinNestedPlaceholder--;
 					index = index + PLACEHOLDER_SUFFIX.length();
-				}
-				else {
+				} else {
 					return index;
 				}
-			}
-			else if (substringMatch(buf, index, SIMPLE_PREFIX)) {
+			} else if (substringMatch(buf, index, SIMPLE_PREFIX)) {
 				withinNestedPlaceholder++;
 				index = index + SIMPLE_PREFIX.length();
-			}
-			else {
+			} else {
 				index++;
 			}
 		}

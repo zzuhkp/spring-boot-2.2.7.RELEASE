@@ -56,6 +56,7 @@ class CentralDirectoryEndRecord {
 	 * Create a new {@link CentralDirectoryEndRecord} instance from the specified
 	 * {@link RandomAccessData}, searching backwards from the end until a valid block is
 	 * located.
+	 *
 	 * @param data the source data
 	 * @throws IOException in case of I/O errors
 	 */
@@ -100,6 +101,7 @@ class CentralDirectoryEndRecord {
 	 * Returns the location in the data that the archive actually starts. For most files
 	 * the archive data will start at 0, however, it is possible to have prefixed bytes
 	 * (often used for startup scripts) at the beginning of the data.
+	 *
 	 * @param data the source data
 	 * @return the offset within the data where the archive begins
 	 */
@@ -115,6 +117,7 @@ class CentralDirectoryEndRecord {
 	/**
 	 * Return the bytes of the "Central directory" based on the offset indicated in this
 	 * record.
+	 *
 	 * @param data the source data
 	 * @return the central directory data
 	 */
@@ -129,6 +132,7 @@ class CentralDirectoryEndRecord {
 
 	/**
 	 * Return the number of ZIP entries in the file.
+	 *
 	 * @return the number of records in the zip
 	 */
 	int getNumberOfRecords() {
@@ -181,6 +185,7 @@ class CentralDirectoryEndRecord {
 
 		/**
 		 * Return the size of this zip 64 end of central directory record.
+		 *
 		 * @return size of this zip 64 end of central directory record
 		 */
 		private long getSize() {
@@ -190,6 +195,7 @@ class CentralDirectoryEndRecord {
 		/**
 		 * Return the bytes of the "Central directory" based on the offset indicated in
 		 * this record.
+		 *
 		 * @param data the source data
 		 * @return the central directory data
 		 */
@@ -199,6 +205,7 @@ class CentralDirectoryEndRecord {
 
 		/**
 		 * Return the number of entries in the zip64 archive.
+		 *
 		 * @return the number of records in the zip
 		 */
 		private int getNumberOfRecords() {
@@ -230,6 +237,7 @@ class CentralDirectoryEndRecord {
 
 		/**
 		 * Return the size of the zip 64 end record located by this zip64 end locator.
+		 *
 		 * @return size of the zip 64 end record located by this zip64 end locator
 		 */
 		private long getZip64EndSize() {
@@ -238,6 +246,7 @@ class CentralDirectoryEndRecord {
 
 		/**
 		 * Return the offset to locate {@link Zip64End}.
+		 *
 		 * @return offset of the Zip64 end of central directory record
 		 */
 		private long getZip64EndOffset() {

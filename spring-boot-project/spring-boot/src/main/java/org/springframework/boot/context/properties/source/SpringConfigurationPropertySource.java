@@ -16,10 +16,6 @@
 
 package org.springframework.boot.context.properties.source;
 
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
-
 import org.springframework.boot.origin.Origin;
 import org.springframework.boot.origin.PropertySourceOrigin;
 import org.springframework.core.env.EnumerablePropertySource;
@@ -28,6 +24,10 @@ import org.springframework.core.env.StandardEnvironment;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * {@link ConfigurationPropertySource} backed by a non-enumerable Spring
@@ -63,13 +63,14 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 
 	/**
 	 * Create a new {@link SpringConfigurationPropertySource} implementation.
-	 * @param propertySource the source property source
-	 * @param mapper the property mapper
+	 *
+	 * @param propertySource       the source property source
+	 * @param mapper               the property mapper
 	 * @param containsDescendantOf function used to implement
-	 * {@link #containsDescendantOf(ConfigurationPropertyName)} (may be {@code null})
+	 *                             {@link #containsDescendantOf(ConfigurationPropertyName)} (may be {@code null})
 	 */
 	SpringConfigurationPropertySource(PropertySource<?> propertySource, PropertyMapper mapper,
-			Function<ConfigurationPropertyName, ConfigurationPropertyState> containsDescendantOf) {
+									  Function<ConfigurationPropertyName, ConfigurationPropertyState> containsDescendantOf) {
 		Assert.notNull(propertySource, "PropertySource must not be null");
 		Assert.notNull(mapper, "Mapper must not be null");
 		this.propertySource = propertySource;
@@ -131,8 +132,11 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 	}
 
 	/**
+	 * PropertySource 转换为 SpringConfigurationPropertySource
+	 * <p>
 	 * Create a new {@link SpringConfigurationPropertySource} for the specified
 	 * {@link PropertySource}.
+	 *
 	 * @param source the source Spring {@link PropertySource}
 	 * @return a {@link SpringConfigurationPropertySource} or
 	 * {@link SpringIterableConfigurationPropertySource} instance
@@ -154,6 +158,12 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 		return new DelegatingPropertyMapper(DefaultPropertyMapper.INSTANCE);
 	}
 
+	/**
+	 * 给定的属性源名称是表示系统环境属性
+	 *
+	 * @param source
+	 * @return
+	 */
 	private static boolean hasSystemEnvironmentName(PropertySource<?> source) {
 		String name = source.getName();
 		return StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME.equals(name)
@@ -166,8 +176,7 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 			// Check we're not security restricted
 			try {
 				((Map<?, ?>) rootSource.getSource()).size();
-			}
-			catch (UnsupportedOperationException ex) {
+			} catch (UnsupportedOperationException ex) {
 				return false;
 			}
 		}
@@ -227,8 +236,7 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 		private PropertyMapping[] map(PropertyMapper mapper, ConfigurationPropertyName configurationPropertyName) {
 			try {
 				return (mapper != null) ? mapper.map(configurationPropertyName) : NONE;
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				return NONE;
 			}
 		}
@@ -243,8 +251,7 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 		private PropertyMapping[] map(PropertyMapper mapper, String propertySourceName) {
 			try {
 				return (mapper != null) ? mapper.map(propertySourceName) : NONE;
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				return NONE;
 			}
 		}

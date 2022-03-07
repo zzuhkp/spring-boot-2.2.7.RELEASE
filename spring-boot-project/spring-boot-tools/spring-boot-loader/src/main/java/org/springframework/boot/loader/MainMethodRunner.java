@@ -19,6 +19,8 @@ package org.springframework.boot.loader;
 import java.lang.reflect.Method;
 
 /**
+ * main 方法运行
+ * <p>
  * Utility class that is used by {@link Launcher}s to call a main method. The class
  * containing the main method is loaded using the thread context class loader.
  *
@@ -34,8 +36,9 @@ public class MainMethodRunner {
 
 	/**
 	 * Create a new {@link MainMethodRunner} instance.
+	 *
 	 * @param mainClass the main class
-	 * @param args incoming arguments
+	 * @param args      incoming arguments
 	 */
 	public MainMethodRunner(String mainClass, String[] args) {
 		this.mainClassName = mainClass;
@@ -45,7 +48,7 @@ public class MainMethodRunner {
 	public void run() throws Exception {
 		Class<?> mainClass = Thread.currentThread().getContextClassLoader().loadClass(this.mainClassName);
 		Method mainMethod = mainClass.getDeclaredMethod("main", String[].class);
-		mainMethod.invoke(null, new Object[] { this.args });
+		mainMethod.invoke(null, new Object[]{this.args});
 	}
 
 }

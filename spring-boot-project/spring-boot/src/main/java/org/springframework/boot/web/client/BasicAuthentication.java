@@ -22,6 +22,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.util.Assert;
 
 /**
+ * 鉴权
+ * <p>
  * Basic authentication details to be applied to {@link HttpHeaders}.
  *
  * @author Dmytro Nosan

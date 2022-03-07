@@ -19,6 +19,8 @@ package org.springframework.boot.loader.jar;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * ASCII 数组包装
+ * <p>
  * Simple wrapper around a byte array that represents an ASCII. Used for performance
  * reasons to save constructing Strings for ZIP data.
  *
@@ -29,22 +31,38 @@ final class AsciiBytes {
 
 	private static final String EMPTY_STRING = "";
 
-	private static final int[] INITIAL_BYTE_BITMASK = { 0x7F, 0x1F, 0x0F, 0x07 };
+	private static final int[] INITIAL_BYTE_BITMASK = {0x7F, 0x1F, 0x0F, 0x07};
 
 	private static final int SUBSEQUENT_BYTE_BITMASK = 0x3F;
 
+	/**
+	 * 字节数组
+	 */
 	private final byte[] bytes;
 
+	/**
+	 * 偏移量
+	 */
 	private final int offset;
 
+	/**
+	 * 长度，从偏移量开始
+	 */
 	private final int length;
 
+	/**
+	 * 原始字符串
+	 */
 	private String string;
 
+	/**
+	 * 哈希码缓存
+	 */
 	private int hash;
 
 	/**
 	 * Create a new {@link AsciiBytes} from the specified String.
+	 *
 	 * @param string the source string
 	 */
 	AsciiBytes(String string) {
@@ -55,6 +73,7 @@ final class AsciiBytes {
 	/**
 	 * Create a new {@link AsciiBytes} from the specified bytes. NOTE: underlying bytes
 	 * are not expected to change.
+	 *
 	 * @param bytes the source bytes
 	 */
 	AsciiBytes(byte[] bytes) {
@@ -64,7 +83,8 @@ final class AsciiBytes {
 	/**
 	 * Create a new {@link AsciiBytes} from the specified bytes. NOTE: underlying bytes
 	 * are not expected to change.
-	 * @param bytes the source bytes
+	 *
+	 * @param bytes  the source bytes
 	 * @param offset the offset
 	 * @param length the length
 	 */
@@ -140,8 +160,7 @@ final class AsciiBytes {
 				if (c != b) {
 					return false;
 				}
-			}
-			else {
+			} else {
 				if (c != ((b >> 0xA) + 0xD7C0)) {
 					return false;
 				}
@@ -211,8 +230,7 @@ final class AsciiBytes {
 				}
 				if (b <= 0xFFFF) {
 					hash = 31 * hash + b;
-				}
-				else {
+				} else {
 					hash = 31 * hash + ((b >> 0xA) + 0xD7C0);
 					hash = 31 * hash + ((b & 0x3FF) + 0xDC00);
 				}
@@ -227,8 +245,7 @@ final class AsciiBytes {
 		if (this.string == null) {
 			if (this.length == 0) {
 				this.string = EMPTY_STRING;
-			}
-			else {
+			} else {
 				this.string = new String(this.bytes, this.offset, this.length, StandardCharsets.UTF_8);
 			}
 		}

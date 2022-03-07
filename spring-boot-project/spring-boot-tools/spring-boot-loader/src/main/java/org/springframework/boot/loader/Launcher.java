@@ -16,6 +16,11 @@
 
 package org.springframework.boot.loader;
 
+import org.springframework.boot.loader.archive.Archive;
+import org.springframework.boot.loader.archive.ExplodedArchive;
+import org.springframework.boot.loader.archive.JarFileArchive;
+import org.springframework.boot.loader.jar.JarFile;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -24,12 +29,9 @@ import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.loader.archive.Archive;
-import org.springframework.boot.loader.archive.ExplodedArchive;
-import org.springframework.boot.loader.archive.JarFileArchive;
-import org.springframework.boot.loader.jar.JarFile;
-
 /**
+ * 启动类
+ * <p>
  * Base class for launchers that can start an application with a fully configured
  * classpath backed by one or more {@link Archive}s.
  *
@@ -42,6 +44,7 @@ public abstract class Launcher {
 	/**
 	 * Launch the application. This method is the initial entry point that should be
 	 * called by a subclass {@code public static void main(String[] args)} method.
+	 *
 	 * @param args the incoming arguments
 	 * @throws Exception if the application fails to launch
 	 */
@@ -52,7 +55,10 @@ public abstract class Launcher {
 	}
 
 	/**
+	 * 使用给定的 Archive 创建 ClassLoader
+	 * <p>
 	 * Create a classloader for the specified archives.
+	 *
 	 * @param archives the archives
 	 * @return the classloader
 	 * @throws Exception if the classloader cannot be created
@@ -66,7 +72,10 @@ public abstract class Launcher {
 	}
 
 	/**
+	 * 使用给定的 url 创建 ClassLoader
+	 * <p>
 	 * Create a classloader for the specified URLs.
+	 *
 	 * @param urls the URLs
 	 * @return the classloader
 	 * @throws Exception if the classloader cannot be created
@@ -76,9 +85,12 @@ public abstract class Launcher {
 	}
 
 	/**
+	 * 启用应用
+	 * <p>
 	 * Launch the application given the archive file and a fully configured classloader.
-	 * @param args the incoming arguments
-	 * @param mainClass the main class to run
+	 *
+	 * @param args        the incoming arguments
+	 * @param mainClass   the main class to run
 	 * @param classLoader the classloader
 	 * @throws Exception if the launch fails
 	 */
@@ -89,8 +101,9 @@ public abstract class Launcher {
 
 	/**
 	 * Create the {@code MainMethodRunner} used to launch the application.
-	 * @param mainClass the main class
-	 * @param args the incoming arguments
+	 *
+	 * @param mainClass   the main class
+	 * @param args        the incoming arguments
 	 * @param classLoader the classloader
 	 * @return the main method runner
 	 */
@@ -100,6 +113,7 @@ public abstract class Launcher {
 
 	/**
 	 * Returns the main class that should be launched.
+	 *
 	 * @return the name of the main class
 	 * @throws Exception if the main class cannot be obtained
 	 */
@@ -107,11 +121,18 @@ public abstract class Launcher {
 
 	/**
 	 * Returns the archives that will be used to construct the class path.
+	 *
 	 * @return the class path archives
 	 * @throws Exception if the class path archives cannot be obtained
 	 */
 	protected abstract List<Archive> getClassPathArchives() throws Exception;
 
+	/**
+	 * 创建 Archive
+	 *
+	 * @return
+	 * @throws Exception
+	 */
 	protected final Archive createArchive() throws Exception {
 		ProtectionDomain protectionDomain = getClass().getProtectionDomain();
 		CodeSource codeSource = protectionDomain.getCodeSource();

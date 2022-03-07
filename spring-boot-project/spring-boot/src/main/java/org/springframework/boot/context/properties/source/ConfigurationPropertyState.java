@@ -16,11 +16,13 @@
 
 package org.springframework.boot.context.properties.source;
 
-import java.util.function.Predicate;
-
 import org.springframework.util.Assert;
 
+import java.util.function.Predicate;
+
 /**
+ * ConfigurationPropertySource 内容的状态
+ * <p>
  * The state of content from a {@link ConfigurationPropertySource}.
  *
  * @author Phillip Webb
@@ -29,28 +31,37 @@ import org.springframework.util.Assert;
 public enum ConfigurationPropertyState {
 
 	/**
+	 * 至少有一个匹配的 ConfigurationProperty
+	 * <p>
 	 * The {@link ConfigurationPropertySource} has at least one matching
 	 * {@link ConfigurationProperty}.
 	 */
 	PRESENT,
 
 	/**
+	 * 没有匹配的 ConfigurationProperty
+	 * <p>
 	 * The {@link ConfigurationPropertySource} has no matching
 	 * {@link ConfigurationProperty ConfigurationProperties}.
 	 */
 	ABSENT,
 
 	/**
+	 * 无法确定是否具有匹配的 ConfigurationProperty
+	 * <p>
 	 * It's not possible to determine if {@link ConfigurationPropertySource} has matching
 	 * {@link ConfigurationProperty ConfigurationProperties} or not.
 	 */
 	UNKNOWN;
 
 	/**
+	 * 确定 ConfigurationProperty 是否存在
+	 * <p>
 	 * Search the given iterable using a predicate to determine if content is
 	 * {@link #PRESENT} or {@link #ABSENT}.
-	 * @param <T> the data type
-	 * @param source the source iterable to search
+	 *
+	 * @param <T>       the data type
+	 * @param source    the source iterable to search
 	 * @param predicate the predicate used to test for presence
 	 * @return {@link #PRESENT} if the iterable contains a matching item, otherwise
 	 * {@link #ABSENT}.
