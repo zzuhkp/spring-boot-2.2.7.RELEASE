@@ -23,6 +23,8 @@ import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 
 /**
+ * 忽略错误的 BindHandler
+ * <p>
  * {@link BindHandler} that can be used to ignore binding errors.
  *
  * @author Phillip Webb

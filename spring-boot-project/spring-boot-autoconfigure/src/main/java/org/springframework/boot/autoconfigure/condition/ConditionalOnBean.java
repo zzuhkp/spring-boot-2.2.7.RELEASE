@@ -27,6 +27,8 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Conditional;
 
 /**
+ * Bean 存在时条件成立
+ * <p>
  * {@link Conditional @Conditional} that only matches when beans meeting all the specified
  * requirements are already contained in the {@link BeanFactory}. All the requirements
  * must be met for the condition to match, but they do not have to be met by the same
@@ -58,53 +60,70 @@ import org.springframework.context.annotation.Conditional;
  * @author Phillip Webb
  * @since 1.0.0
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnBeanCondition.class)
 public @interface ConditionalOnBean {
 
 	/**
+	 * bean 类型
+	 * <p>
 	 * The class types of beans that should be checked. The condition matches when beans
 	 * of all classes specified are contained in the {@link BeanFactory}.
+	 *
 	 * @return the class types of beans to check
 	 */
 	Class<?>[] value() default {};
 
 	/**
+	 * bean 类型
+	 * <p>
 	 * The class type names of beans that should be checked. The condition matches when
 	 * beans of all classes specified are contained in the {@link BeanFactory}.
+	 *
 	 * @return the class type names of beans to check
 	 */
 	String[] type() default {};
 
 	/**
+	 * bean 类型上的注解
+	 * <p>
 	 * The annotation type decorating a bean that should be checked. The condition matches
 	 * when all of the annotations specified are defined on beans in the
 	 * {@link BeanFactory}.
+	 *
 	 * @return the class-level annotation types to check
 	 */
 	Class<? extends Annotation>[] annotation() default {};
 
 	/**
+	 * bean 名称
+	 * <p>
 	 * The names of beans to check. The condition matches when all of the bean names
 	 * specified are contained in the {@link BeanFactory}.
+	 *
 	 * @return the names of beans to check
 	 */
 	String[] name() default {};
 
 	/**
+	 * bean 搜索策略
 	 * Strategy to decide if the application context hierarchy (parent contexts) should be
 	 * considered.
+	 *
 	 * @return the search strategy
 	 */
 	SearchStrategy search() default SearchStrategy.ALL;
 
 	/**
+	 * 带泛型类型的 bean 类型
+	 * <p>
 	 * Additional classes that may contain the specified bean types within their generic
 	 * parameters. For example, an annotation declaring {@code value=Name.class} and
 	 * {@code parameterizedContainer=NameRegistration.class} would detect both
 	 * {@code Name} and {@code NameRegistration<Name>}.
+	 *
 	 * @return the container types
 	 * @since 2.1.0
 	 */

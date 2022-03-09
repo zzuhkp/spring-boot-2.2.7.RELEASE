@@ -19,7 +19,7 @@ package org.springframework.boot.context.properties.source;
 import org.springframework.core.env.PropertySource;
 
 /**
- * PropertySource 和 ConfigurationPropertySource 之间的映射
+ * PropertySource 和 ConfigurationPropertySource 之间的映射关系
  * <p>
  * Details a mapping between a {@link PropertySource} item and a
  * {@link ConfigurationPropertySource} item.

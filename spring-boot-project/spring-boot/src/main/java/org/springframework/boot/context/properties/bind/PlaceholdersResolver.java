@@ -19,12 +19,14 @@ package org.springframework.boot.context.properties.bind;
 import org.springframework.core.env.PropertyResolver;
 
 /**
+ * 占位符解析
+ * <p>
  * Optional strategy that used by a {@link Binder} to resolve property placeholders.
  *
  * @author Phillip Webb
  * @author Madhura Bhave
- * @since 2.0.0
  * @see PropertySourcesPlaceholdersResolver
+ * @since 2.0.0
  */
 @FunctionalInterface
 public interface PlaceholdersResolver {
@@ -36,6 +38,7 @@ public interface PlaceholdersResolver {
 
 	/**
 	 * Called to resolve any placeholders in the given value.
+	 *
 	 * @param value the source value
 	 * @return a value with placeholders resolved
 	 */

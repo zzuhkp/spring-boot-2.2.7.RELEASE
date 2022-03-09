@@ -52,6 +52,12 @@ class ConfigurationPropertiesBindConstructorProvider implements BindConstructorP
 		return constructor;
 	}
 
+	/**
+	 * 查找给定类型的构造方法
+	 *
+	 * @param type
+	 * @return
+	 */
 	private Constructor<?> findConstructorBindingAnnotatedConstructor(Class<?> type) {
 		if (isKotlinType(type)) {
 			Constructor<?> constructor = BeanUtils.findPrimaryConstructor(type);
@@ -62,6 +68,13 @@ class ConfigurationPropertiesBindConstructorProvider implements BindConstructorP
 		return findAnnotatedConstructor(type, type.getDeclaredConstructors());
 	}
 
+	/**
+	 * 查找标注了 @ConstructorBinding 注解的构造方法
+	 *
+	 * @param type
+	 * @param candidates
+	 * @return
+	 */
 	private Constructor<?> findAnnotatedConstructor(Class<?> type, Constructor<?>... candidates) {
 		Constructor<?> constructor = null;
 		for (Constructor<?> candidate : candidates) {
@@ -76,11 +89,23 @@ class ConfigurationPropertiesBindConstructorProvider implements BindConstructorP
 		return constructor;
 	}
 
+	/**
+	 * 给定类型是否存在 @ConstructorBinding 注解
+	 *
+	 * @param type
+	 * @return
+	 */
 	private boolean isConstructorBindingAnnotatedType(Class<?> type) {
 		return MergedAnnotations.from(type, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY_AND_ENCLOSING_CLASSES)
 				.isPresent(ConstructorBinding.class);
 	}
 
+	/**
+	 * 获取给定类型构造方法
+	 *
+	 * @param type
+	 * @return
+	 */
 	private Constructor<?> deduceBindConstructor(Class<?> type) {
 		if (isKotlinType(type)) {
 			return deducedKotlinBindConstructor(type);
@@ -92,6 +117,12 @@ class ConfigurationPropertiesBindConstructorProvider implements BindConstructorP
 		return null;
 	}
 
+	/**
+	 * 获取构造方法
+	 *
+	 * @param type
+	 * @return
+	 */
 	private Constructor<?> deducedKotlinBindConstructor(Class<?> type) {
 		Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(type);
 		if (primaryConstructor != null && primaryConstructor.getParameterCount() > 0) {

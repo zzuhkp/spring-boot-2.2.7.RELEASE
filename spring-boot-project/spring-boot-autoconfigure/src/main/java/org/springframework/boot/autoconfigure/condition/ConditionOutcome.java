@@ -20,11 +20,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 匹配结果
+ * <p>
  * Outcome for a condition match, including log message.
  *
  * @author Phillip Webb
- * @since 1.0.0
  * @see ConditionMessage
+ * @since 1.0.0
  */
 public class ConditionOutcome {
 
@@ -35,7 +37,8 @@ public class ConditionOutcome {
 	/**
 	 * Create a new {@link ConditionOutcome} instance. For more consistent messages
 	 * consider using {@link #ConditionOutcome(boolean, ConditionMessage)}.
-	 * @param match if the condition is a match
+	 *
+	 * @param match   if the condition is a match
 	 * @param message the condition message
 	 */
 	public ConditionOutcome(boolean match, String message) {
@@ -44,7 +47,8 @@ public class ConditionOutcome {
 
 	/**
 	 * Create a new {@link ConditionOutcome} instance.
-	 * @param match if the condition is a match
+	 *
+	 * @param match   if the condition is a match
 	 * @param message the condition message
 	 */
 	public ConditionOutcome(boolean match, ConditionMessage message) {
@@ -55,6 +59,7 @@ public class ConditionOutcome {
 
 	/**
 	 * Create a new {@link ConditionOutcome} instance for a 'match'.
+	 *
 	 * @return the {@link ConditionOutcome}
 	 */
 	public static ConditionOutcome match() {
@@ -64,6 +69,7 @@ public class ConditionOutcome {
 	/**
 	 * Create a new {@link ConditionOutcome} instance for 'match'. For more consistent
 	 * messages consider using {@link #match(ConditionMessage)}.
+	 *
 	 * @param message the message
 	 * @return the {@link ConditionOutcome}
 	 */
@@ -73,6 +79,7 @@ public class ConditionOutcome {
 
 	/**
 	 * Create a new {@link ConditionOutcome} instance for 'match'.
+	 *
 	 * @param message the message
 	 * @return the {@link ConditionOutcome}
 	 */
@@ -83,6 +90,7 @@ public class ConditionOutcome {
 	/**
 	 * Create a new {@link ConditionOutcome} instance for 'no match'. For more consistent
 	 * messages consider using {@link #noMatch(ConditionMessage)}.
+	 *
 	 * @param message the message
 	 * @return the {@link ConditionOutcome}
 	 */
@@ -92,6 +100,7 @@ public class ConditionOutcome {
 
 	/**
 	 * Create a new {@link ConditionOutcome} instance for 'no match'.
+	 *
 	 * @param message the message
 	 * @return the {@link ConditionOutcome}
 	 */
@@ -101,6 +110,7 @@ public class ConditionOutcome {
 
 	/**
 	 * Return {@code true} if the outcome was a match.
+	 *
 	 * @return {@code true} if the outcome matches
 	 */
 	public boolean isMatch() {
@@ -109,6 +119,7 @@ public class ConditionOutcome {
 
 	/**
 	 * Return an outcome message or {@code null}.
+	 *
 	 * @return the message or {@code null}
 	 */
 	public String getMessage() {
@@ -117,6 +128,7 @@ public class ConditionOutcome {
 
 	/**
 	 * Return an outcome message or {@code null}.
+	 *
 	 * @return the message or {@code null}
 	 */
 	public ConditionMessage getConditionMessage() {
@@ -150,6 +162,7 @@ public class ConditionOutcome {
 
 	/**
 	 * Return the inverse of the specified condition outcome.
+	 *
 	 * @param outcome the outcome to inverse
 	 * @return the inverse of the condition outcome
 	 * @since 1.3.0

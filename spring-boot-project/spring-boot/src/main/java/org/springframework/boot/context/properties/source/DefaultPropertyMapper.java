@@ -19,7 +19,7 @@ package org.springframework.boot.context.properties.source;
 import org.springframework.util.ObjectUtils;
 
 /**
- * PropertyMapper 默认实现
+ * PropertyMapper 默认的实现，主要通过字符串与 ConfigurationPropertyName 之间的转换进行映射
  * <p>
  * Default {@link PropertyMapper} implementation. Names are mapped by removing invalid
  * characters and converting to lower case. For example "{@code my.server_name.PORT}" is

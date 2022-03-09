@@ -59,6 +59,9 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 
 	private final PropertyMapper mapper;
 
+	/**
+	 * ConfigurationPropertyName -> ConfigurationPropertyState
+	 */
 	private final Function<ConfigurationPropertyName, ConfigurationPropertyState> containsDescendantOf;
 
 	/**
@@ -95,6 +98,13 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 		return this.propertySource;
 	}
 
+	/**
+	 * 从 PropertyMapping 数组中查找满足给定 ConfigurationPropertyName 的 ConfigurationProperty
+	 *
+	 * @param mappings
+	 * @param name
+	 * @return
+	 */
 	protected final ConfigurationProperty find(PropertyMapping[] mappings, ConfigurationPropertyName name) {
 		for (PropertyMapping candidate : mappings) {
 			if (candidate.isApplicable(name)) {
@@ -107,6 +117,12 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 		return null;
 	}
 
+	/**
+	 * 查找 ConfigurationProperty
+	 *
+	 * @param mapping
+	 * @return
+	 */
 	private ConfigurationProperty find(PropertyMapping mapping) {
 		String propertySourceName = mapping.getPropertySourceName();
 		Object value = getPropertySource().getProperty(propertySourceName);
@@ -183,6 +199,12 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 		return (source instanceof EnumerablePropertySource);
 	}
 
+	/**
+	 * 获取根 PropertySource
+	 *
+	 * @param source
+	 * @return
+	 */
 	private static PropertySource<?> getRootSource(PropertySource<?> source) {
 		while (source.getSource() != null && source.getSource() instanceof PropertySource) {
 			source = (PropertySource<?>) source.getSource();
@@ -206,6 +228,8 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 	}
 
 	/**
+	 * 代理 PropertyMapper
+	 * <p>
 	 * {@link PropertyMapper} that delegates to other {@link PropertyMapper}s and also
 	 * swallows exceptions when the mapping fails.
 	 */
@@ -256,6 +280,13 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 			}
 		}
 
+		/**
+		 * 合并
+		 *
+		 * @param first
+		 * @param second
+		 * @return
+		 */
 		private PropertyMapping[] merge(PropertyMapping[] first, PropertyMapping[] second) {
 			if (ObjectUtils.isEmpty(second)) {
 				return first;

@@ -25,13 +25,15 @@ import java.lang.annotation.Target;
 import org.springframework.context.annotation.Conditional;
 
 /**
+ * 非 Web 应用条件
+ * <p>
  * {@link Conditional @Conditional} that only matches when the application context is a
  * not a web application context.
  *
  * @author Dave Syer
  * @since 1.0.0
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnWebApplicationCondition.class)

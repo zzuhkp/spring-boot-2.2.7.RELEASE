@@ -16,20 +16,21 @@
 
 package org.springframework.boot;
 
+import org.apache.commons.logging.Log;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-
-import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.StringUtils;
-
 /**
+ * Banner 打印
+ * <p>
  * Class used by {@link SpringApplication} to print the application banner.
  *
  * @author Phillip Webb
@@ -42,7 +43,7 @@ class SpringApplicationBannerPrinter {
 
 	static final String DEFAULT_BANNER_LOCATION = "banner.txt";
 
-	static final String[] IMAGE_EXTENSION = { "gif", "jpg", "png" };
+	static final String[] IMAGE_EXTENSION = {"gif", "jpg", "png"};
 
 	private static final Banner DEFAULT_BANNER = new SpringBootBanner();
 
@@ -55,23 +56,44 @@ class SpringApplicationBannerPrinter {
 		this.fallbackBanner = fallbackBanner;
 	}
 
+	/**
+	 * Banner 打印
+	 *
+	 * @param environment
+	 * @param sourceClass
+	 * @param logger
+	 * @return
+	 */
 	Banner print(Environment environment, Class<?> sourceClass, Log logger) {
 		Banner banner = getBanner(environment);
 		try {
 			logger.info(createStringFromBanner(banner, environment, sourceClass));
-		}
-		catch (UnsupportedEncodingException ex) {
+		} catch (UnsupportedEncodingException ex) {
 			logger.warn("Failed to create String for banner", ex);
 		}
 		return new PrintedBanner(banner, sourceClass);
 	}
 
+	/**
+	 * Banner 打印
+	 *
+	 * @param environment
+	 * @param sourceClass
+	 * @param out
+	 * @return
+	 */
 	Banner print(Environment environment, Class<?> sourceClass, PrintStream out) {
 		Banner banner = getBanner(environment);
 		banner.printBanner(environment, sourceClass, out);
 		return new PrintedBanner(banner, sourceClass);
 	}
 
+	/**
+	 * 获取 Banner
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private Banner getBanner(Environment environment) {
 		Banners banners = new Banners();
 		banners.addIfNotNull(getImageBanner(environment));
@@ -85,6 +107,12 @@ class SpringApplicationBannerPrinter {
 		return DEFAULT_BANNER;
 	}
 
+	/**
+	 * 获取 ResourceBanner
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private Banner getTextBanner(Environment environment) {
 		String location = environment.getProperty(BANNER_LOCATION_PROPERTY, DEFAULT_BANNER_LOCATION);
 		Resource resource = this.resourceLoader.getResource(location);
@@ -94,6 +122,12 @@ class SpringApplicationBannerPrinter {
 		return null;
 	}
 
+	/**
+	 * 获取 ImageBanner 实例
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private Banner getImageBanner(Environment environment) {
 		String location = environment.getProperty(BANNER_IMAGE_LOCATION_PROPERTY);
 		if (StringUtils.hasLength(location)) {
@@ -109,6 +143,15 @@ class SpringApplicationBannerPrinter {
 		return null;
 	}
 
+	/**
+	 * 获取字符串形式的 banner
+	 *
+	 * @param banner
+	 * @param environment
+	 * @param mainApplicationClass
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
 	private String createStringFromBanner(Banner banner, Environment environment, Class<?> mainApplicationClass)
 			throws UnsupportedEncodingException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -118,6 +161,8 @@ class SpringApplicationBannerPrinter {
 	}
 
 	/**
+	 * Banner 组合
+	 * <p>
 	 * {@link Banner} comprised of other {@link Banner Banners}.
 	 */
 	private static class Banners implements Banner {

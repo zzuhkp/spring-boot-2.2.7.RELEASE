@@ -22,6 +22,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
 /**
+ * 应用上下文已加载好
+ * <p>
  * Event published as when a {@link SpringApplication} is starting up and the
  * {@link ApplicationContext} is fully prepared but not refreshed. The bean definitions
  * will be loaded and the {@link Environment} is ready for use at this stage.
@@ -36,18 +38,20 @@ public class ApplicationPreparedEvent extends SpringApplicationEvent {
 
 	/**
 	 * Create a new {@link ApplicationPreparedEvent} instance.
+	 *
 	 * @param application the current application
-	 * @param args the arguments the application is running with
-	 * @param context the ApplicationContext about to be refreshed
+	 * @param args        the arguments the application is running with
+	 * @param context     the ApplicationContext about to be refreshed
 	 */
 	public ApplicationPreparedEvent(SpringApplication application, String[] args,
-			ConfigurableApplicationContext context) {
+									ConfigurableApplicationContext context) {
 		super(application, args);
 		this.context = context;
 	}
 
 	/**
 	 * Return the application context.
+	 *
 	 * @return the context
 	 */
 	public ConfigurableApplicationContext getApplicationContext() {

@@ -22,7 +22,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 
 /**
- * SpringApplication 监听器，实现类需要定义参数类型分别为 SpringApplication 和 String[] 的构造方法
+ * SpringApplication 监听器，
+ * 实现类需要定义参数类型分别为 SpringApplication 和 String[] 的构造方法
  * <p>
  * Listener for the {@link SpringApplication} {@code run} method.
  * {@link SpringApplicationRunListener}s are loaded via the {@link SpringFactoriesLoader}
@@ -58,6 +59,8 @@ public interface SpringApplicationRunListener {
 	}
 
 	/**
+	 * 应用上下文已准备好
+	 * <p>
 	 * Called once the {@link ApplicationContext} has been created and prepared, but
 	 * before sources have been loaded.
 	 *
@@ -67,6 +70,8 @@ public interface SpringApplicationRunListener {
 	}
 
 	/**
+	 * 应用上下文已经加载好
+	 * <p>
 	 * Called once the application context has been loaded but before it has been
 	 * refreshed.
 	 *
@@ -76,6 +81,8 @@ public interface SpringApplicationRunListener {
 	}
 
 	/**
+	 * 应用上下文已经刷新
+	 * <p>
 	 * The context has been refreshed and the application has started but
 	 * {@link CommandLineRunner CommandLineRunners} and {@link ApplicationRunner
 	 * ApplicationRunners} have not been called.
@@ -87,6 +94,8 @@ public interface SpringApplicationRunListener {
 	}
 
 	/**
+	 * 应用运行中
+	 *
 	 * Called immediately before the run method finishes, when the application context has
 	 * been refreshed and all {@link CommandLineRunner CommandLineRunners} and
 	 * {@link ApplicationRunner ApplicationRunners} have been called.

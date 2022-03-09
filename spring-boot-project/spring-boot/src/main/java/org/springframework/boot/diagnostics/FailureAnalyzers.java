@@ -16,13 +16,8 @@
 
 package org.springframework.boot.diagnostics;
 
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.boot.SpringBootExceptionReporter;
@@ -34,6 +29,10 @@ import org.springframework.core.log.LogMessage;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility to trigger {@link FailureAnalyzer} and {@link FailureAnalysisReporter}
@@ -75,8 +74,7 @@ final class FailureAnalyzers implements SpringBootExceptionReporter {
 				Constructor<?> constructor = ClassUtils.forName(analyzerName, classLoader).getDeclaredConstructor();
 				ReflectionUtils.makeAccessible(constructor);
 				analyzers.add((FailureAnalyzer) constructor.newInstance());
-			}
-			catch (Throwable ex) {
+			} catch (Throwable ex) {
 				logger.trace(LogMessage.format("Failed to load %s", analyzerName), ex);
 			}
 		}
@@ -112,8 +110,7 @@ final class FailureAnalyzers implements SpringBootExceptionReporter {
 				if (analysis != null) {
 					return analysis;
 				}
-			}
-			catch (Throwable ex) {
+			} catch (Throwable ex) {
 				logger.debug(LogMessage.format("FailureAnalyzer %s failed", analyzer), ex);
 			}
 		}

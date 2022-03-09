@@ -26,6 +26,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
+ * 表达式条件
+ * <p>
  * A Condition that evaluates a SpEL expression.
  *
  * @author Dave Syer
@@ -51,6 +53,13 @@ class OnExpressionCondition extends SpringBootCondition {
 		return ConditionOutcome.noMatch(messageBuilder.because("no BeanFactory available."));
 	}
 
+	/**
+	 * 评估表达式值是否为 true
+	 *
+	 * @param beanFactory
+	 * @param expression
+	 * @return
+	 */
 	private Boolean evaluateExpression(ConfigurableListableBeanFactory beanFactory, String expression) {
 		BeanExpressionResolver resolver = beanFactory.getBeanExpressionResolver();
 		if (resolver == null) {
@@ -62,7 +71,10 @@ class OnExpressionCondition extends SpringBootCondition {
 	}
 
 	/**
+	 * 包装
+	 * <p>
 	 * Allow user to provide bare expression with no '#{}' wrapper.
+	 *
 	 * @param expression source expression
 	 * @return wrapped expression
 	 */

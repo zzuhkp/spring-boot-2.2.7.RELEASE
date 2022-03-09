@@ -28,7 +28,7 @@ import org.springframework.util.ReflectionUtils;
 
 /**
  * SpringApplicationRunListener 集合
- *
+ * <p>
  * A collection of {@link SpringApplicationRunListener}.
  *
  * @author Phillip Webb
@@ -87,7 +87,7 @@ class SpringApplicationRunListeners {
 	}
 
 	private void callFailedListener(SpringApplicationRunListener listener, ConfigurableApplicationContext context,
-			Throwable exception) {
+									Throwable exception) {
 		try {
 			listener.failed(context, exception);
 		} catch (Throwable ex) {

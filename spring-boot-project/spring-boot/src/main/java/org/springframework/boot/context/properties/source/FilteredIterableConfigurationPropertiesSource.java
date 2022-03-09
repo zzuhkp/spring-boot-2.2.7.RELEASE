@@ -20,6 +20,8 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
+ * 支持过滤的 IterableConfigurationPropertySource
+ * <p>
  * A filtered {@link IterableConfigurationPropertySource}.
  *
  * @author Phillip Webb
@@ -29,7 +31,7 @@ class FilteredIterableConfigurationPropertiesSource extends FilteredConfiguratio
 		implements IterableConfigurationPropertySource {
 
 	FilteredIterableConfigurationPropertiesSource(IterableConfigurationPropertySource source,
-			Predicate<ConfigurationPropertyName> filter) {
+												  Predicate<ConfigurationPropertyName> filter) {
 		super(source, filter);
 	}
 

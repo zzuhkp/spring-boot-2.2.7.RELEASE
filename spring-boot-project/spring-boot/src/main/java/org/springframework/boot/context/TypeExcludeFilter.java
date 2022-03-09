@@ -28,6 +28,8 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
 
 /**
+ * 使用 TypeExcludeFilter  bean 进行过滤
+ * <p>
  * Provides exclusion {@link TypeFilter TypeFilters} that are loaded from the
  * {@link BeanFactory} and automatically applied to {@code SpringBootApplication}
  * scanning. Can also be used directly with {@code @ComponentScan} as follows:

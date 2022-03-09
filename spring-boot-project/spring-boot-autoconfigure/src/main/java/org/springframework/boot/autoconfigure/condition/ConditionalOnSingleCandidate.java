@@ -26,6 +26,8 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Conditional;
 
 /**
+ * 能确定单个候选 bean 时条件成立
+ * <p>
  * {@link Conditional @Conditional} that only matches when a bean of the specified class
  * is already contained in the {@link BeanFactory} and a single candidate can be
  * determined.
@@ -42,37 +44,46 @@ import org.springframework.context.annotation.Conditional;
  * @author Stephane Nicoll
  * @since 1.3.0
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnBeanCondition.class)
 public @interface ConditionalOnSingleCandidate {
 
 	/**
+	 * bean 类型
+	 * <p>
 	 * The class type of bean that should be checked. The condition matches if a bean of
 	 * the class specified is contained in the {@link BeanFactory} and a primary candidate
 	 * exists in case of multiple instances.
 	 * <p>
 	 * This attribute may <strong>not</strong> be used in conjunction with
 	 * {@link #type()}, but it may be used instead of {@link #type()}.
+	 *
 	 * @return the class type of the bean to check
 	 */
 	Class<?> value() default Object.class;
 
 	/**
+	 * bean 类型
+	 * <p>
 	 * The class type name of bean that should be checked. The condition matches if a bean
 	 * of the class specified is contained in the {@link BeanFactory} and a primary
 	 * candidate exists in case of multiple instances.
 	 * <p>
 	 * This attribute may <strong>not</strong> be used in conjunction with
 	 * {@link #value()}, but it may be used instead of {@link #value()}.
+	 *
 	 * @return the class type name of the bean to check
 	 */
 	String type() default "";
 
 	/**
+	 * bean 搜索策略
+	 * <p>
 	 * Strategy to decide if the application context hierarchy (parent contexts) should be
 	 * considered.
+	 *
 	 * @return the search strategy
 	 */
 	SearchStrategy search() default SearchStrategy.ALL;

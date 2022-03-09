@@ -27,6 +27,8 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * spring-autoconfigure-metadata.properties 加载为 AutoConfigurationMetadata
+ *
  * Internal utility used to load {@link AutoConfigurationMetadata}.
  *
  * @author Phillip Webb
@@ -51,8 +53,7 @@ final class AutoConfigurationMetadataLoader {
 				properties.putAll(PropertiesLoaderUtils.loadProperties(new UrlResource(urls.nextElement())));
 			}
 			return loadMetadata(properties);
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			throw new IllegalArgumentException("Unable to load @ConditionalOnClass location [" + path + "]", ex);
 		}
 	}

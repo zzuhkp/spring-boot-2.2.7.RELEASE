@@ -30,8 +30,8 @@ import org.springframework.context.annotation.Import;
  * {@link AutoConfigurationPackages}.
  *
  * @author Phillip Webb
- * @since 1.3.0
  * @see AutoConfigurationPackages
+ * @since 1.3.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

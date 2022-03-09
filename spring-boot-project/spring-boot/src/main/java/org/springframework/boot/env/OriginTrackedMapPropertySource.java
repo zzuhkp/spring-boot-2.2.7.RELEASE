@@ -29,8 +29,8 @@ import org.springframework.core.env.MapPropertySource;
  *
  * @author Madhura Bhave
  * @author Phillip Webb
- * @since 2.0.0
  * @see OriginTrackedValue
+ * @since 2.0.0
  */
 public final class OriginTrackedMapPropertySource extends MapPropertySource implements OriginLookup<String> {
 
@@ -38,7 +38,8 @@ public final class OriginTrackedMapPropertySource extends MapPropertySource impl
 
 	/**
 	 * Create a new {@link OriginTrackedMapPropertySource} instance.
-	 * @param name the property source name
+	 *
+	 * @param name   the property source name
 	 * @param source the underlying map source
 	 */
 	@SuppressWarnings("rawtypes")
@@ -48,12 +49,13 @@ public final class OriginTrackedMapPropertySource extends MapPropertySource impl
 
 	/**
 	 * Create a new {@link OriginTrackedMapPropertySource} instance.
-	 * @param name the property source name
-	 * @param source the underlying map source
+	 *
+	 * @param name      the property source name
+	 * @param source    the underlying map source
 	 * @param immutable if the underlying source is immutable and guaranteed not to change
 	 * @since 2.2.0
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public OriginTrackedMapPropertySource(String name, Map source, boolean immutable) {
 		super(name, source);
 		this.immutable = immutable;

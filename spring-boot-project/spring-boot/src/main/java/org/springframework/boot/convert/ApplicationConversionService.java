@@ -36,7 +36,7 @@ import org.springframework.util.StringValueResolver;
 
 /**
  * 类型转换服务
- *
+ * <p>
  * A specialization of {@link FormattingConversionService} configured by default with
  * converters and formatters appropriate for most Spring Boot applications.
  * <p>
@@ -65,7 +65,7 @@ public class ApplicationConversionService extends FormattingConversionService {
 
 	/**
 	 * 获取单例类型转换服务
-	 *
+	 * <p>
 	 * Return a shared default application {@code ConversionService} instance, lazily
 	 * building it once needed.
 	 * <p>
@@ -128,6 +128,8 @@ public class ApplicationConversionService extends FormattingConversionService {
 	}
 
 	/**
+	 * 添加支持字符串分隔的 Converter
+	 * <p>
 	 * Add converters to support delimited strings.
 	 *
 	 * @param registry the registry of converters to add to (must also be castable to

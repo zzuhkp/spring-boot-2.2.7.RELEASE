@@ -26,6 +26,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 绑定结果
+ * <p>
  * A container object to return the result of a {@link Binder} bind operation. May contain
  * either a successfully bound object or an empty result.
  *
@@ -47,6 +49,7 @@ public final class BindResult<T> {
 	/**
 	 * Return the object that was bound or throw a {@link NoSuchElementException} if no
 	 * value was bound.
+	 *
 	 * @return the bound value (never {@code null})
 	 * @throws NoSuchElementException if no value was bound
 	 * @see #isBound()
@@ -60,6 +63,7 @@ public final class BindResult<T> {
 
 	/**
 	 * Returns {@code true} if a result was bound.
+	 *
 	 * @return if a result was bound
 	 */
 	public boolean isBound() {
@@ -69,6 +73,7 @@ public final class BindResult<T> {
 	/**
 	 * Invoke the specified consumer with the bound value, or do nothing if no value has
 	 * been bound.
+	 *
 	 * @param consumer block to execute if a value has been bound
 	 */
 	public void ifBound(Consumer<? super T> consumer) {
@@ -81,9 +86,10 @@ public final class BindResult<T> {
 	/**
 	 * Apply the provided mapping function to the bound value, or return an updated
 	 * unbound result if no value has been bound.
-	 * @param <U> the type of the result of the mapping function
+	 *
+	 * @param <U>    the type of the result of the mapping function
 	 * @param mapper a mapping function to apply to the bound value. The mapper will not
-	 * be invoked if no value has been bound.
+	 *               be invoked if no value has been bound.
 	 * @return an {@code BindResult} describing the result of applying a mapping function
 	 * to the value of this {@code BindResult}.
 	 */
@@ -94,8 +100,9 @@ public final class BindResult<T> {
 
 	/**
 	 * Return the object that was bound, or {@code other} if no value has been bound.
+	 *
 	 * @param other the value to be returned if there is no bound value (may be
-	 * {@code null})
+	 *              {@code null})
 	 * @return the value, if bound, otherwise {@code other}
 	 */
 	public T orElse(T other) {
@@ -105,8 +112,9 @@ public final class BindResult<T> {
 	/**
 	 * Return the object that was bound, or the result of invoking {@code other} if no
 	 * value has been bound.
+	 *
 	 * @param other a {@link Supplier} of the value to be returned if there is no bound
-	 * value
+	 *              value
 	 * @return the value, if bound, otherwise the supplied {@code other}
 	 */
 	public T orElseGet(Supplier<? extends T> other) {
@@ -116,6 +124,7 @@ public final class BindResult<T> {
 	/**
 	 * Return the object that was bound, or a new instance of the specified class if no
 	 * value has been bound.
+	 *
 	 * @param type the type to create if no value was bound
 	 * @return the value, if bound, otherwise a new instance of {@code type}
 	 * @deprecated since 2.2.0 in favor of {@link Binder#bindOrCreate}
@@ -129,7 +138,8 @@ public final class BindResult<T> {
 	/**
 	 * Return the object that was bound, or throw an exception to be created by the
 	 * provided supplier if no value has been bound.
-	 * @param <X> the type of the exception to be thrown
+	 *
+	 * @param <X>               the type of the exception to be thrown
 	 * @param exceptionSupplier the supplier which will return the exception to be thrown
 	 * @return the present value
 	 * @throws X if there is no value present

@@ -17,6 +17,8 @@
 package org.springframework.boot.autoconfigure.condition;
 
 /**
+ * bean 搜索策略
+ * <p>
  * Some named search strategies for beans in the bean factory hierarchy.
  *
  * @author Dave Syer

@@ -16,14 +16,14 @@
 
 package org.springframework.boot.context.properties.bind;
 
+import org.springframework.boot.context.properties.bind.Binder.Context;
+import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
+import org.springframework.core.ResolvableType;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-
-import org.springframework.boot.context.properties.bind.Binder.Context;
-import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
-import org.springframework.core.ResolvableType;
 
 /**
  * {@link AggregateBinder} for arrays.
@@ -39,7 +39,7 @@ class ArrayBinder extends IndexedElementsBinder<Object> {
 
 	@Override
 	protected Object bindAggregate(ConfigurationPropertyName name, Bindable<?> target,
-			AggregateElementBinder elementBinder) {
+								   AggregateElementBinder elementBinder) {
 		IndexedCollectionSupplier result = new IndexedCollectionSupplier(ArrayList::new);
 		ResolvableType aggregateType = target.getType();
 		ResolvableType elementType = target.getType().getComponentType();

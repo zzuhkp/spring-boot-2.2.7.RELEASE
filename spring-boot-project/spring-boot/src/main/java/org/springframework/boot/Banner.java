@@ -21,6 +21,8 @@ import java.io.PrintStream;
 import org.springframework.core.env.Environment;
 
 /**
+ * banner 接口
+ * <p>
  * Interface class for writing a banner programmatically.
  *
  * @author Phillip Webb
@@ -32,10 +34,13 @@ import org.springframework.core.env.Environment;
 public interface Banner {
 
 	/**
+	 * 打印 banner
+	 * <p>
 	 * Print the banner to the specified print stream.
+	 *
 	 * @param environment the spring environment
 	 * @param sourceClass the source class for the application
-	 * @param out the output print stream
+	 * @param out         the output print stream
 	 */
 	void printBanner(Environment environment, Class<?> sourceClass, PrintStream out);
 

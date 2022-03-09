@@ -21,6 +21,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 
 /**
+ * 环境已经准备好事件
+ *
  * Event published when a {@link SpringApplication} is starting up and the
  * {@link Environment} is first available for inspection and modification.
  *

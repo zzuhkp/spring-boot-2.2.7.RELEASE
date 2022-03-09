@@ -33,6 +33,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 /**
+ * 给定类是否存在
+ * <p>
  * {@link Condition} and {@link AutoConfigurationImportFilter} that checks for the
  * presence or absence of specific classes.
  *
@@ -45,22 +47,29 @@ class OnClassCondition extends FilteringSpringBootCondition {
 
 	@Override
 	protected final ConditionOutcome[] getOutcomes(String[] autoConfigurationClasses,
-			AutoConfigurationMetadata autoConfigurationMetadata) {
+												   AutoConfigurationMetadata autoConfigurationMetadata) {
 		// Split the work and perform half in a background thread if more than one
 		// processor is available. Using a single additional thread seems to offer the
 		// best performance. More threads make things worse.
 		if (Runtime.getRuntime().availableProcessors() > 1) {
+			// 多线程解析
 			return resolveOutcomesThreaded(autoConfigurationClasses, autoConfigurationMetadata);
-		}
-		else {
+		} else {
 			OutcomesResolver outcomesResolver = new StandardOutcomesResolver(autoConfigurationClasses, 0,
 					autoConfigurationClasses.length, autoConfigurationMetadata, getBeanClassLoader());
 			return outcomesResolver.resolveOutcomes();
 		}
 	}
 
+	/**
+	 * 多线程解析 ConditionOutcome
+	 *
+	 * @param autoConfigurationClasses
+	 * @param autoConfigurationMetadata
+	 * @return
+	 */
 	private ConditionOutcome[] resolveOutcomesThreaded(String[] autoConfigurationClasses,
-			AutoConfigurationMetadata autoConfigurationMetadata) {
+													   AutoConfigurationMetadata autoConfigurationMetadata) {
 		int split = autoConfigurationClasses.length / 2;
 		OutcomesResolver firstHalfResolver = createOutcomesResolver(autoConfigurationClasses, 0, split,
 				autoConfigurationMetadata);
@@ -74,14 +83,22 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		return outcomes;
 	}
 
+	/**
+	 * 创建 OutcomesResolver 实例
+	 *
+	 * @param autoConfigurationClasses
+	 * @param start
+	 * @param end
+	 * @param autoConfigurationMetadata
+	 * @return
+	 */
 	private OutcomesResolver createOutcomesResolver(String[] autoConfigurationClasses, int start, int end,
-			AutoConfigurationMetadata autoConfigurationMetadata) {
+													AutoConfigurationMetadata autoConfigurationMetadata) {
 		OutcomesResolver outcomesResolver = new StandardOutcomesResolver(autoConfigurationClasses, start, end,
 				autoConfigurationMetadata, getBeanClassLoader());
 		try {
 			return new ThreadedOutcomesResolver(outcomesResolver);
-		}
-		catch (AccessControlException ex) {
+		} catch (AccessControlException ex) {
 			return outcomesResolver;
 		}
 	}
@@ -94,6 +111,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		if (onClasses != null) {
 			List<String> missing = filter(onClasses, ClassNameFilter.MISSING, classLoader);
 			if (!missing.isEmpty()) {
+				// 存在给定的类时条件成立，有不存在的类
 				return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnClass.class)
 						.didNotFind("required class", "required classes").items(Style.QUOTE, missing));
 			}
@@ -105,6 +123,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		if (onMissingClasses != null) {
 			List<String> present = filter(onMissingClasses, ClassNameFilter.PRESENT, classLoader);
 			if (!present.isEmpty()) {
+				// 不存在给定的类时条件成立，有存在的类
 				return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnMissingClass.class)
 						.found("unwanted class", "unwanted classes").items(Style.QUOTE, present));
 			}
@@ -115,6 +134,13 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		return ConditionOutcome.match(matchMessage);
 	}
 
+	/**
+	 * 获取候选的类
+	 *
+	 * @param metadata
+	 * @param annotationType
+	 * @return
+	 */
 	private List<String> getCandidates(AnnotatedTypeMetadata metadata, Class<?> annotationType) {
 		MultiValueMap<String, Object> attributes = metadata.getAllAnnotationAttributes(annotationType.getName(), true);
 		if (attributes == null) {
@@ -134,12 +160,18 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		}
 	}
 
+	/**
+	 * ConditionOutcome 解析
+	 */
 	private interface OutcomesResolver {
 
 		ConditionOutcome[] resolveOutcomes();
 
 	}
 
+	/**
+	 * ConditionOutcome 异步解析
+	 */
 	private static final class ThreadedOutcomesResolver implements OutcomesResolver {
 
 		private final Thread thread;
@@ -155,8 +187,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		public ConditionOutcome[] resolveOutcomes() {
 			try {
 				this.thread.join();
-			}
-			catch (InterruptedException ex) {
+			} catch (InterruptedException ex) {
 				Thread.currentThread().interrupt();
 			}
 			return this.outcomes;
@@ -164,6 +195,9 @@ class OnClassCondition extends FilteringSpringBootCondition {
 
 	}
 
+	/**
+	 * ConditionOutcome 标准解析，从自动装配元数据中解析依赖的类
+	 */
 	private final class StandardOutcomesResolver implements OutcomesResolver {
 
 		private final String[] autoConfigurationClasses;
@@ -177,7 +211,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		private final ClassLoader beanClassLoader;
 
 		private StandardOutcomesResolver(String[] autoConfigurationClasses, int start, int end,
-				AutoConfigurationMetadata autoConfigurationMetadata, ClassLoader beanClassLoader) {
+										 AutoConfigurationMetadata autoConfigurationMetadata, ClassLoader beanClassLoader) {
 			this.autoConfigurationClasses = autoConfigurationClasses;
 			this.start = start;
 			this.end = end;
@@ -191,11 +225,12 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		}
 
 		private ConditionOutcome[] getOutcomes(String[] autoConfigurationClasses, int start, int end,
-				AutoConfigurationMetadata autoConfigurationMetadata) {
+											   AutoConfigurationMetadata autoConfigurationMetadata) {
 			ConditionOutcome[] outcomes = new ConditionOutcome[end - start];
 			for (int i = start; i < end; i++) {
 				String autoConfigurationClass = autoConfigurationClasses[i];
 				if (autoConfigurationClass != null) {
+					// 从自动装配元数据中判断是否装配
 					String candidates = autoConfigurationMetadata.get(autoConfigurationClass, "ConditionalOnClass");
 					if (candidates != null) {
 						outcomes[i - start] = getOutcome(candidates);
@@ -213,11 +248,11 @@ class OnClassCondition extends FilteringSpringBootCondition {
 				for (String candidate : StringUtils.commaDelimitedListToStringArray(candidates)) {
 					ConditionOutcome outcome = getOutcome(candidate, this.beanClassLoader);
 					if (outcome != null) {
+						// 或关系
 						return outcome;
 					}
 				}
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				// We'll get another chance later
 			}
 			return null;
@@ -225,6 +260,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 
 		private ConditionOutcome getOutcome(String className, ClassLoader classLoader) {
 			if (ClassNameFilter.MISSING.matches(className, classLoader)) {
+				// 不匹配
 				return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnClass.class)
 						.didNotFind("required class").items(Style.QUOTE, className));
 			}

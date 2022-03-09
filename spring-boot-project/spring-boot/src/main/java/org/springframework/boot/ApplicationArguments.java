@@ -21,7 +21,7 @@ import java.util.Set;
 
 /**
  * SpringApplication#run 方法参数
- *
+ * <p>
  * Provides access to the arguments that were used to run a {@link SpringApplication}.
  *
  * @author Phillip Webb
@@ -30,27 +30,38 @@ import java.util.Set;
 public interface ApplicationArguments {
 
 	/**
+	 * 原始参数
+	 *
 	 * Return the raw unprocessed arguments that were passed to the application.
+	 *
 	 * @return the arguments
 	 */
 	String[] getSourceArgs();
 
 	/**
+	 * 参数名
+	 *
 	 * Return the names of all option arguments. For example, if the arguments were
 	 * "--foo=bar --debug" would return the values {@code ["foo", "debug"]}.
+	 *
 	 * @return the option names or an empty set
 	 */
 	Set<String> getOptionNames();
 
 	/**
+	 * 是否存在给定名称的参数
+	 *
 	 * Return whether the set of option arguments parsed from the arguments contains an
 	 * option with the given name.
+	 *
 	 * @param name the name to check
 	 * @return {@code true} if the arguments contain an option with the given name
 	 */
 	boolean containsOption(String name);
 
 	/**
+	 * 获取给定名称的参数
+	 *
 	 * Return the collection of values associated with the arguments option having the
 	 * given name.
 	 * <ul>
@@ -62,13 +73,17 @@ public interface ApplicationArguments {
 	 * return a collection having elements for each value ({@code ["bar", "baz"]})</li>
 	 * <li>if the option is not present, return {@code null}</li>
 	 * </ul>
+	 *
 	 * @param name the name of the option
 	 * @return a list of option values for the given name
 	 */
 	List<String> getOptionValues(String name);
 
 	/**
+	 * 获取没有参数值的参数
+	 *
 	 * Return the collection of non-option arguments parsed.
+	 *
 	 * @return the non-option arguments or an empty list
 	 */
 	List<String> getNonOptionArgs();

@@ -19,6 +19,8 @@ package org.springframework.boot.autoconfigure;
 import java.util.Set;
 
 /**
+ * 自动装配元数据
+ * <p>
  * Provides access to meta-data written by the auto-configure annotation processor.
  *
  * @author Phillip Webb
@@ -29,6 +31,7 @@ public interface AutoConfigurationMetadata {
 	/**
 	 * Return {@code true} if the specified class name was processed by the annotation
 	 * processor.
+	 *
 	 * @param className the source class
 	 * @return if the class was processed
 	 */
@@ -36,16 +39,18 @@ public interface AutoConfigurationMetadata {
 
 	/**
 	 * Get an {@link Integer} value from the meta-data.
+	 *
 	 * @param className the source class
-	 * @param key the meta-data key
+	 * @param key       the meta-data key
 	 * @return the meta-data value or {@code null}
 	 */
 	Integer getInteger(String className, String key);
 
 	/**
 	 * Get an {@link Integer} value from the meta-data.
-	 * @param className the source class
-	 * @param key the meta-data key
+	 *
+	 * @param className    the source class
+	 * @param key          the meta-data key
 	 * @param defaultValue the default value
 	 * @return the meta-data value or {@code defaultValue}
 	 */
@@ -53,16 +58,18 @@ public interface AutoConfigurationMetadata {
 
 	/**
 	 * Get a {@link Set} value from the meta-data.
+	 *
 	 * @param className the source class
-	 * @param key the meta-data key
+	 * @param key       the meta-data key
 	 * @return the meta-data value or {@code null}
 	 */
 	Set<String> getSet(String className, String key);
 
 	/**
 	 * Get a {@link Set} value from the meta-data.
-	 * @param className the source class
-	 * @param key the meta-data key
+	 *
+	 * @param className    the source class
+	 * @param key          the meta-data key
 	 * @param defaultValue the default value
 	 * @return the meta-data value or {@code defaultValue}
 	 */
@@ -70,16 +77,18 @@ public interface AutoConfigurationMetadata {
 
 	/**
 	 * Get an {@link String} value from the meta-data.
+	 *
 	 * @param className the source class
-	 * @param key the meta-data key
+	 * @param key       the meta-data key
 	 * @return the meta-data value or {@code null}
 	 */
 	String get(String className, String key);
 
 	/**
 	 * Get an {@link String} value from the meta-data.
-	 * @param className the source class
-	 * @param key the meta-data key
+	 *
+	 * @param className    the source class
+	 * @param key          the meta-data key
 	 * @param defaultValue the default value
 	 * @return the meta-data value or {@code defaultValue}
 	 */

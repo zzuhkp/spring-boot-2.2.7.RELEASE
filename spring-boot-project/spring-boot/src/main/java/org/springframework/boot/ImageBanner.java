@@ -46,6 +46,8 @@ import org.springframework.core.log.LogMessage;
 import org.springframework.util.Assert;
 
 /**
+ * 图片 banner 打印
+ * <p>
  * Banner implementation that prints ASCII art generated from an image resource
  * {@link Resource}.
  *
@@ -61,7 +63,7 @@ public class ImageBanner implements Banner {
 
 	private static final Log logger = LogFactory.getLog(ImageBanner.class);
 
-	private static final double[] RGB_WEIGHT = { 0.2126d, 0.7152d, 0.0722d };
+	private static final double[] RGB_WEIGHT = {0.2126d, 0.7152d, 0.0722d};
 
 	private final Resource image;
 
@@ -77,17 +79,14 @@ public class ImageBanner implements Banner {
 		try {
 			System.setProperty("java.awt.headless", "true");
 			printBanner(environment, out);
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			logger.warn(LogMessage.format("Image banner not printable: %s (%s: '%s')", this.image, ex.getClass(),
 					ex.getMessage()));
 			logger.debug("Image banner printing failure", ex);
-		}
-		finally {
+		} finally {
 			if (headless == null) {
 				System.clearProperty("java.awt.headless");
-			}
-			else {
+			} else {
 				System.setProperty("java.awt.headless", headless);
 			}
 		}
@@ -145,8 +144,7 @@ public class ImageBanner implements Banner {
 				frames[i] = readFrame(width, height, reader, i, readParam);
 			}
 			return frames;
-		}
-		finally {
+		} finally {
 			reader.dispose();
 		}
 	}
@@ -199,7 +197,7 @@ public class ImageBanner implements Banner {
 	}
 
 	private void printBanner(BufferedImage image, int margin, boolean invert, BitDepth bitDepth, PixelMode pixelMode,
-			PrintStream out) {
+							 PrintStream out) {
 		AnsiElement background = invert ? AnsiBackground.BLACK : AnsiBackground.DEFAULT;
 		out.print(AnsiOutput.encode(AnsiColor.DEFAULT));
 		out.print(AnsiOutput.encode(background));
@@ -255,8 +253,7 @@ public class ImageBanner implements Banner {
 	private void sleep(int delay) {
 		try {
 			Thread.sleep(delay);
-		}
-		catch (InterruptedException ex) {
+		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
 	}

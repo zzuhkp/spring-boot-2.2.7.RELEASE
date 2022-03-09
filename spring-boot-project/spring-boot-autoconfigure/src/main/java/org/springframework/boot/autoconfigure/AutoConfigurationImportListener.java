@@ -24,6 +24,8 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 
 /**
+ * import 监听器
+ * <p>
  * Listener that can be registered with {@code spring.factories} to receive details of
  * imported auto-configurations.
  * <p>
@@ -46,6 +48,7 @@ public interface AutoConfigurationImportListener extends EventListener {
 
 	/**
 	 * Handle an auto-configuration import event.
+	 *
 	 * @param event the event to respond to
 	 */
 	void onAutoConfigurationImportEvent(AutoConfigurationImportEvent event);

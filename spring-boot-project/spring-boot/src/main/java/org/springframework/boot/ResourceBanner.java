@@ -69,13 +69,19 @@ public class ResourceBanner implements Banner {
 				banner = resolver.resolvePlaceholders(banner);
 			}
 			out.println(banner);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.warn(LogMessage.format("Banner not printable: %s (%s: '%s')", this.resource, ex.getClass(),
 					ex.getMessage()), ex);
 		}
 	}
 
+	/**
+	 * 获取解析器
+	 *
+	 * @param environment
+	 * @param sourceClass
+	 * @return
+	 */
 	protected List<PropertyResolver> getPropertyResolvers(Environment environment, Class<?> sourceClass) {
 		List<PropertyResolver> resolvers = new ArrayList<>();
 		resolvers.add(environment);
@@ -85,12 +91,24 @@ public class ResourceBanner implements Banner {
 		return resolvers;
 	}
 
+	/**
+	 * 获取版本号解析器
+	 *
+	 * @param sourceClass
+	 * @return
+	 */
 	private PropertyResolver getVersionResolver(Class<?> sourceClass) {
 		MutablePropertySources propertySources = new MutablePropertySources();
 		propertySources.addLast(new MapPropertySource("version", getVersionsMap(sourceClass)));
 		return new PropertySourcesPropertyResolver(propertySources);
 	}
 
+	/**
+	 * 获取版本号信息
+	 *
+	 * @param sourceClass
+	 * @return
+	 */
 	private Map<String, Object> getVersionsMap(Class<?> sourceClass) {
 		String appVersion = getApplicationVersion(sourceClass);
 		String bootVersion = getBootVersion();
@@ -102,11 +120,22 @@ public class ResourceBanner implements Banner {
 		return versions;
 	}
 
+	/**
+	 * 获取应用版本号
+	 *
+	 * @param sourceClass
+	 * @return
+	 */
 	protected String getApplicationVersion(Class<?> sourceClass) {
 		Package sourcePackage = (sourceClass != null) ? sourceClass.getPackage() : null;
 		return (sourcePackage != null) ? sourcePackage.getImplementationVersion() : null;
 	}
 
+	/**
+	 * 获取 SpringBoot 版本号
+	 *
+	 * @return
+	 */
 	protected String getBootVersion() {
 		return SpringBootVersion.getVersion();
 	}
@@ -118,12 +147,23 @@ public class ResourceBanner implements Banner {
 		return format ? " (v" + version + ")" : version;
 	}
 
+	/**
+	 * ANSI 解析器
+	 *
+	 * @return
+	 */
 	private PropertyResolver getAnsiResolver() {
 		MutablePropertySources sources = new MutablePropertySources();
 		sources.addFirst(new AnsiPropertySource("ansi", true));
 		return new PropertySourcesPropertyResolver(sources);
 	}
 
+	/**
+	 * 获取 Title 解析器
+	 *
+	 * @param sourceClass
+	 * @return
+	 */
 	private PropertyResolver getTitleResolver(Class<?> sourceClass) {
 		MutablePropertySources sources = new MutablePropertySources();
 		String applicationTitle = getApplicationTitle(sourceClass);
@@ -133,6 +173,12 @@ public class ResourceBanner implements Banner {
 		return new PropertySourcesPropertyResolver(sources);
 	}
 
+	/**
+	 * 获取应用 Title
+	 *
+	 * @param sourceClass
+	 * @return
+	 */
 	protected String getApplicationTitle(Class<?> sourceClass) {
 		Package sourcePackage = (sourceClass != null) ? sourceClass.getPackage() : null;
 		return (sourcePackage != null) ? sourcePackage.getImplementationTitle() : null;

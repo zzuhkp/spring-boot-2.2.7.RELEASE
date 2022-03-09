@@ -25,6 +25,8 @@ import java.lang.annotation.Target;
 import org.springframework.context.annotation.Conditional;
 
 /**
+ * 给定类存在时条件成立
+ * <p>
  * {@link Conditional @Conditional} that only matches when the specified classes are on
  * the classpath.
  * <p>
@@ -37,7 +39,7 @@ import org.springframework.context.annotation.Conditional;
  * @author Phillip Webb
  * @since 1.0.0
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnClassCondition.class)
@@ -49,12 +51,14 @@ public @interface ConditionalOnClass {
 	 * classpath, only if this annotation is directly on the affected component and
 	 * <b>not</b> if this annotation is used as a composed, meta-annotation. In order to
 	 * use this annotation as a meta-annotation, only use the {@link #name} attribute.
+	 *
 	 * @return the classes that must be present
 	 */
 	Class<?>[] value() default {};
 
 	/**
 	 * The classes names that must be present.
+	 *
 	 * @return the class names that must be present.
 	 */
 	String[] name() default {};

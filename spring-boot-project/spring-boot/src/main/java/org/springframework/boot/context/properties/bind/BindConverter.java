@@ -41,6 +41,8 @@ import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.util.Assert;
 
 /**
+ * 绑定期间进行类型转换的工具类
+ * <p>
  * Utility to handle any conversion needed during binding. This class is not thread-safe
  * and so a new instance is created for each top-level bind.
  *
@@ -50,6 +52,7 @@ import org.springframework.util.Assert;
 final class BindConverter {
 
 	private static final Set<Class<?>> EXCLUDED_EDITORS;
+
 	static {
 		Set<Class<?>> excluded = new HashSet<>();
 		excluded.add(FileEditor.class); // gh-12163
@@ -61,15 +64,22 @@ final class BindConverter {
 	private final ConversionService conversionService;
 
 	private BindConverter(ConversionService conversionService,
-			Consumer<PropertyEditorRegistry> propertyEditorInitializer) {
+						  Consumer<PropertyEditorRegistry> propertyEditorInitializer) {
 		Assert.notNull(conversionService, "ConversionService must not be null");
 		List<ConversionService> conversionServices = getConversionServices(conversionService,
 				propertyEditorInitializer);
 		this.conversionService = new CompositeConversionService(conversionServices);
 	}
 
+	/**
+	 * 获取 ConversionService 列表
+	 *
+	 * @param conversionService
+	 * @param propertyEditorInitializer
+	 * @return
+	 */
 	private List<ConversionService> getConversionServices(ConversionService conversionService,
-			Consumer<PropertyEditorRegistry> propertyEditorInitializer) {
+														  Consumer<PropertyEditorRegistry> propertyEditorInitializer) {
 		List<ConversionService> services = new ArrayList<>();
 		services.add(new TypeConverterConversionService(propertyEditorInitializer));
 		services.add(conversionService);
@@ -97,8 +107,15 @@ final class BindConverter {
 				new ResolvableTypeDescriptor(type, annotations));
 	}
 
+	/**
+	 * 获取实例
+	 *
+	 * @param conversionService
+	 * @param propertyEditorInitializer
+	 * @return
+	 */
 	static BindConverter get(ConversionService conversionService,
-			Consumer<PropertyEditorRegistry> propertyEditorInitializer) {
+							 Consumer<PropertyEditorRegistry> propertyEditorInitializer) {
 		if (conversionService == ApplicationConversionService.getSharedInstance()
 				&& propertyEditorInitializer == null) {
 			if (sharedInstance == null) {
@@ -163,8 +180,7 @@ final class BindConverter {
 					if (delegate.canConvert(sourceType, targetType)) {
 						return delegate.convert(source, sourceType, targetType);
 					}
-				}
-				catch (ConversionException ex) {
+				} catch (ConversionException ex) {
 				}
 			}
 			return this.delegates.get(this.delegates.size() - 1).convert(source, sourceType, targetType);
@@ -184,6 +200,12 @@ final class BindConverter {
 			ApplicationConversionService.addDelimitedStringConverters(this);
 		}
 
+		/**
+		 * 根据 Consumer<PropertyEditorRegistry>  创建 SimpleTypeConverter
+		 *
+		 * @param initializer
+		 * @return
+		 */
 		private SimpleTypeConverter createTypeConverter(Consumer<PropertyEditorRegistry> initializer) {
 			SimpleTypeConverter typeConverter = new SimpleTypeConverter();
 			if (initializer != null) {

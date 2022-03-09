@@ -44,6 +44,8 @@ import org.springframework.boot.origin.TextResourceOrigin.Location;
 import org.springframework.core.io.Resource;
 
 /**
+ * yml 文件加载
+ * <p>
  * Class to load {@code .yml} files into a map of {@code String} to
  * {@link OriginTrackedValue}.
  *
@@ -87,8 +89,7 @@ class OriginTrackedYamlLoader extends YamlProcessor {
 				if (!(node instanceof KeyScalarNode)) {
 					return constructTrackedObject(node, super.constructObject(node));
 				}
-			}
-			else if (node instanceof MappingNode) {
+			} else if (node instanceof MappingNode) {
 				replaceMappingNodeKeys((MappingNode) node);
 			}
 			return super.constructObject(node);

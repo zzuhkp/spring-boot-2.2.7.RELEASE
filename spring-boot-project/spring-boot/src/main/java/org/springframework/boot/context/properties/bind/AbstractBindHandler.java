@@ -20,6 +20,8 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyN
 import org.springframework.util.Assert;
 
 /**
+ * BindHandler 抽象基类
+ *
  * Abstract base class for {@link BindHandler} implementations.
  *
  * @author Phillip Webb

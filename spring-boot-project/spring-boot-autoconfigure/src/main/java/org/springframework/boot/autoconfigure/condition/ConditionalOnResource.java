@@ -25,13 +25,15 @@ import java.lang.annotation.Target;
 import org.springframework.context.annotation.Conditional;
 
 /**
+ * 资源存在条件
+ *
  * {@link Conditional @Conditional} that only matches when the specified resources are on
  * the classpath.
  *
  * @author Dave Syer
  * @since 1.0.0
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnResourceCondition.class)
@@ -39,6 +41,7 @@ public @interface ConditionalOnResource {
 
 	/**
 	 * The resources that must be present.
+	 *
 	 * @return the resource paths that must be present.
 	 */
 	String[] resources() default {};

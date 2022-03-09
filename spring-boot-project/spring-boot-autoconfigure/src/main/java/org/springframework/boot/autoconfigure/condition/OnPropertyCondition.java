@@ -34,6 +34,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 /**
+ * Environment 中的属性匹配条件
+ * <p>
  * {@link Condition} that checks if properties are defined in environment.
  *
  * @author Maciej Walkowiak
@@ -69,8 +71,7 @@ class OnPropertyCondition extends SpringBootCondition {
 				Map<String, Object> map;
 				if (i < maps.size()) {
 					map = maps.get(i);
-				}
-				else {
+				} else {
 					map = new HashMap<>();
 					maps.add(map);
 				}
@@ -140,8 +141,7 @@ class OnPropertyCondition extends SpringBootCondition {
 					if (!isMatch(resolver.getProperty(key), this.havingValue)) {
 						nonMatching.add(name);
 					}
-				}
-				else {
+				} else {
 					if (!this.matchIfMissing) {
 						missing.add(name);
 					}
@@ -163,8 +163,7 @@ class OnPropertyCondition extends SpringBootCondition {
 			result.append(this.prefix);
 			if (this.names.length == 1) {
 				result.append(this.names[0]);
-			}
-			else {
+			} else {
 				result.append("[");
 				result.append(StringUtils.arrayToCommaDelimitedString(this.names));
 				result.append("]");

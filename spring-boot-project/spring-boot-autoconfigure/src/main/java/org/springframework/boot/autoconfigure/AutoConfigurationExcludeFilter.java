@@ -27,6 +27,8 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
 
 /**
+ * 不处理被自动装配并且类上存在 @Configuration 注解的类
+ * <p>
  * A {@link TypeFilter} implementation that matches registered auto-configuration classes.
  *
  * @author Stephane Nicoll
@@ -36,6 +38,9 @@ public class AutoConfigurationExcludeFilter implements TypeFilter, BeanClassLoad
 
 	private ClassLoader beanClassLoader;
 
+	/**
+	 * 自动装配的类
+	 */
 	private volatile List<String> autoConfigurations;
 
 	@Override
@@ -46,6 +51,7 @@ public class AutoConfigurationExcludeFilter implements TypeFilter, BeanClassLoad
 	@Override
 	public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory)
 			throws IOException {
+		// 类上存在 @Configuration 注解，并且该类被自动装配
 		return isConfiguration(metadataReader) && isAutoConfiguration(metadataReader);
 	}
 

@@ -20,6 +20,8 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyN
 import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
 
 /**
+ * AggregateBinder 用于递归绑定的接口
+ *
  * Binder that can be used by {@link AggregateBinder} implementations to recursively bind
  * elements.
  *
@@ -31,7 +33,8 @@ interface AggregateElementBinder {
 
 	/**
 	 * Bind the given name to a target bindable.
-	 * @param name the name to bind
+	 *
+	 * @param name   the name to bind
 	 * @param target the target bindable
 	 * @return a bound object or {@code null}
 	 */
@@ -42,7 +45,8 @@ interface AggregateElementBinder {
 	/**
 	 * Bind the given name to a target bindable using optionally limited to a single
 	 * source.
-	 * @param name the name to bind
+	 *
+	 * @param name   the name to bind
 	 * @param target the target bindable
 	 * @param source the source of the elements or {@code null} to use all sources
 	 * @return a bound object or {@code null}

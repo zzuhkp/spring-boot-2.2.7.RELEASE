@@ -27,21 +27,26 @@ import javax.naming.InitialContext;
 import org.springframework.context.annotation.Conditional;
 
 /**
+ * JNDI 条件
+ * <p>
  * {@link Conditional @Conditional} that matches based on the availability of a JNDI
  * {@link InitialContext} and the ability to lookup specific locations.
  *
  * @author Phillip Webb
  * @since 1.2.0
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnJndiCondition.class)
 public @interface ConditionalOnJndi {
 
 	/**
+	 * JNDI 位置
+	 * <p>
 	 * JNDI Locations, one of which must exist. If no locations are specific the condition
 	 * matches solely based on the presence of an {@link InitialContext}.
+	 *
 	 * @return the JNDI locations
 	 */
 	String[] value() default {};

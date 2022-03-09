@@ -29,23 +29,34 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 可以被 Binder 绑定的对象
+ * <p>
  * Source that can be bound by a {@link Binder}.
  *
  * @param <T> the source type
  * @author Phillip Webb
  * @author Madhura Bhave
- * @since 2.0.0
  * @see Bindable#of(Class)
  * @see Bindable#of(ResolvableType)
+ * @since 2.0.0
  */
 public final class Bindable<T> {
 
 	private static final Annotation[] NO_ANNOTATIONS = {};
 
+	/**
+	 * 类型
+	 */
 	private final ResolvableType type;
 
+	/**
+	 * 包装类型
+	 */
 	private final ResolvableType boxedType;
 
+	/**
+	 * 类型值获取
+	 */
 	private final Supplier<T> value;
 
 	private final Annotation[] annotations;
@@ -59,6 +70,7 @@ public final class Bindable<T> {
 
 	/**
 	 * Return the type of the item to bind.
+	 *
 	 * @return the type being bound
 	 */
 	public ResolvableType getType() {
@@ -67,6 +79,7 @@ public final class Bindable<T> {
 
 	/**
 	 * Return the boxed type of the item to bind.
+	 *
 	 * @return the boxed type for the item being bound
 	 */
 	public ResolvableType getBoxedType() {
@@ -75,6 +88,7 @@ public final class Bindable<T> {
 
 	/**
 	 * Return a supplier that provides the object value or {@code null}.
+	 *
 	 * @return the value or {@code null}
 	 */
 	public Supplier<T> getValue() {
@@ -83,6 +97,7 @@ public final class Bindable<T> {
 
 	/**
 	 * Return any associated annotations that could affect binding.
+	 *
 	 * @return the associated annotations
 	 */
 	public Annotation[] getAnnotations() {
@@ -90,8 +105,11 @@ public final class Bindable<T> {
 	}
 
 	/**
+	 * 获取给定类型注解实例
+	 * <p>
 	 * Return a single associated annotations that could affect binding.
-	 * @param <A> the annotation type
+	 *
+	 * @param <A>  the annotation type
 	 * @param type annotation type
 	 * @return the associated annotation or {@code null}
 	 */
@@ -144,6 +162,7 @@ public final class Bindable<T> {
 
 	/**
 	 * Create an updated {@link Bindable} instance with the specified annotations.
+	 *
 	 * @param annotations the annotations
 	 * @return an updated {@link Bindable}
 	 */
@@ -154,6 +173,7 @@ public final class Bindable<T> {
 
 	/**
 	 * Create an updated {@link Bindable} instance with an existing value.
+	 *
 	 * @param existingValue the existing value
 	 * @return an updated {@link Bindable}
 	 */
@@ -167,6 +187,7 @@ public final class Bindable<T> {
 
 	/**
 	 * Create an updated {@link Bindable} instance with a value supplier.
+	 *
 	 * @param suppliedValue the supplier for the value
 	 * @return an updated {@link Bindable}
 	 */
@@ -175,9 +196,12 @@ public final class Bindable<T> {
 	}
 
 	/**
+	 * 根据实例创建 Bindable
+	 * <p>
 	 * Create a new {@link Bindable} of the type of the specified instance with an
 	 * existing value equal to the instance.
-	 * @param <T> the source type
+	 *
+	 * @param <T>      the source type
 	 * @param instance the instance (must not be {@code null})
 	 * @return a {@link Bindable} instance
 	 * @see #of(ResolvableType)
@@ -191,8 +215,11 @@ public final class Bindable<T> {
 	}
 
 	/**
+	 * 根据类型创建 Bindable
+	 * <p>
 	 * Create a new {@link Bindable} of the specified type.
-	 * @param <T> the source type
+	 *
+	 * @param <T>  the source type
 	 * @param type the type (must not be {@code null})
 	 * @return a {@link Bindable} instance
 	 * @see #of(ResolvableType)
@@ -203,8 +230,11 @@ public final class Bindable<T> {
 	}
 
 	/**
+	 * 根据 List 元素类型创建 Bindable
+	 * <p>
 	 * Create a new {@link Bindable} {@link List} of the specified element type.
-	 * @param <E> the element type
+	 *
+	 * @param <E>         the element type
 	 * @param elementType the list element type
 	 * @return a {@link Bindable} instance
 	 */
@@ -213,8 +243,11 @@ public final class Bindable<T> {
 	}
 
 	/**
+	 * 根据 Set 元素类型创建 Bindable
+	 * <p>
 	 * Create a new {@link Bindable} {@link Set} of the specified element type.
-	 * @param <E> the element type
+	 *
+	 * @param <E>         the element type
 	 * @param elementType the set element type
 	 * @return a {@link Bindable} instance
 	 */
@@ -223,10 +256,13 @@ public final class Bindable<T> {
 	}
 
 	/**
+	 * 根据 Map 键值的类型创建 Bindable
+	 * <p>
 	 * Create a new {@link Bindable} {@link Map} of the specified key and value type.
-	 * @param <K> the key type
-	 * @param <V> the value type
-	 * @param keyType the map key type
+	 *
+	 * @param <K>       the key type
+	 * @param <V>       the value type
+	 * @param keyType   the map key type
 	 * @param valueType the map value type
 	 * @return a {@link Bindable} instance
 	 */
@@ -235,8 +271,11 @@ public final class Bindable<T> {
 	}
 
 	/**
+	 * 根据 ResolvableType 创建 Bindable 实例
+	 * <p>
 	 * Create a new {@link Bindable} of the specified type.
-	 * @param <T> the source type
+	 *
+	 * @param <T>  the source type
 	 * @param type the type (must not be {@code null})
 	 * @return a {@link Bindable} instance
 	 * @see #of(Class)
@@ -247,6 +286,12 @@ public final class Bindable<T> {
 		return new Bindable<>(type, boxedType, null, NO_ANNOTATIONS);
 	}
 
+	/**
+	 * 获取基本类型的包装类型
+	 *
+	 * @param type
+	 * @return
+	 */
 	private static ResolvableType box(ResolvableType type) {
 		Class<?> resolved = type.resolve();
 		if (resolved != null && resolved.isPrimitive()) {

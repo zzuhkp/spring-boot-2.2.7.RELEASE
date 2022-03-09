@@ -34,6 +34,8 @@ import org.springframework.validation.AbstractBindingResult;
 import org.springframework.validation.Validator;
 
 /**
+ * 对绑定结果执行校验的 BindHandler
+ * <p>
  * {@link BindHandler} to apply {@link Validator Validators} to bound results.
  *
  * @author Phillip Webb
@@ -44,10 +46,19 @@ public class ValidationBindHandler extends AbstractBindHandler {
 
 	private final Validator[] validators;
 
+	/**
+	 * 属性名称 -> 类型
+	 */
 	private final Map<ConfigurationPropertyName, ResolvableType> boundTypes = new LinkedHashMap<>();
 
+	/**
+	 * 属性名称 -> 实例
+	 */
 	private final Map<ConfigurationPropertyName, Object> boundResults = new LinkedHashMap<>();
 
+	/**
+	 * 绑定的属性
+	 */
 	private final Set<ConfigurationProperty> boundProperties = new LinkedHashSet<>();
 
 	private BindValidationException exception;
@@ -171,8 +182,7 @@ public class ValidationBindHandler extends AbstractBindHandler {
 				if (resolved != null) {
 					return resolved;
 				}
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 			}
 			return super.getFieldType(field);
 		}
@@ -181,8 +191,7 @@ public class ValidationBindHandler extends AbstractBindHandler {
 		protected Object getActualFieldValue(String field) {
 			try {
 				return ValidationBindHandler.this.boundResults.get(getName(field));
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 			}
 			return null;
 		}

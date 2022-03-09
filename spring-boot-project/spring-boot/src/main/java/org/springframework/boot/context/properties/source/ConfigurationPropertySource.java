@@ -21,6 +21,8 @@ import java.util.function.Predicate;
 import org.springframework.boot.origin.OriginTrackedValue;
 
 /**
+ * ConfigurationProperty 来源
+ * <p>
  * A source of {@link ConfigurationProperty ConfigurationProperties}.
  *
  * @author Phillip Webb

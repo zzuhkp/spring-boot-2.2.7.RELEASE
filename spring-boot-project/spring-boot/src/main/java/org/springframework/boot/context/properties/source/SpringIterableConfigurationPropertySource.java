@@ -34,6 +34,8 @@ import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 由 EnumerablePropertySource 支持的 IterableConfigurationPropertySource
+ * <p>
  * {@link ConfigurationPropertySource} backed by an {@link EnumerablePropertySource}.
  * Extends {@link SpringConfigurationPropertySource} with full "relaxed" mapping support.
  * In order to use this adapter the underlying {@link PropertySource} must be fully
@@ -58,8 +60,7 @@ class SpringIterableConfigurationPropertySource extends SpringConfigurationPrope
 		if (getPropertySource() instanceof MapPropertySource) {
 			try {
 				((MapPropertySource) getPropertySource()).getSource().size();
-			}
-			catch (UnsupportedOperationException ex) {
+			} catch (UnsupportedOperationException ex) {
 				throw new IllegalArgumentException("PropertySource must be fully enumerable");
 			}
 		}
@@ -137,8 +138,7 @@ class SpringIterableConfigurationPropertySource extends SpringConfigurationPrope
 			cache = new Cache(key.copy());
 			this.cache = cache;
 			return cache;
-		}
-		catch (ConcurrentModificationException ex) {
+		} catch (ConcurrentModificationException ex) {
 			// Not fatal at this point, we can continue without a cache
 			return null;
 		}

@@ -26,13 +26,15 @@ import org.springframework.boot.cloud.CloudPlatform;
 import org.springframework.context.annotation.Conditional;
 
 /**
+ * 云平台条件
+ * <p>
  * {@link Conditional @Conditional} that matches when the specified cloud platform is
  * active.
  *
  * @author Madhura Bhave
  * @since 1.5.0
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnCloudPlatformCondition.class)
@@ -40,6 +42,7 @@ public @interface ConditionalOnCloudPlatform {
 
 	/**
 	 * The {@link CloudPlatform cloud platform} that must be active.
+	 *
 	 * @return the expected cloud platform
 	 */
 	CloudPlatform value();

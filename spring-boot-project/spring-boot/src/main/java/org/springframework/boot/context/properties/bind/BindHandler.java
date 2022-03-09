@@ -19,6 +19,8 @@ package org.springframework.boot.context.properties.bind;
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 
 /**
+ * 在绑定期间添加附加逻辑的回调接口
+ * <p>
  * Callback interface that can be used to handle additional logic during element
  * {@link Binder binding}.
  *
@@ -37,9 +39,10 @@ public interface BindHandler {
 
 	/**
 	 * Called when binding of an element starts but before any result has been determined.
-	 * @param <T> the bindable source type
-	 * @param name the name of the element being bound
-	 * @param target the item being bound
+	 *
+	 * @param <T>     the bindable source type
+	 * @param name    the name of the element being bound
+	 * @param target  the item being bound
 	 * @param context the bind context
 	 * @return the actual item that should be used for binding (may be {@code null})
 	 */
@@ -50,10 +53,11 @@ public interface BindHandler {
 	/**
 	 * Called when binding of an element ends with a successful result. Implementations
 	 * may change the ultimately returned result or perform addition validation.
-	 * @param name the name of the element being bound
-	 * @param target the item being bound
+	 *
+	 * @param name    the name of the element being bound
+	 * @param target  the item being bound
 	 * @param context the bind context
-	 * @param result the bound result (never {@code null})
+	 * @param result  the bound result (never {@code null})
 	 * @return the actual result that should be used (may be {@code null})
 	 */
 	default Object onSuccess(ConfigurationPropertyName name, Bindable<?> target, BindContext context, Object result) {
@@ -64,10 +68,11 @@ public interface BindHandler {
 	 * Called when binding of an element ends with an unbound result and a newly created
 	 * instance is about to be returned. Implementations may change the ultimately
 	 * returned result or perform addition validation.
-	 * @param name the name of the element being bound
-	 * @param target the item being bound
+	 *
+	 * @param name    the name of the element being bound
+	 * @param target  the item being bound
 	 * @param context the bind context
-	 * @param result the newly created instance (never {@code null})
+	 * @param result  the newly created instance (never {@code null})
 	 * @return the actual result that should be used (must not be {@code null})
 	 * @since 2.2.2
 	 */
@@ -79,10 +84,11 @@ public interface BindHandler {
 	 * Called when binding fails for any reason (including failures from
 	 * {@link #onSuccess} or {@link #onCreate} calls). Implementations may choose to
 	 * swallow exceptions and return an alternative result.
-	 * @param name the name of the element being bound
-	 * @param target the item being bound
+	 *
+	 * @param name    the name of the element being bound
+	 * @param target  the item being bound
 	 * @param context the bind context
-	 * @param error the cause of the error (if the exception stands it may be re-thrown)
+	 * @param error   the cause of the error (if the exception stands it may be re-thrown)
 	 * @return the actual result that should be used (may be {@code null}).
 	 * @throws Exception if the binding isn't valid
 	 */
@@ -95,10 +101,11 @@ public interface BindHandler {
 	 * Called when binding finishes with either bound or unbound result. This method will
 	 * not be called when binding failed, even if a handler returns a result from
 	 * {@link #onFailure}.
-	 * @param name the name of the element being bound
-	 * @param target the item being bound
+	 *
+	 * @param name    the name of the element being bound
+	 * @param target  the item being bound
 	 * @param context the bind context
-	 * @param result the bound result (may be {@code null})
+	 * @param result  the bound result (may be {@code null})
 	 * @throws Exception if the binding isn't valid
 	 */
 	default void onFinish(ConfigurationPropertyName name, Bindable<?> target, BindContext context, Object result)

@@ -30,6 +30,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * 资源存在条件
+ * <p>
  * {@link Condition} that checks for specific resources.
  *
  * @author Dave Syer

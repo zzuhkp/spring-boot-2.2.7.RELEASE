@@ -24,6 +24,8 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyN
 import org.springframework.core.convert.ConverterNotFoundException;
 
 /**
+ * 忽略顶级 ConverterNotFoundException 的 BindHandler
+ * <p>
  * {@link BindHandler} that can be used to ignore top-level
  * {@link ConverterNotFoundException}s.
  *
@@ -41,6 +43,7 @@ public class IgnoreTopLevelConverterNotFoundBindHandler extends AbstractBindHand
 	/**
 	 * Create a new {@link IgnoreTopLevelConverterNotFoundBindHandler} instance with a
 	 * specific parent.
+	 *
 	 * @param parent the parent handler
 	 */
 	public IgnoreTopLevelConverterNotFoundBindHandler(BindHandler parent) {

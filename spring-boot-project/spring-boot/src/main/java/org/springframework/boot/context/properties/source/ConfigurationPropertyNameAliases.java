@@ -34,6 +34,9 @@ import java.util.*;
  */
 public final class ConfigurationPropertyNameAliases implements Iterable<ConfigurationPropertyName> {
 
+	/**
+	 * 名称 -> 别名
+	 */
 	private final MultiValueMap<ConfigurationPropertyName, ConfigurationPropertyName> aliases = new LinkedMultiValueMap<>();
 
 	public ConfigurationPropertyNameAliases() {

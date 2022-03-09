@@ -16,8 +16,6 @@
 
 package org.springframework.boot;
 
-import java.util.Collection;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -26,7 +24,11 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.core.Ordered;
 
+import java.util.Collection;
+
 /**
+ * 未设置 lazyInit 的 BeanDefinition 设置为 true
+ * <p>
  * {@link BeanFactoryPostProcessor} to set lazy-init on bean definitions that are not
  * {@link LazyInitializationExcludeFilter excluded} and have not already had a value
  * explicitly set.
@@ -35,8 +37,8 @@ import org.springframework.core.Ordered;
  * @author Madhura Bhave
  * @author Tyler Van Gorder
  * @author Phillip Webb
- * @since 2.2.0
  * @see LazyInitializationExcludeFilter
+ * @since 2.2.0
  */
 public final class LazyInitializationBeanFactoryPostProcessor implements BeanFactoryPostProcessor, Ordered {
 
@@ -53,9 +55,17 @@ public final class LazyInitializationBeanFactoryPostProcessor implements BeanFac
 		}
 	}
 
+	/**
+	 * 未设置 lazyInit 的 BeanDefinition 设置为 true
+	 *
+	 * @param beanFactory
+	 * @param filters
+	 * @param beanName
+	 * @param beanDefinition
+	 */
 	private void postProcess(ConfigurableListableBeanFactory beanFactory,
-			Collection<LazyInitializationExcludeFilter> filters, String beanName,
-			AbstractBeanDefinition beanDefinition) {
+							 Collection<LazyInitializationExcludeFilter> filters, String beanName,
+							 AbstractBeanDefinition beanDefinition) {
 		Boolean lazyInit = beanDefinition.getLazyInit();
 		if (lazyInit != null) {
 			return;
@@ -66,17 +76,32 @@ public final class LazyInitializationBeanFactoryPostProcessor implements BeanFac
 		}
 	}
 
+	/**
+	 * 获取 bean 类型
+	 *
+	 * @param beanFactory
+	 * @param beanName
+	 * @return
+	 */
 	private Class<?> getBeanType(ConfigurableListableBeanFactory beanFactory, String beanName) {
 		try {
 			return beanFactory.getType(beanName, false);
-		}
-		catch (NoSuchBeanDefinitionException ex) {
+		} catch (NoSuchBeanDefinitionException ex) {
 			return null;
 		}
 	}
 
+	/**
+	 * 是否排除给定 bean
+	 *
+	 * @param filters
+	 * @param beanName
+	 * @param beanDefinition
+	 * @param beanType
+	 * @return
+	 */
 	private boolean isExcluded(Collection<LazyInitializationExcludeFilter> filters, String beanName,
-			AbstractBeanDefinition beanDefinition, Class<?> beanType) {
+							   AbstractBeanDefinition beanDefinition, Class<?> beanType) {
 		if (beanType != null) {
 			for (LazyInitializationExcludeFilter filter : filters) {
 				if (filter.isExcluded(beanName, beanDefinition, beanType)) {

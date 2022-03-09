@@ -22,6 +22,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.core.KotlinDetector;
 
 /**
+ * BindConstructorProvider 默认实现
+ * <p>
  * Default {@link BindConstructorProvider} implementation.
  *
  * @author Madhura Bhave

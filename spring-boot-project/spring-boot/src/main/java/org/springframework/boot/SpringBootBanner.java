@@ -24,16 +24,18 @@ import org.springframework.boot.ansi.AnsiStyle;
 import org.springframework.core.env.Environment;
 
 /**
+ * 默认 banner 打印
+ * <p>
  * Default Banner implementation which writes the 'Spring' banner.
  *
  * @author Phillip Webb
  */
 class SpringBootBanner implements Banner {
 
-	private static final String[] BANNER = { "", "  .   ____          _            __ _ _",
+	private static final String[] BANNER = {"", "  .   ____          _            __ _ _",
 			" /\\\\ / ___'_ __ _ _(_)_ __  __ _ \\ \\ \\ \\", "( ( )\\___ | '_ | '_| | '_ \\/ _` | \\ \\ \\ \\",
 			" \\\\/  ___)| |_)| | | | | || (_| |  ) ) ) )", "  '  |____| .__|_| |_|_| |_\\__, | / / / /",
-			" =========|_|==============|___/=/_/_/_/" };
+			" =========|_|==============|___/=/_/_/_/"};
 
 	private static final String SPRING_BOOT = " :: Spring Boot :: ";
 

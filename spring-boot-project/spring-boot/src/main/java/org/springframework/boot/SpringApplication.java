@@ -171,10 +171,13 @@ public class SpringApplication {
 	private static final Log logger = LogFactory.getLog(SpringApplication.class);
 
 	/**
-	 * 主要的配置类，一般为标注了 @SpringAppliction 的类
+	 * 主要的配置类，一般为标注了 @SpringApplication 的类
 	 */
 	private Set<Class<?>> primarySources;
 
+	/**
+	 * 配置源，可能是 Class 或者 String 等
+	 */
 	private Set<String> sources = new LinkedHashSet<>();
 
 	/**
@@ -216,6 +219,9 @@ public class SpringApplication {
 
 	private boolean headless = true;
 
+	/**
+	 * 是否注册关闭 hook
+	 */
 	private boolean registerShutdownHook = true;
 
 	/**
@@ -238,10 +244,19 @@ public class SpringApplication {
 	 */
 	private Set<String> additionalProfiles = new HashSet<>();
 
+	/**
+	 * 是否允许 BeanDefinition 重新定义
+	 */
 	private boolean allowBeanDefinitionOverriding;
 
+	/**
+	 * 是否自定义 Environment
+	 */
 	private boolean isCustomEnvironment = false;
 
+	/**
+	 * 是否默认延迟初始化 bean
+	 */
 	private boolean lazyInitialization = false;
 
 	/**
@@ -380,6 +395,15 @@ public class SpringApplication {
 		}
 	}
 
+	/**
+	 * 准备应用上下文
+	 *
+	 * @param context
+	 * @param environment
+	 * @param listeners
+	 * @param applicationArguments
+	 * @param printedBanner
+	 */
 	private void prepareContext(ConfigurableApplicationContext context, ConfigurableEnvironment environment,
 								SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
 		context.setEnvironment(environment);
@@ -410,6 +434,11 @@ public class SpringApplication {
 		listeners.contextLoaded(context);
 	}
 
+	/**
+	 * 刷新应用上下文
+	 *
+	 * @param context
+	 */
 	private void refreshContext(ConfigurableApplicationContext context) {
 		refresh(context);
 		if (this.registerShutdownHook) {
@@ -589,6 +618,11 @@ public class SpringApplication {
 		environment.setActiveProfiles(StringUtils.toStringArray(profiles));
 	}
 
+	/**
+	 * 配置是否忽略 BeanInfo 到系统变量
+	 *
+	 * @param environment
+	 */
 	private void configureIgnoreBeanInfo(ConfigurableEnvironment environment) {
 		if (System.getProperty(CachedIntrospectionResults.IGNORE_BEANINFO_PROPERTY_NAME) == null) {
 			Boolean ignore = environment.getProperty("spring.beaninfo.ignore", Boolean.class, Boolean.TRUE);
@@ -597,6 +631,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 将 Environment 中的属性设置到 SpringApplication 属性值中
+	 * <p>
 	 * Bind the environment to the {@link SpringApplication}.
 	 *
 	 * @param environment the environment to bind
@@ -609,6 +645,12 @@ public class SpringApplication {
 		}
 	}
 
+	/**
+	 * Banner 打印
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private Banner printBanner(ConfigurableEnvironment environment) {
 		if (this.bannerMode == Banner.Mode.OFF) {
 			return null;
@@ -623,6 +665,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 创建应用上下文
+	 * <p>
 	 * Strategy method used to create the {@link ApplicationContext}. By default this
 	 * method will respect any explicitly set application context or application context
 	 * class before falling back to a suitable default.
@@ -653,6 +697,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * ApplicationContext 后处理
+	 * <p>
 	 * Apply any relevant post processing the {@link ApplicationContext}. Subclasses can
 	 * apply additional processing as required.
 	 *
@@ -677,6 +723,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * ApplicationContextInitializer 回调
+	 * <p>
 	 * Apply any {@link ApplicationContextInitializer}s to the context before it is
 	 * refreshed.
 	 *
@@ -694,6 +742,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 启动信息打印
+	 * <p>
 	 * Called to log startup information, subclasses may override to add additional
 	 * logging.
 	 *
@@ -706,6 +756,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 打印 profile 信息
+	 * <p>
 	 * Called to log active profile information.
 	 *
 	 * @param context the application context
@@ -726,6 +778,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 获取 Log 日志
+	 * <p>
 	 * Returns the {@link Log} for the application. By default will be deduced.
 	 *
 	 * @return the application log
@@ -738,6 +792,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 加载 sources 到应用上下文
+	 * <p>
 	 * Load beans into the application context.
 	 *
 	 * @param context the context to load beans into
@@ -801,6 +857,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 创建 BeanDefinitionLoader
+	 * <p>
 	 * Factory method used to create the {@link BeanDefinitionLoader}.
 	 *
 	 * @param registry the bean definition registry
@@ -812,6 +870,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 应用上下文刷新
+	 * <p>
 	 * Refresh the underlying {@link ApplicationContext}.
 	 *
 	 * @param applicationContext the application context to refresh
@@ -822,6 +882,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 应用上下文刷新后的回调
+	 * <p>
 	 * Called after the context has been refreshed.
 	 *
 	 * @param context the application context
@@ -830,6 +892,12 @@ public class SpringApplication {
 	protected void afterRefresh(ConfigurableApplicationContext context, ApplicationArguments args) {
 	}
 
+	/**
+	 * 回调 ApplicationRunner、CommandLineRunner
+	 *
+	 * @param context
+	 * @param args
+	 */
 	private void callRunners(ApplicationContext context, ApplicationArguments args) {
 		List<Object> runners = new ArrayList<>();
 		runners.addAll(context.getBeansOfType(ApplicationRunner.class).values());
@@ -845,6 +913,12 @@ public class SpringApplication {
 		}
 	}
 
+	/**
+	 * 回调 ApplicationRunner
+	 *
+	 * @param runner
+	 * @param args
+	 */
 	private void callRunner(ApplicationRunner runner, ApplicationArguments args) {
 		try {
 			(runner).run(args);
@@ -853,6 +927,12 @@ public class SpringApplication {
 		}
 	}
 
+	/**
+	 * 回调 CommandLineRunner
+	 *
+	 * @param runner
+	 * @param args
+	 */
 	private void callRunner(CommandLineRunner runner, ApplicationArguments args) {
 		try {
 			(runner).run(args.getSourceArgs());
@@ -861,6 +941,14 @@ public class SpringApplication {
 		}
 	}
 
+	/**
+	 * 处理运行失败
+	 *
+	 * @param context
+	 * @param exception
+	 * @param exceptionReporters
+	 * @param listeners
+	 */
 	private void handleRunFailure(ConfigurableApplicationContext context, Throwable exception,
 								  Collection<SpringBootExceptionReporter> exceptionReporters, SpringApplicationRunListeners listeners) {
 		try {
@@ -1203,6 +1291,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 获取所有来源
+	 * <p>
 	 * Return an immutable set of all the sources that will be added to an
 	 * ApplicationContext when {@link #run(String...)} is called. This method combines any
 	 * primary sources specified in the constructor with any additional ones that have
@@ -1265,6 +1355,8 @@ public class SpringApplication {
 	}
 
 	/**
+	 * 获取 ApplicationContextInitializer 实例
+	 * <p>
 	 * Returns read-only ordered Set of the {@link ApplicationContextInitializer}s that
 	 * will be applied to the Spring {@link ApplicationContext}.
 	 *
@@ -1392,6 +1484,13 @@ public class SpringApplication {
 		}
 	}
 
+	/**
+	 * 获取排序后的不可变 Set
+	 *
+	 * @param elements
+	 * @param <E>
+	 * @return
+	 */
 	private static <E> Set<E> asUnmodifiableOrderedSet(Collection<E> elements) {
 		List<E> list = new ArrayList<>(elements);
 		list.sort(AnnotationAwareOrderComparator.INSTANCE);

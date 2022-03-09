@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 import org.springframework.boot.origin.OriginTrackedValue;
 
 /**
+ * 支持迭代属性名的 ConfigurationPropertySource
+ * <p>
  * A {@link ConfigurationPropertySource} with a fully {@link Iterable} set of entries.
  * Implementations of this interface <strong>must</strong> be able to iterate over all
  * contained configuration properties. Any {@code non-null} result from
@@ -31,12 +33,12 @@ import org.springframework.boot.origin.OriginTrackedValue;
  *
  * @author Phillip Webb
  * @author Madhura Bhave
- * @since 2.0.0
  * @see ConfigurationPropertyName
  * @see OriginTrackedValue
  * @see #getConfigurationProperty(ConfigurationPropertyName)
  * @see #iterator()
  * @see #stream()
+ * @since 2.0.0
  */
 public interface IterableConfigurationPropertySource
 		extends ConfigurationPropertySource, Iterable<ConfigurationPropertyName> {
@@ -44,6 +46,7 @@ public interface IterableConfigurationPropertySource
 	/**
 	 * Return an iterator for the {@link ConfigurationPropertyName names} managed by this
 	 * source.
+	 *
 	 * @return an iterator (never {@code null})
 	 */
 	@Override
@@ -54,6 +57,7 @@ public interface IterableConfigurationPropertySource
 	/**
 	 * Returns a sequential {@code Stream} for the {@link ConfigurationPropertyName names}
 	 * managed by this source.
+	 *
 	 * @return a stream of names (never {@code null})
 	 */
 	Stream<ConfigurationPropertyName> stream();

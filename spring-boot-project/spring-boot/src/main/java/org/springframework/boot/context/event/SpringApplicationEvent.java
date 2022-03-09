@@ -20,6 +20,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationEvent;
 
 /**
+ * Spring 应用事件
+ * <p>
  * Base class for {@link ApplicationEvent} related to a {@link SpringApplication}.
  *
  * @author Phillip Webb

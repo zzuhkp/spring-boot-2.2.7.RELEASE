@@ -21,8 +21,8 @@ package org.springframework.boot.context.properties.bind;
  *
  * @author Phillip Webb
  * @author Madhura Bhave
- * @since 2.2.3
  * @see DataObjectBinder
+ * @since 2.2.3
  */
 public abstract class DataObjectPropertyName {
 
@@ -30,7 +30,10 @@ public abstract class DataObjectPropertyName {
 	}
 
 	/**
+	 * 将属性名转换为使用 - 分隔的小写形式
+	 * <p>
 	 * Return the specified Java Bean property name in dashed form.
+	 *
 	 * @param name the source name
 	 * @return the dashed from
 	 */

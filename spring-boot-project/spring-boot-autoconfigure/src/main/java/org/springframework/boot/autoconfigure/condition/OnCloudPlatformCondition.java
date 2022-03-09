@@ -25,6 +25,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
+ * 云平台条件
+ * <p>
  * {@link Condition} that checks for a required {@link CloudPlatform}.
  *
  * @author Madhura Bhave
@@ -43,6 +45,7 @@ class OnCloudPlatformCondition extends SpringBootCondition {
 		String name = cloudPlatform.name();
 		ConditionMessage.Builder message = ConditionMessage.forCondition(ConditionalOnCloudPlatform.class);
 		if (cloudPlatform.isActive(environment)) {
+			// 给定云平台激活，则条件成立
 			return ConditionOutcome.match(message.foundExactly(name));
 		}
 		return ConditionOutcome.noMatch(message.didNotFind(name).atAll());

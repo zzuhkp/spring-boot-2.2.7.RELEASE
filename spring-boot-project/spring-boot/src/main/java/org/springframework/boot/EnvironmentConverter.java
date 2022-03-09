@@ -29,6 +29,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
 /**
+ * Environment 转换成目标 Environment 类型
+ * <p>
  * Utility class for converting one type of {@link Environment} to another.
  *
  * @author Ethan Rubinson
@@ -54,6 +56,7 @@ final class EnvironmentConverter {
 	/**
 	 * Creates a new {@link EnvironmentConverter} that will use the given
 	 * {@code classLoader} during conversion.
+	 *
 	 * @param classLoader the class loader to use
 	 */
 	EnvironmentConverter(ClassLoader classLoader) {
@@ -64,12 +67,13 @@ final class EnvironmentConverter {
 	 * Converts the given {@code environment} to the given {@link StandardEnvironment}
 	 * type. If the environment is already of the same type, no conversion is performed
 	 * and it is returned unchanged.
+	 *
 	 * @param environment the Environment to convert
-	 * @param type the type to convert the Environment to
+	 * @param type        the type to convert the Environment to
 	 * @return the converted Environment
 	 */
 	StandardEnvironment convertEnvironmentIfNecessary(ConfigurableEnvironment environment,
-			Class<? extends StandardEnvironment> type) {
+													  Class<? extends StandardEnvironment> type) {
 		if (type.equals(environment.getClass())) {
 			return (StandardEnvironment) environment;
 		}
@@ -77,7 +81,7 @@ final class EnvironmentConverter {
 	}
 
 	private StandardEnvironment convertEnvironment(ConfigurableEnvironment environment,
-			Class<? extends StandardEnvironment> type) {
+												   Class<? extends StandardEnvironment> type) {
 		StandardEnvironment result = createEnvironment(type);
 		result.setActiveProfiles(environment.getActiveProfiles());
 		result.setConversionService(environment.getConversionService());
@@ -88,8 +92,7 @@ final class EnvironmentConverter {
 	private StandardEnvironment createEnvironment(Class<? extends StandardEnvironment> type) {
 		try {
 			return type.newInstance();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return new StandardEnvironment();
 		}
 	}
@@ -107,8 +110,7 @@ final class EnvironmentConverter {
 		try {
 			Class<?> webEnvironmentClass = ClassUtils.forName(CONFIGURABLE_WEB_ENVIRONMENT_CLASS, classLoader);
 			return webEnvironmentClass.isAssignableFrom(conversionType);
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			return false;
 		}
 	}

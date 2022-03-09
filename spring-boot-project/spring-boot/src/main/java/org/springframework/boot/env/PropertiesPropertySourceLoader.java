@@ -26,6 +26,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
+ * properties 文件形式的属性源加载
+ *
  * Strategy to load '.properties' files into a {@link PropertySource}.
  *
  * @author Dave Syer
@@ -39,7 +41,7 @@ public class PropertiesPropertySourceLoader implements PropertySourceLoader {
 
 	@Override
 	public String[] getFileExtensions() {
-		return new String[] { "properties", "xml" };
+		return new String[]{"properties", "xml"};
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class PropertiesPropertySourceLoader implements PropertySourceLoader {
 				.singletonList(new OriginTrackedMapPropertySource(name, Collections.unmodifiableMap(properties), true));
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private Map<String, ?> loadProperties(Resource resource) throws IOException {
 		String filename = resource.getFilename();
 		if (filename != null && filename.endsWith(XML_FILE_EXTENSION)) {

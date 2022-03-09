@@ -39,6 +39,8 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 
 /**
+ * MetadataReaderFactory bean 注册
+ * <p>
  * {@link ApplicationContextInitializer} to create a shared
  * {@link CachingMetadataReaderFactory} between the
  * {@link ConfigurationClassPostProcessor} and Spring Boot.
@@ -97,8 +99,7 @@ class SharedMetadataReaderFactoryContextInitializer
 				BeanDefinition definition = registry
 						.getBeanDefinition(AnnotationConfigUtils.CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME);
 				definition.getPropertyValues().add("metadataReaderFactory", new RuntimeBeanReference(BEAN_NAME));
-			}
-			catch (NoSuchBeanDefinitionException ex) {
+			} catch (NoSuchBeanDefinitionException ex) {
 			}
 		}
 
@@ -125,6 +126,7 @@ class SharedMetadataReaderFactoryContextInitializer
 
 		@Override
 		public Class<?> getObjectType() {
+			// TODO ConcurrentReferenceCachingMetadataReaderFactory 未继承 CachingMetadataReaderFactory ？
 			return CachingMetadataReaderFactory.class;
 		}
 

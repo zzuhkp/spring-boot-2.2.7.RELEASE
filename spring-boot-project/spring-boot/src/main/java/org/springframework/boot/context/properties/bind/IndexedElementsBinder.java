@@ -35,6 +35,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 /**
+ * 连续读取索引项的基类
+ * <p>
  * Base class for {@link AggregateBinder AggregateBinders} that read a sequential run of
  * indexed items.
  *
@@ -56,17 +58,20 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 	}
 
 	/**
+	 * 将索引元素绑定到提供的集合
+	 * <p>
 	 * Bind indexed elements to the supplied collection.
-	 * @param name the name of the property to bind
-	 * @param target the target bindable
+	 *
+	 * @param name          the name of the property to bind
+	 * @param target        the target bindable
 	 * @param elementBinder the binder to use for elements
 	 * @param aggregateType the aggregate type, may be a collection or an array
-	 * @param elementType the element type
-	 * @param result the destination for results
+	 * @param elementType   the element type
+	 * @param result        the destination for results
 	 */
 	protected final void bindIndexed(ConfigurationPropertyName name, Bindable<?> target,
-			AggregateElementBinder elementBinder, ResolvableType aggregateType, ResolvableType elementType,
-			IndexedCollectionSupplier result) {
+									 AggregateElementBinder elementBinder, ResolvableType aggregateType, ResolvableType elementType,
+									 IndexedCollectionSupplier result) {
 		for (ConfigurationPropertySource source : getContext().getSources()) {
 			bindIndexed(source, name, target, elementBinder, result, aggregateType, elementType);
 			if (result.wasSupplied() && result.get() != null) {
@@ -76,19 +81,20 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 	}
 
 	private void bindIndexed(ConfigurationPropertySource source, ConfigurationPropertyName root, Bindable<?> target,
-			AggregateElementBinder elementBinder, IndexedCollectionSupplier collection, ResolvableType aggregateType,
-			ResolvableType elementType) {
+							 AggregateElementBinder elementBinder, IndexedCollectionSupplier collection, ResolvableType aggregateType,
+							 ResolvableType elementType) {
 		ConfigurationProperty property = source.getConfigurationProperty(root);
 		if (property != null) {
+			// 存在属性值
 			bindValue(target, collection.get(), aggregateType, elementType, property.getValue());
-		}
-		else {
+		} else {
+			// 不存在属性值
 			bindIndexed(source, root, elementBinder, collection, elementType);
 		}
 	}
 
 	private void bindValue(Bindable<?> target, Collection<Object> collection, ResolvableType aggregateType,
-			ResolvableType elementType, Object value) {
+						   ResolvableType elementType, Object value) {
 		if (value instanceof String && !StringUtils.hasText((String) value)) {
 			return;
 		}
@@ -99,7 +105,7 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 	}
 
 	private void bindIndexed(ConfigurationPropertySource source, ConfigurationPropertyName root,
-			AggregateElementBinder elementBinder, IndexedCollectionSupplier collection, ResolvableType elementType) {
+							 AggregateElementBinder elementBinder, IndexedCollectionSupplier collection, ResolvableType elementType) {
 		MultiValueMap<String, ConfigurationProperty> knownIndexedChildren = getKnownIndexedChildren(source, root);
 		for (int i = 0; i < Integer.MAX_VALUE; i++) {
 			ConfigurationPropertyName name = root.append((i != 0) ? "[" + i + "]" : INDEX_ZERO);
@@ -114,7 +120,7 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 	}
 
 	private MultiValueMap<String, ConfigurationProperty> getKnownIndexedChildren(ConfigurationPropertySource source,
-			ConfigurationPropertyName root) {
+																				 ConfigurationPropertyName root) {
 		MultiValueMap<String, ConfigurationProperty> children = new LinkedMultiValueMap<>();
 		if (!(source instanceof IterableConfigurationPropertySource)) {
 			return children;
@@ -137,6 +143,15 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 		}
 	}
 
+	/**
+	 * 类型转换
+	 *
+	 * @param value
+	 * @param type
+	 * @param annotations
+	 * @param <C>
+	 * @return
+	 */
 	private <C> C convert(Object value, ResolvableType type, Annotation... annotations) {
 		value = getContext().getPlaceholdersResolver().resolvePlaceholders(value);
 		return getContext().getConverter().convert(value, type, annotations);

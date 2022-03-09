@@ -31,6 +31,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 
 /**
+ * 基于 AutoConfigurationImportFilter 的 SpringBootCondition
+ * <p>
  * Abstract base class for a {@link SpringBootCondition} that also implements
  * {@link AutoConfigurationImportFilter}.
  *
@@ -49,6 +51,7 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 		ConditionOutcome[] outcomes = getOutcomes(autoConfigurationClasses, autoConfigurationMetadata);
 		boolean[] match = new boolean[outcomes.length];
 		for (int i = 0; i < outcomes.length; i++) {
+			// 为空默认匹配
 			match[i] = (outcomes[i] == null || outcomes[i].isMatch());
 			if (!match[i] && outcomes[i] != null) {
 				logOutcome(autoConfigurationClasses[i], outcomes[i]);
@@ -61,7 +64,7 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 	}
 
 	protected abstract ConditionOutcome[] getOutcomes(String[] autoConfigurationClasses,
-			AutoConfigurationMetadata autoConfigurationMetadata);
+													  AutoConfigurationMetadata autoConfigurationMetadata);
 
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -81,8 +84,16 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 		this.beanClassLoader = classLoader;
 	}
 
+	/**
+	 * 获取匹配的列表
+	 *
+	 * @param classNames
+	 * @param classNameFilter
+	 * @param classLoader
+	 * @return
+	 */
 	protected final List<String> filter(Collection<String> classNames, ClassNameFilter classNameFilter,
-			ClassLoader classLoader) {
+										ClassLoader classLoader) {
 		if (CollectionUtils.isEmpty(classNames)) {
 			return Collections.emptyList();
 		}
@@ -98,7 +109,8 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 	/**
 	 * Slightly faster variant of {@link ClassUtils#forName(String, ClassLoader)} that
 	 * doesn't deal with primitives, arrays or inner types.
-	 * @param className the class name to resolve
+	 *
+	 * @param className   the class name to resolve
 	 * @param classLoader the class loader to use
 	 * @return a resolved class
 	 * @throws ClassNotFoundException if the class cannot be found
@@ -113,7 +125,6 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 	protected enum ClassNameFilter {
 
 		PRESENT {
-
 			@Override
 			public boolean matches(String className, ClassLoader classLoader) {
 				return isPresent(className, classLoader);
@@ -122,7 +133,6 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 		},
 
 		MISSING {
-
 			@Override
 			public boolean matches(String className, ClassLoader classLoader) {
 				return !isPresent(className, classLoader);
@@ -137,10 +147,10 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 				classLoader = ClassUtils.getDefaultClassLoader();
 			}
 			try {
+				// 可以解析类名则匹配
 				resolve(className, classLoader);
 				return true;
-			}
-			catch (Throwable ex) {
+			} catch (Throwable ex) {
 				return false;
 			}
 		}

@@ -20,6 +20,8 @@ import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
 
 /**
+ * PropertySource 与 ConfigurationPropertySource 之间的映射
+ * <p>
  * Strategy used to provide a mapping between a {@link PropertySource} and a
  * {@link ConfigurationPropertySource}.
  * <p>
@@ -43,6 +45,7 @@ interface PropertyMapper {
 	/**
 	 * Provide mappings from a {@link ConfigurationPropertySource}
 	 * {@link ConfigurationPropertyName}.
+	 *
 	 * @param configurationPropertyName the name to map
 	 * @return a stream of mappings or {@code Stream#empty()}
 	 */
@@ -50,6 +53,7 @@ interface PropertyMapper {
 
 	/**
 	 * Provide mappings from a {@link PropertySource} property name.
+	 *
 	 * @param propertySourceName the name to map
 	 * @return a stream of mappings or {@code Stream#empty()}
 	 */

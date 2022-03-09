@@ -27,6 +27,8 @@ import java.util.jar.Attributes.Name;
 import java.util.jar.JarFile;
 
 /**
+ * 获取 SpringBoot 版本号
+ * <p>
  * Class that exposes the Spring Boot version. Fetches the
  * {@link Name#IMPLEMENTATION_VERSION Implementation-Version} manifest attribute from the
  * jar file via {@link Package#getImplementationVersion()}, falling back to locating the
@@ -50,6 +52,7 @@ public final class SpringBootVersion {
 	/**
 	 * Return the full version string of the present Spring Boot codebase, or {@code null}
 	 * if it cannot be determined.
+	 *
 	 * @return the version of Spring Boot or {@code null}
 	 * @see Package#getImplementationVersion()
 	 */
@@ -75,8 +78,7 @@ public final class SpringBootVersion {
 			try (JarFile jarFile = new JarFile(new File(codeSourceLocation.toURI()))) {
 				return getImplementationVersion(jarFile);
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return null;
 		}
 	}

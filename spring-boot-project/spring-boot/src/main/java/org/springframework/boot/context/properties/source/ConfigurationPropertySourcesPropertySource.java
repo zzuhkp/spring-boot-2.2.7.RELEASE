@@ -23,6 +23,8 @@ import org.springframework.core.env.PropertyResolver;
 import org.springframework.core.env.PropertySource;
 
 /**
+ * 获取 ConfigurationProperty 中保存值的 PropertySource
+ * <p>
  * {@link PropertySource} that exposes {@link ConfigurationPropertySource} instances so
  * that they can be used with a {@link PropertyResolver} or added to the
  * {@link Environment}.
@@ -48,15 +50,26 @@ class ConfigurationPropertySourcesPropertySource extends PropertySource<Iterable
 		return Origin.from(findConfigurationProperty(name));
 	}
 
+	/**
+	 * 获取配置属性
+	 *
+	 * @param name
+	 * @return
+	 */
 	private ConfigurationProperty findConfigurationProperty(String name) {
 		try {
 			return findConfigurationProperty(ConfigurationPropertyName.of(name, true));
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return null;
 		}
 	}
 
+	/**
+	 * 获取配置属性
+	 *
+	 * @param name
+	 * @return
+	 */
 	private ConfigurationProperty findConfigurationProperty(ConfigurationPropertyName name) {
 		if (name == null) {
 			return null;

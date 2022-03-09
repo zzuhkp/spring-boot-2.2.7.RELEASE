@@ -26,6 +26,8 @@ import org.springframework.core.env.MapPropertySource;
 import org.springframework.util.Assert;
 
 /**
+ * 由 Map 支持的 IterableConfigurationPropertySource
+ * <p>
  * A {@link ConfigurationPropertySource} backed by a {@link Map} and using standard name
  * mapping rules.
  *
@@ -49,6 +51,7 @@ public class MapConfigurationPropertySource implements IterableConfigurationProp
 	/**
 	 * Create a new {@link MapConfigurationPropertySource} instance with entries copies
 	 * from the specified map.
+	 *
 	 * @param map the source map
 	 */
 	public MapConfigurationPropertySource(Map<?, ?> map) {
@@ -60,6 +63,7 @@ public class MapConfigurationPropertySource implements IterableConfigurationProp
 
 	/**
 	 * Add all entries from the specified map.
+	 *
 	 * @param map the source map
 	 */
 	public void putAll(Map<?, ?> map) {
@@ -70,7 +74,8 @@ public class MapConfigurationPropertySource implements IterableConfigurationProp
 
 	/**
 	 * Add an individual entry.
-	 * @param name the name
+	 *
+	 * @param name  the name
 	 * @param value the value
 	 */
 	public void put(Object name, Object value) {
@@ -100,8 +105,7 @@ public class MapConfigurationPropertySource implements IterableConfigurationProp
 	private void assertNotReadOnlySystemAttributesMap(Map<?, ?> map) {
 		try {
 			map.size();
-		}
-		catch (UnsupportedOperationException ex) {
+		} catch (UnsupportedOperationException ex) {
 			throw new IllegalArgumentException("Security restricted maps are not supported", ex);
 		}
 	}

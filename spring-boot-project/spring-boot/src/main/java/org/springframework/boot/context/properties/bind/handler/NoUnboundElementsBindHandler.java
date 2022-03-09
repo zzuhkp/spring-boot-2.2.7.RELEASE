@@ -32,6 +32,8 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyS
 import org.springframework.boot.context.properties.source.IterableConfigurationPropertySource;
 
 /**
+ * 强制 root name 下的配置属性都绑定的 BindHandler
+ * <p>
  * {@link BindHandler} to enforce that all configuration properties under the root name
  * have been bound.
  *
@@ -41,8 +43,14 @@ import org.springframework.boot.context.properties.source.IterableConfigurationP
  */
 public class NoUnboundElementsBindHandler extends AbstractBindHandler {
 
+	/**
+	 * 成功绑定的属性名
+	 */
 	private final Set<ConfigurationPropertyName> boundNames = new HashSet<>();
 
+	/**
+	 * 尝试绑定的属性名
+	 */
 	private final Set<ConfigurationPropertyName> attemptedNames = new HashSet<>();
 
 	private final Function<ConfigurationPropertySource, Boolean> filter;
@@ -80,6 +88,12 @@ public class NoUnboundElementsBindHandler extends AbstractBindHandler {
 		}
 	}
 
+	/**
+	 * 检查未绑定的元素
+	 *
+	 * @param name
+	 * @param context
+	 */
 	private void checkNoUnboundElements(ConfigurationPropertyName name, BindContext context) {
 		Set<ConfigurationProperty> unbound = new TreeSet<>();
 		for (ConfigurationPropertySource source : context.getSources()) {
@@ -93,18 +107,24 @@ public class NoUnboundElementsBindHandler extends AbstractBindHandler {
 	}
 
 	private void collectUnbound(ConfigurationPropertyName name, Set<ConfigurationProperty> unbound,
-			IterableConfigurationPropertySource source) {
+								IterableConfigurationPropertySource source) {
 		IterableConfigurationPropertySource filtered = source.filter((candidate) -> isUnbound(name, candidate));
 		for (ConfigurationPropertyName unboundName : filtered) {
 			try {
 				unbound.add(
 						source.filter((candidate) -> isUnbound(name, candidate)).getConfigurationProperty(unboundName));
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 			}
 		}
 	}
 
+	/**
+	 * 是否未绑定
+	 *
+	 * @param name
+	 * @param candidate
+	 * @return
+	 */
 	private boolean isUnbound(ConfigurationPropertyName name, ConfigurationPropertyName candidate) {
 		if (name.isAncestorOf(candidate)) {
 			return !this.boundNames.contains(candidate) && !isOverriddenCollectionElement(candidate);

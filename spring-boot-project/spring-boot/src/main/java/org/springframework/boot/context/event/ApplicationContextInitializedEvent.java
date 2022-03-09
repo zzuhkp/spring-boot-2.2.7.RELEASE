@@ -21,6 +21,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
+ * 应用上下文已准备事件
+ * <p>
  * Event published when a {@link SpringApplication} is starting up and the
  * {@link ApplicationContext} is prepared and ApplicationContextInitializers have been
  * called but before any bean definitions are loaded.
@@ -35,18 +37,20 @@ public class ApplicationContextInitializedEvent extends SpringApplicationEvent {
 
 	/**
 	 * Create a new {@link ApplicationContextInitializedEvent} instance.
+	 *
 	 * @param application the current application
-	 * @param args the arguments the application is running with
-	 * @param context the context that has been initialized
+	 * @param args        the arguments the application is running with
+	 * @param context     the context that has been initialized
 	 */
 	public ApplicationContextInitializedEvent(SpringApplication application, String[] args,
-			ConfigurableApplicationContext context) {
+											  ConfigurableApplicationContext context) {
 		super(application, args);
 		this.context = context;
 	}
 
 	/**
 	 * Return the application context.
+	 *
 	 * @return the context
 	 */
 	public ConfigurableApplicationContext getApplicationContext() {

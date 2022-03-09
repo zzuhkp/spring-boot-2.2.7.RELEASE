@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 import org.springframework.util.CollectionUtils;
 
 /**
+ * 支持别名的 IterableConfigurationPropertySource
+ * <p>
  * A {@link IterableConfigurationPropertySource} supporting name aliases.
  *
  * @author Phillip Webb
@@ -31,7 +33,7 @@ class AliasedIterableConfigurationPropertySource extends AliasedConfigurationPro
 		implements IterableConfigurationPropertySource {
 
 	AliasedIterableConfigurationPropertySource(IterableConfigurationPropertySource source,
-			ConfigurationPropertyNameAliases aliases) {
+											   ConfigurationPropertyNameAliases aliases) {
 		super(source, aliases);
 	}
 

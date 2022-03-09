@@ -41,6 +41,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * RestTemplateBuilder bean 注册
+ * <p>
  * {@link EnableAutoConfiguration Auto-configuration} for {@link RestTemplate}.
  *
  * @author Stephane Nicoll
@@ -56,8 +58,8 @@ public class RestTemplateAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public RestTemplateBuilder restTemplateBuilder(ObjectProvider<HttpMessageConverters> messageConverters,
-			ObjectProvider<RestTemplateCustomizer> restTemplateCustomizers,
-			ObjectProvider<RestTemplateRequestCustomizer<?>> restTemplateRequestCustomizers) {
+												   ObjectProvider<RestTemplateCustomizer> restTemplateCustomizers,
+												   ObjectProvider<RestTemplateRequestCustomizer<?>> restTemplateRequestCustomizers) {
 		RestTemplateBuilder builder = new RestTemplateBuilder();
 		HttpMessageConverters converters = messageConverters.getIfUnique();
 		if (converters != null) {
@@ -69,7 +71,7 @@ public class RestTemplateAutoConfiguration {
 	}
 
 	private <T> RestTemplateBuilder addCustomizers(RestTemplateBuilder builder, ObjectProvider<T> objectProvider,
-			BiFunction<RestTemplateBuilder, Collection<T>, RestTemplateBuilder> method) {
+												   BiFunction<RestTemplateBuilder, Collection<T>, RestTemplateBuilder> method) {
 		List<T> customizers = objectProvider.orderedStream().collect(Collectors.toList());
 		if (!customizers.isEmpty()) {
 			return method.apply(builder, customizers);

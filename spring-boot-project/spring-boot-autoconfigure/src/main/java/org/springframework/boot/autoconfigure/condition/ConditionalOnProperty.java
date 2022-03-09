@@ -26,6 +26,8 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.core.env.Environment;
 
 /**
+ * 属性条件
+ *
  * {@link Conditional @Conditional} that checks if the specified properties have a
  * specific value. By default the properties must be present in the {@link Environment}
  * and <strong>not</strong> equal to {@code false}. The {@link #havingValue()} and
@@ -81,7 +83,7 @@ import org.springframework.core.env.Environment;
  * class ExampleAutoConfiguration {
  * }
  * </pre>
- *
+ * <p>
  * It is better to use a custom condition for such cases.
  *
  * @author Maciej Walkowiak
@@ -90,13 +92,14 @@ import org.springframework.core.env.Environment;
  * @since 1.1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Documented
 @Conditional(OnPropertyCondition.class)
 public @interface ConditionalOnProperty {
 
 	/**
 	 * Alias for {@link #name()}.
+	 *
 	 * @return the names
 	 */
 	String[] value() default {};
@@ -105,6 +108,7 @@ public @interface ConditionalOnProperty {
 	 * A prefix that should be applied to each property. The prefix automatically ends
 	 * with a dot if not specified. A valid prefix is defined by one or more words
 	 * separated with dots (e.g. {@code "acme.system.feature"}).
+	 *
 	 * @return the prefix
 	 */
 	String prefix() default "";
@@ -117,6 +121,7 @@ public @interface ConditionalOnProperty {
 	 * <p>
 	 * Use the dashed notation to specify each property, that is all lower case with a "-"
 	 * to separate words (e.g. {@code my-long-property}).
+	 *
 	 * @return the names
 	 */
 	String[] name() default {};
@@ -124,6 +129,7 @@ public @interface ConditionalOnProperty {
 	/**
 	 * The string representation of the expected value for the properties. If not
 	 * specified, the property must <strong>not</strong> be equal to {@code false}.
+	 *
 	 * @return the expected value
 	 */
 	String havingValue() default "";
@@ -131,6 +137,7 @@ public @interface ConditionalOnProperty {
 	/**
 	 * Specify if the condition should match if the property is not set. Defaults to
 	 * {@code false}.
+	 *
 	 * @return if should match if the property is missing
 	 */
 	boolean matchIfMissing() default false;

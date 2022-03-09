@@ -29,6 +29,8 @@ import org.springframework.jndi.JndiLocatorSupport;
 import org.springframework.util.StringUtils;
 
 /**
+ * JNDI 条件，检查给定位置是否存在
+ * <p>
  * {@link Condition} that checks for JNDI locations.
  *
  * @author Phillip Webb
@@ -44,8 +46,7 @@ class OnJndiCondition extends SpringBootCondition {
 		String[] locations = annotationAttributes.getStringArray("value");
 		try {
 			return getMatchOutcome(locations);
-		}
-		catch (NoClassDefFoundError ex) {
+		} catch (NoClassDefFoundError ex) {
 			return ConditionOutcome
 					.noMatch(ConditionMessage.forCondition(ConditionalOnJndi.class).because("JNDI class not found"));
 		}
@@ -92,8 +93,7 @@ class OnJndiCondition extends SpringBootCondition {
 				try {
 					lookup(location);
 					return location;
-				}
-				catch (NamingException ex) {
+				} catch (NamingException ex) {
 					// Swallow and continue
 				}
 			}

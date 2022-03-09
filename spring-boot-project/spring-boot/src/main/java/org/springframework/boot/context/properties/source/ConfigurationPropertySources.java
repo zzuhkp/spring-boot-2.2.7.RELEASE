@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
+ * 访问 ConfigurationPropertySource 的类
+ * <p>
  * Provides access to {@link ConfigurationPropertySource ConfigurationPropertySources}.
  *
  * @author Phillip Webb
@@ -84,6 +86,8 @@ public final class ConfigurationPropertySources {
 	}
 
 	/**
+	 * 获取 Environment 保存的 ConfigurationPropertySource
+	 * <p>
 	 * Return a set of {@link ConfigurationPropertySource} instances that have previously
 	 * been {@link #attach(Environment) attached} to the {@link Environment}.
 	 *
