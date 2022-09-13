@@ -21,6 +21,8 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 /**
+ * DBCP2 数据源配置
+ * <p>
  * {@link DataSourcePoolMetadata} for an Apache Commons DBCP2 {@link DataSource}.
  *
  * @author Stephane Nicoll

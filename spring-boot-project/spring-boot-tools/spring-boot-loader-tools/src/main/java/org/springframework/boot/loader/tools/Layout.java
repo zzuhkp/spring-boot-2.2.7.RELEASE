@@ -22,36 +22,48 @@ package org.springframework.boot.loader.tools;
  * custom loader classes.
  *
  * @author Phillip Webb
- * @since 1.0.0
  * @see Layouts
  * @see RepackagingLayout
  * @see CustomLoaderLayout
+ * @since 1.0.0
  */
 public interface Layout {
 
 	/**
+	 * 启动器类名
+	 * <p>
 	 * Returns the launcher class name for this layout.
+	 *
 	 * @return the launcher class name
 	 */
 	String getLauncherClassName();
 
 	/**
+	 * 依赖在打包的文件中的路径
+	 * <p>
 	 * Returns the destination path for a given library.
+	 *
 	 * @param libraryName the name of the library (excluding any path)
-	 * @param scope the scope of the library
+	 * @param scope       the scope of the library
 	 * @return the destination relative to the root of the archive (should end with '/')
 	 * or {@code null} if the library should not be included.
 	 */
 	String getLibraryDestination(String libraryName, LibraryScope scope);
 
 	/**
+	 * 类在打包的文件中的路径
+	 * <p>
 	 * Returns the location of classes within the archive.
+	 *
 	 * @return the classes location
 	 */
 	String getClassesLocation();
 
 	/**
+	 * 打包的文件能否执行
+	 * <p>
 	 * Returns if loader classes should be included to make the archive executable.
+	 *
 	 * @return if the layout is executable
 	 */
 	boolean isExecutable();

@@ -43,6 +43,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.unit.DataSize;
 
 /**
+ * 基于 Tomcat 的 WebServerFactory 自定义
+ * <p>
  * Customization for Tomcat-specific features common for both Servlet and Reactive
  * servers.
  *
@@ -188,8 +190,7 @@ public class TomcatWebServerFactoryCustomizer
 			valve.setInternalProxies(tomcatProperties.getInternalProxies());
 			try {
 				valve.setHostHeader(tomcatProperties.getHostHeader());
-			}
-			catch (NoSuchMethodError ex) {
+			} catch (NoSuchMethodError ex) {
 				// Avoid failure with war deployments to Tomcat 8.5 before 8.5.44 and
 				// Tomcat 9 before 9.0.23
 			}

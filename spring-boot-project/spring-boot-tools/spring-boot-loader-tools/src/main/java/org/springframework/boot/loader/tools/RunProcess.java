@@ -37,10 +37,19 @@ public class RunProcess {
 
 	private static final long JUST_ENDED_LIMIT = 500;
 
+	/**
+	 * 工作目录
+	 */
 	private File workingDirectory;
 
+	/**
+	 * 命令
+	 */
 	private final String[] command;
 
+	/**
+	 * 新开启的进程
+	 */
 	private volatile Process process;
 
 	private volatile long endTime;

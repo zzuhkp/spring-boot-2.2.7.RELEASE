@@ -43,6 +43,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * 警告信息打印
+ * <p>
  * {@link ApplicationContextInitializer} to report warnings for common misconfiguration
  * mistakes.
  *
@@ -61,10 +63,11 @@ public class ConfigurationWarningsApplicationContextInitializer
 
 	/**
 	 * Returns the checks that should be applied.
+	 *
 	 * @return the checks to apply
 	 */
 	protected Check[] getChecks() {
-		return new Check[] { new ComponentScanPackageCheck() };
+		return new Check[]{new ComponentScanPackageCheck()};
 	}
 
 	/**
@@ -115,6 +118,7 @@ public class ConfigurationWarningsApplicationContextInitializer
 
 		/**
 		 * Returns a warning if the check fails or {@code null} if there are no problems.
+		 *
 		 * @param registry the {@link BeanDefinitionRegistry}
 		 * @return a warning message or {@code null}
 		 */
@@ -147,6 +151,12 @@ public class ConfigurationWarningsApplicationContextInitializer
 					+ StringUtils.collectionToDelimitedString(problematicPackages, ", ") + ".";
 		}
 
+		/**
+		 * 获取扫描的包名
+		 *
+		 * @param registry
+		 * @return
+		 */
 		protected Set<String> getComponentScanningPackages(BeanDefinitionRegistry registry) {
 			Set<String> packages = new LinkedHashSet<>();
 			String[] names = registry.getBeanDefinitionNames();
@@ -160,6 +170,12 @@ public class ConfigurationWarningsApplicationContextInitializer
 			return packages;
 		}
 
+		/**
+		 * 添加扫描的包名到列表
+		 *
+		 * @param packages
+		 * @param metadata
+		 */
 		private void addComponentScanningPackages(Set<String> packages, AnnotationMetadata metadata) {
 			AnnotationAttributes attributes = AnnotationAttributes
 					.fromMap(metadata.getAnnotationAttributes(ComponentScan.class.getName(), true));
@@ -173,12 +189,24 @@ public class ConfigurationWarningsApplicationContextInitializer
 			}
 		}
 
+		/**
+		 * 添加包名到列表
+		 *
+		 * @param packages
+		 * @param values
+		 */
 		private void addPackages(Set<String> packages, String[] values) {
 			if (values != null) {
 				Collections.addAll(packages, values);
 			}
 		}
 
+		/**
+		 * 添加包名到列表
+		 *
+		 * @param packages
+		 * @param values
+		 */
 		private void addClasses(Set<String> packages, String[] values) {
 			if (values != null) {
 				for (String value : values) {
@@ -187,6 +215,12 @@ public class ConfigurationWarningsApplicationContextInitializer
 			}
 		}
 
+		/**
+		 * 获取有问题的包名
+		 *
+		 * @param scannedPackages
+		 * @return
+		 */
 		private List<String> getProblematicPackages(Set<String> scannedPackages) {
 			List<String> problematicPackages = new ArrayList<>();
 			for (String scannedPackage : scannedPackages) {
@@ -197,6 +231,12 @@ public class ConfigurationWarningsApplicationContextInitializer
 			return problematicPackages;
 		}
 
+		/**
+		 * 给定包名是否存在问题
+		 *
+		 * @param scannedPackage
+		 * @return
+		 */
 		private boolean isProblematicPackage(String scannedPackage) {
 			if (scannedPackage == null || scannedPackage.isEmpty()) {
 				return true;

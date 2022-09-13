@@ -20,6 +20,8 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.util.Assert;
 
 /**
+ * 基于 HTTP 请求头的 HttpHeaderAccessManager
+ * <p>
  * {@link AccessManager} that checks for the presence of a HTTP header secret.
  *
  * @author Rob Winch
@@ -28,8 +30,14 @@ import org.springframework.util.Assert;
  */
 public class HttpHeaderAccessManager implements AccessManager {
 
+	/**
+	 * 请求头
+	 */
 	private final String headerName;
 
+	/**
+	 * 密钥值
+	 */
 	private final String expectedSecret;
 
 	public HttpHeaderAccessManager(String headerName, String expectedSecret) {

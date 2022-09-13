@@ -41,6 +41,8 @@ import org.springframework.core.log.LogMessage;
 import org.springframework.util.StringUtils;
 
 /**
+ * URL 集合
+ * <p>
  * A filtered collection of URLs which can change after the application has started.
  *
  * @author Phillip Webb
@@ -50,6 +52,9 @@ final class ChangeableUrls implements Iterable<URL> {
 
 	private static final Log logger = DevToolsLogFactory.getLog(ChangeableUrls.class);
 
+	/**
+	 * 需要重新加载的 URL 列表
+	 */
 	private final List<URL> urls;
 
 	private ChangeableUrls(URL... urls) {
@@ -66,6 +71,12 @@ final class ChangeableUrls implements Iterable<URL> {
 		this.urls = Collections.unmodifiableList(reloadableUrls);
 	}
 
+	/**
+	 * 是否为目录
+	 *
+	 * @param urlString
+	 * @return
+	 */
 	private boolean isFolderUrl(String urlString) {
 		return urlString.startsWith("file:") && urlString.endsWith("/");
 	}
@@ -92,6 +103,7 @@ final class ChangeableUrls implements Iterable<URL> {
 		return this.urls.toString();
 	}
 
+
 	static ChangeableUrls fromClassLoader(ClassLoader classLoader) {
 		List<URL> urls = new ArrayList<>();
 		for (URL url : urlsFromClassLoader(classLoader)) {
@@ -101,6 +113,12 @@ final class ChangeableUrls implements Iterable<URL> {
 		return fromUrls(urls);
 	}
 
+	/**
+	 * 从类加载器中获取  URL
+	 *
+	 * @param classLoader
+	 * @return
+	 */
 	private static URL[] urlsFromClassLoader(ClassLoader classLoader) {
 		if (classLoader instanceof URLClassLoader) {
 			return ((URLClassLoader) classLoader).getURLs();
@@ -109,15 +127,26 @@ final class ChangeableUrls implements Iterable<URL> {
 				.map(ChangeableUrls::toURL).toArray(URL[]::new);
 	}
 
+	/**
+	 * 字符串转 URL
+	 *
+	 * @param classPathEntry
+	 * @return
+	 */
 	private static URL toURL(String classPathEntry) {
 		try {
 			return new File(classPathEntry).toURI().toURL();
-		}
-		catch (MalformedURLException ex) {
+		} catch (MalformedURLException ex) {
 			throw new IllegalArgumentException("URL could not be created from '" + classPathEntry + "'", ex);
 		}
 	}
 
+	/**
+	 * 从 Manifest 中获取类路径
+	 *
+	 * @param url
+	 * @return
+	 */
 	private static List<URL> getUrlsFromClassPathOfJarManifestIfPossible(URL url) {
 		try {
 			File file = new File(url.toURI());
@@ -125,20 +154,26 @@ final class ChangeableUrls implements Iterable<URL> {
 				try (JarFile jarFile = new JarFile(file)) {
 					try {
 						return getUrlsFromManifestClassPathAttribute(url, jarFile);
-					}
-					catch (IOException ex) {
+					} catch (IOException ex) {
 						throw new IllegalStateException(
 								"Failed to read Class-Path attribute from manifest of jar " + url, ex);
 					}
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			// Assume it's not a jar and continue
 		}
 		return Collections.emptyList();
 	}
 
+	/**
+	 * 从 Manifest 文件中获取类路径
+	 *
+	 * @param jarUrl
+	 * @param jarFile
+	 * @return
+	 * @throws IOException
+	 */
 	private static List<URL> getUrlsFromManifestClassPathAttribute(URL jarUrl, JarFile jarFile) throws IOException {
 		Manifest manifest = jarFile.getManifest();
 		if (manifest == null) {
@@ -156,18 +191,15 @@ final class ChangeableUrls implements Iterable<URL> {
 				URL referenced = new URL(jarUrl, entry);
 				if (new File(referenced.getFile()).exists()) {
 					urls.add(referenced);
-				}
-				else {
+				} else {
 					referenced = new URL(jarUrl, URLDecoder.decode(entry, "UTF-8"));
 					if (new File(referenced.getFile()).exists()) {
 						urls.add(referenced);
-					}
-					else {
+					} else {
 						nonExistentEntries.add(referenced);
 					}
 				}
-			}
-			catch (MalformedURLException ex) {
+			} catch (MalformedURLException ex) {
 				throw new IllegalStateException("Class-Path attribute contains malformed URL", ex);
 			}
 		}
@@ -179,10 +211,22 @@ final class ChangeableUrls implements Iterable<URL> {
 		return urls;
 	}
 
+	/**
+	 * 集合转 ChangeableUrls
+	 *
+	 * @param urls
+	 * @return
+	 */
 	static ChangeableUrls fromUrls(Collection<URL> urls) {
 		return fromUrls(new ArrayList<>(urls).toArray(new URL[urls.size()]));
 	}
 
+	/**
+	 * 数组转 ChangeableUrls
+	 *
+	 * @param urls
+	 * @return
+	 */
 	static ChangeableUrls fromUrls(URL... urls) {
 		return new ChangeableUrls(urls);
 	}

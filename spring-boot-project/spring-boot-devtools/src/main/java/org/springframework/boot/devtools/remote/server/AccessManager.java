@@ -19,6 +19,8 @@ package org.springframework.boot.devtools.remote.server;
 import org.springframework.http.server.ServerHttpRequest;
 
 /**
+ * 访问控制
+ * <p>
  * Provides access control for a {@link Dispatcher}.
  *
  * @author Phillip Webb
@@ -35,6 +37,7 @@ public interface AccessManager {
 	/**
 	 * Determine if the specific request is allowed to be handled by the
 	 * {@link Dispatcher}.
+	 *
 	 * @param request the request to check
 	 * @return {@code true} if access is allowed.
 	 */

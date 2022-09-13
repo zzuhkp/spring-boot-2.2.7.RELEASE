@@ -17,6 +17,8 @@
 package org.springframework.boot.web.server;
 
 /**
+ * 错误页面注册
+ *
  * Interface for a registry that holds {@link ErrorPage ErrorPages}.
  *
  * @author Phillip Webb
@@ -27,6 +29,7 @@ public interface ErrorPageRegistry {
 
 	/**
 	 * Adds error pages that will be used when handling exceptions.
+	 *
 	 * @param errorPages the error pages
 	 */
 	void addErrorPages(ErrorPage... errorPages);

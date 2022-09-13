@@ -30,6 +30,7 @@ public interface CustomLoaderLayout {
 
 	/**
 	 * Write the required loader classes into the JAR.
+	 *
 	 * @param writer the writer used to write the classes
 	 * @throws IOException if the classes cannot be written
 	 */

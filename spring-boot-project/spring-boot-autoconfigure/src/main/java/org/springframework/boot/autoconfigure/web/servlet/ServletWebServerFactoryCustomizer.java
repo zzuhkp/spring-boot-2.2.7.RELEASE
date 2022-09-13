@@ -23,6 +23,8 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.core.Ordered;
 
 /**
+ * 设置 ServerProperties 中的参数到 ServletWebServerFactory
+ * <p>
  * {@link WebServerFactoryCustomizer} to apply {@link ServerProperties} to servlet web
  * servers.
  *

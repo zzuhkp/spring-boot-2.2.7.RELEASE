@@ -29,6 +29,8 @@ import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
 /**
+ * 校验
+ * <p>
  * {@link BeanFactoryPostProcessor} to validate that regular bean definitions aren't
  * creating {@link ConstructorBinding} beans.
  *
@@ -65,8 +67,7 @@ class ConfigurationPropertiesBeanDefinitionValidator implements BeanFactoryPostP
 						"@EnableConfigurationProperties or @ConfigurationPropertiesScan must be used to add "
 								+ "@ConstructorBinding type " + beanClass.getName());
 			}
-		}
-		catch (CannotLoadBeanClassException ex) {
+		} catch (CannotLoadBeanClassException ex) {
 			// Ignore
 		}
 
@@ -75,6 +76,7 @@ class ConfigurationPropertiesBeanDefinitionValidator implements BeanFactoryPostP
 	/**
 	 * Register a {@link ConfigurationPropertiesBeanDefinitionValidator} bean if one is
 	 * not already registered.
+	 *
 	 * @param registry the bean definition registry
 	 */
 	static void register(BeanDefinitionRegistry registry) {

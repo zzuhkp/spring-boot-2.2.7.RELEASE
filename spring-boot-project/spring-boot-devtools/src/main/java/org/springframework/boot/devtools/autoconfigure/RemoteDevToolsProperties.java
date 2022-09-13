@@ -17,12 +17,14 @@
 package org.springframework.boot.devtools.autoconfigure;
 
 /**
+ * remote 配置属性
+ * <p>
  * Configuration properties for remote Spring Boot applications.
  *
  * @author Phillip Webb
  * @author Rob Winch
- * @since 1.3.0
  * @see DevToolsProperties
+ * @since 1.3.0
  */
 public class RemoteDevToolsProperties {
 

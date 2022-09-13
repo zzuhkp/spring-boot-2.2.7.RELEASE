@@ -56,6 +56,7 @@ class OnResourceCondition extends SpringBootCondition {
 				missing.add(location);
 			}
 		}
+		// 有不存在的资源
 		if (!missing.isEmpty()) {
 			return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnResource.class)
 					.didNotFind("resource", "resources").items(Style.QUOTE, missing));

@@ -44,6 +44,11 @@ class PropertySourcesDeducer {
 		this.applicationContext = applicationContext;
 	}
 
+	/**
+	 * 获取 PropertySources
+	 *
+	 * @return
+	 */
 	PropertySources getPropertySources() {
 		PropertySourcesPlaceholderConfigurer configurer = getSinglePropertySourcesPlaceholderConfigurer();
 		if (configurer != null) {
@@ -55,6 +60,11 @@ class PropertySourcesDeducer {
 		return sources;
 	}
 
+	/**
+	 * 获取 PropertySourcesPlaceholderConfigurer bean
+	 *
+	 * @return
+	 */
 	private PropertySourcesPlaceholderConfigurer getSinglePropertySourcesPlaceholderConfigurer() {
 		// Take care not to cause early instantiation of all FactoryBeans
 		Map<String, PropertySourcesPlaceholderConfigurer> beans = this.applicationContext
@@ -69,6 +79,11 @@ class PropertySourcesDeducer {
 		return null;
 	}
 
+	/**
+	 * 抽取 Environment 中的 PropertySources
+	 *
+	 * @return
+	 */
 	private MutablePropertySources extractEnvironmentPropertySources() {
 		Environment environment = this.applicationContext.getEnvironment();
 		if (environment instanceof ConfigurableEnvironment) {

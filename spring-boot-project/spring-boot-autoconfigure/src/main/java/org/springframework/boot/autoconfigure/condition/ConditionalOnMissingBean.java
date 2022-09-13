@@ -88,7 +88,8 @@ public @interface ConditionalOnMissingBean {
 	String[] type() default {};
 
 	/**
-	 * 忽略的 bean 名称
+	 * 忽略的 bean 名称，parameterizedContainer 不为空时同时表示泛型参数类型
+	 *
 	 * The class types of beans that should be ignored when identifying matching beans.
 	 *
 	 * @return the class types of beans to ignore
@@ -97,7 +98,7 @@ public @interface ConditionalOnMissingBean {
 	Class<?>[] ignored() default {};
 
 	/**
-	 * 忽略的 bean 类型
+	 * 忽略的 bean 类型，parameterizedContainer 不为空时同时表示泛型参数类型
 	 * <p>
 	 * The class type names of beans that should be ignored when identifying matching
 	 * beans.

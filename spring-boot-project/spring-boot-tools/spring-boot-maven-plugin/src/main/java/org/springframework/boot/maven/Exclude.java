@@ -17,6 +17,8 @@
 package org.springframework.boot.maven;
 
 /**
+ * exclude 依赖
+ * <p>
  * A model for a dependency to exclude.
  *
  * @author Stephane Nicoll

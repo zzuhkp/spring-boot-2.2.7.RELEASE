@@ -16,18 +16,23 @@
 
 package org.springframework.boot.devtools.restart;
 
+import org.springframework.util.Assert;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.springframework.util.Assert;
-
 /**
+ * 主方法
+ * <p>
  * The "main" method located from a running thread.
  *
  * @author Phillip Webb
  */
 class MainMethod {
 
+	/**
+	 * 主方法
+	 */
 	private final Method method;
 
 	MainMethod() {
@@ -39,6 +44,12 @@ class MainMethod {
 		this.method = getMainMethod(thread);
 	}
 
+	/**
+	 * 获取主方法
+	 *
+	 * @param thread
+	 * @return
+	 */
 	private Method getMainMethod(Thread thread) {
 		for (StackTraceElement element : thread.getStackTrace()) {
 			if ("main".equals(element.getMethodName())) {
@@ -51,6 +62,12 @@ class MainMethod {
 		throw new IllegalStateException("Unable to find main method");
 	}
 
+	/**
+	 * 获取主方法
+	 *
+	 * @param element
+	 * @return
+	 */
 	private Method getMainMethod(StackTraceElement element) {
 		try {
 			Class<?> elementClass = Class.forName(element.getClassName());
@@ -58,15 +75,17 @@ class MainMethod {
 			if (Modifier.isStatic(method.getModifiers())) {
 				return method;
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			// Ignore
 		}
 		return null;
 	}
 
 	/**
+	 * 获取主方法
+	 * <p>
 	 * Returns the actual main method.
+	 *
 	 * @return the main method
 	 */
 	Method getMethod() {
@@ -74,7 +93,10 @@ class MainMethod {
 	}
 
 	/**
+	 * 获取主方法所在类
+	 * <p>
 	 * Return the name of the declaring class.
+	 *
 	 * @return the declaring class name
 	 */
 	String getDeclaringClassName() {

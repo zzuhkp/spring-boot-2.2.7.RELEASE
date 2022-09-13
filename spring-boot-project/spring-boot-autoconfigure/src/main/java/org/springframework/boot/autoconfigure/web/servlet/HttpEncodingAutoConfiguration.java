@@ -33,6 +33,8 @@ import org.springframework.core.Ordered;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 /**
+ * 编码处理
+ *
  * {@link EnableAutoConfiguration Auto-configuration} for configuring the encoding to use
  * in web applications.
  *

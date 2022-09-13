@@ -28,13 +28,15 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.Assert;
 
 /**
+ * 请求派发
+ * <p>
  * Dispatcher used to route incoming remote server requests to a {@link Handler}. Similar
  * to {@code DispatchServlet} in Spring MVC but separate to ensure that remote support can
  * be used regardless of any web framework.
  *
  * @author Phillip Webb
- * @since 1.3.0
  * @see HandlerMapper
+ * @since 1.3.0
  */
 public class Dispatcher {
 
@@ -51,10 +53,14 @@ public class Dispatcher {
 	}
 
 	/**
+	 * 处理请求
+	 * <p>
 	 * Dispatch the specified request to an appropriate {@link Handler}.
-	 * @param request the request
+	 *
+	 * @param request  the request
 	 * @param response the response
-	 * @return {@code true} if the request was dispatched
+	 * @return {@code true} 是否成功处理
+	 * if the request was dispatched
 	 * @throws IOException in case of I/O errors
 	 */
 	public boolean handle(ServerHttpRequest request, ServerHttpResponse response) throws IOException {
@@ -68,6 +74,14 @@ public class Dispatcher {
 		return false;
 	}
 
+	/**
+	 * 处理请求
+	 *
+	 * @param handler
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	private void handle(Handler handler, ServerHttpRequest request, ServerHttpResponse response) throws IOException {
 		if (!this.accessManager.isAllowed(request)) {
 			response.setStatusCode(HttpStatus.FORBIDDEN);

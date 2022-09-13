@@ -44,7 +44,10 @@ public abstract class AgentReloader {
 	}
 
 	/**
+	 * 是否存在 agent reloader 激活
+	 * <p>
 	 * Determine if any agent reloader is active.
+	 *
 	 * @return true if agent reloading is active
 	 */
 	public static boolean isActive() {

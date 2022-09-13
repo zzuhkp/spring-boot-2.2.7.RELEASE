@@ -32,6 +32,8 @@ import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 /**
+ * 静态资源 jar 抽取
+ *
  * Logic to extract URLs of static resource jars (those containing
  * {@code "META-INF/resources"} directories).
  *

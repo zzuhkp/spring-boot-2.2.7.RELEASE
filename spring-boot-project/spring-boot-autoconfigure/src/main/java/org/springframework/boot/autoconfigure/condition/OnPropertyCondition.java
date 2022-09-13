@@ -65,6 +65,7 @@ class OnPropertyCondition extends SpringBootCondition {
 
 	private List<AnnotationAttributes> annotationAttributesFromMultiValueMap(
 			MultiValueMap<String, Object> multiValueMap) {
+		// MultiValueMap 转 List
 		List<Map<String, Object>> maps = new ArrayList<>();
 		multiValueMap.forEach((key, value) -> {
 			for (int i = 0; i < value.size(); i++) {
@@ -91,10 +92,12 @@ class OnPropertyCondition extends SpringBootCondition {
 		List<String> nonMatchingProperties = new ArrayList<>();
 		spec.collectProperties(resolver, missingProperties, nonMatchingProperties);
 		if (!missingProperties.isEmpty()) {
+			// 缺少属性配置
 			return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnProperty.class, spec)
 					.didNotFind("property", "properties").items(Style.QUOTE, missingProperties));
 		}
 		if (!nonMatchingProperties.isEmpty()) {
+			// 属性配置不匹配
 			return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnProperty.class, spec)
 					.found("different value in property", "different value in properties")
 					.items(Style.QUOTE, nonMatchingProperties));
@@ -149,6 +152,13 @@ class OnPropertyCondition extends SpringBootCondition {
 			}
 		}
 
+		/**
+		 * 是否匹配
+		 *
+		 * @param value
+		 * @param requiredValue
+		 * @return
+		 */
 		private boolean isMatch(String value, String requiredValue) {
 			if (StringUtils.hasLength(requiredValue)) {
 				return requiredValue.equalsIgnoreCase(value);

@@ -31,6 +31,8 @@ import org.springframework.boot.devtools.filewatch.ChangedFile.Type;
 import org.springframework.util.Assert;
 
 /**
+ * 给定时间的目录快照版本
+ * <p>
  * A snapshot of a folder at a given point in time.
  *
  * @author Phillip Webb
@@ -39,14 +41,24 @@ class FolderSnapshot {
 
 	private static final Set<String> DOT_FOLDERS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(".", "..")));
 
+	/**
+	 * 目录
+	 */
 	private final File folder;
 
+	/**
+	 * 时间
+	 */
 	private final Date time;
 
+	/**
+	 * 给定目录及其子目录下的文件
+	 */
 	private Set<FileSnapshot> files;
 
 	/**
 	 * Create a new {@link FolderSnapshot} for the given folder.
+	 *
 	 * @param folder the source folder
 	 */
 	FolderSnapshot(File folder) {
@@ -59,20 +71,32 @@ class FolderSnapshot {
 		this.files = Collections.unmodifiableSet(files);
 	}
 
+	/**
+	 * 收集给定目录下的所有文件（含子目录下的文件）
+	 *
+	 * @param source
+	 * @param result
+	 */
 	private void collectFiles(File source, Set<FileSnapshot> result) {
 		File[] children = source.listFiles();
 		if (children != null) {
 			for (File child : children) {
 				if (child.isDirectory() && !DOT_FOLDERS.contains(child.getName())) {
 					collectFiles(child, result);
-				}
-				else if (child.isFile()) {
+				} else if (child.isFile()) {
 					result.add(new FileSnapshot(child));
 				}
 			}
 		}
 	}
 
+	/**
+	 * 获取变化的文件
+	 *
+	 * @param snapshot
+	 * @param triggerFilter
+	 * @return
+	 */
 	ChangedFiles getChangedFiles(FolderSnapshot snapshot, FileFilter triggerFilter) {
 		Assert.notNull(snapshot, "Snapshot must not be null");
 		File folder = this.folder;
@@ -84,8 +108,7 @@ class FolderSnapshot {
 				FileSnapshot previousFile = previousFiles.remove(currentFile.getFile());
 				if (previousFile == null) {
 					changes.add(new ChangedFile(folder, currentFile.getFile(), Type.ADD));
-				}
-				else if (!previousFile.equals(currentFile)) {
+				} else if (!previousFile.equals(currentFile)) {
 					changes.add(new ChangedFile(folder, currentFile.getFile(), Type.MODIFY));
 				}
 			}
@@ -98,10 +121,22 @@ class FolderSnapshot {
 		return new ChangedFiles(folder, changes);
 	}
 
+	/**
+	 * 是否接收文件的变化
+	 *
+	 * @param triggerFilter
+	 * @param file
+	 * @return
+	 */
 	private boolean acceptChangedFile(FileFilter triggerFilter, FileSnapshot file) {
 		return (triggerFilter == null || !triggerFilter.accept(file.getFile()));
 	}
 
+	/**
+	 * 获取快照文件
+	 *
+	 * @return
+	 */
 	private Map<File, FileSnapshot> getFilesMap() {
 		Map<File, FileSnapshot> files = new LinkedHashMap<>();
 		for (FileSnapshot file : this.files) {
@@ -155,6 +190,7 @@ class FolderSnapshot {
 
 	/**
 	 * Return the source folder of this snapshot.
+	 *
 	 * @return the source folder
 	 */
 	File getFolder() {

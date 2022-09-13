@@ -34,6 +34,8 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.util.Assert;
 
 /**
+ * Dispatcher 过滤器，将请求委托给 Dispatcher 处理
+ * <p>
  * Servlet filter providing integration with the remote server {@link Dispatcher}.
  *
  * @author Phillip Webb
@@ -58,8 +60,7 @@ public class DispatcherFilter implements Filter {
 			throws IOException, ServletException {
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
 			doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
-		}
-		else {
+		} else {
 			chain.doFilter(request, response);
 		}
 	}

@@ -16,6 +16,12 @@
 
 package org.springframework.boot.devtools.restart.classloader;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.boot.devtools.restart.classloader.ClassLoaderFile.Kind;
+import org.springframework.core.SmartClassLoader;
+import org.springframework.util.Assert;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,14 +30,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Enumeration;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.boot.devtools.restart.classloader.ClassLoaderFile.Kind;
-import org.springframework.core.SmartClassLoader;
-import org.springframework.util.Assert;
-
 /**
+ * 支持重启的类加载器
+ * <p>
  * Disposable {@link ClassLoader} used to support application restarting. Provides parent
  * last loading for the specified URLs.
  *
@@ -47,8 +48,9 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 
 	/**
 	 * Create a new {@link RestartClassLoader} instance.
+	 *
 	 * @param parent the parent classloader
-	 * @param urls the urls managed by the classloader
+	 * @param urls   the urls managed by the classloader
 	 */
 	public RestartClassLoader(ClassLoader parent, URL[] urls) {
 		this(parent, urls, ClassLoaderFileRepository.NONE);
@@ -56,10 +58,11 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 
 	/**
 	 * Create a new {@link RestartClassLoader} instance.
-	 * @param parent the parent classloader
+	 *
+	 * @param parent       the parent classloader
 	 * @param updatedFiles any files that have been updated since the JARs referenced in
-	 * URLs were created.
-	 * @param urls the urls managed by the classloader
+	 *                     URLs were created.
+	 * @param urls         the urls managed by the classloader
 	 */
 	public RestartClassLoader(ClassLoader parent, URL[] urls, ClassLoaderFileRepository updatedFiles) {
 		this(parent, urls, updatedFiles, LogFactory.getLog(RestartClassLoader.class));
@@ -67,11 +70,12 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 
 	/**
 	 * Create a new {@link RestartClassLoader} instance.
-	 * @param parent the parent classloader
+	 *
+	 * @param parent       the parent classloader
 	 * @param updatedFiles any files that have been updated since the JARs referenced in
-	 * URLs were created.
-	 * @param urls the urls managed by the classloader
-	 * @param logger the logger used for messages
+	 *                     URLs were created.
+	 * @param urls         the urls managed by the classloader
+	 * @param logger       the logger used for messages
 	 */
 	public RestartClassLoader(ClassLoader parent, URL[] urls, ClassLoaderFileRepository updatedFiles, Log logger) {
 		super(urls, parent);
@@ -92,6 +96,7 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 		ClassLoaderFile file = this.updatedFiles.getFile(name);
 		if (file != null) {
 			// Assume that we're replacing just the first item
+			// 替代第一个
 			if (resources.hasMoreElements()) {
 				resources.nextElement();
 			}
@@ -132,6 +137,7 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 		String path = name.replace('.', '/').concat(".class");
 		ClassLoaderFile file = this.updatedFiles.getFile(path);
 		if (file != null && file.getKind() == Kind.DELETED) {
+			// 文件被删除
 			throw new ClassNotFoundException(name);
 		}
 		synchronized (getClassLoadingLock(name)) {
@@ -139,8 +145,7 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 			if (loadedClass == null) {
 				try {
 					loadedClass = findClass(name);
-				}
-				catch (ClassNotFoundException ex) {
+				} catch (ClassNotFoundException ex) {
 					loadedClass = getParent().loadClass(name);
 				}
 			}
@@ -156,6 +161,7 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 		String path = name.replace('.', '/').concat(".class");
 		final ClassLoaderFile file = this.updatedFiles.getFile(path);
 		if (file == null) {
+			// 优先使用 class 文件，找不到再使用父加载器查找
 			return super.findClass(name);
 		}
 		if (file.getKind() == Kind.DELETED) {
@@ -167,11 +173,17 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 		});
 	}
 
+	/**
+	 * 创建 ClassLoaderFile 对应的 URL
+	 *
+	 * @param name
+	 * @param file
+	 * @return
+	 */
 	private URL createFileUrl(String name, ClassLoaderFile file) {
 		try {
 			return new URL("reloaded", null, -1, "/" + name, new ClassLoaderFileURLStreamHandler(file));
-		}
-		catch (MalformedURLException ex) {
+		} catch (MalformedURLException ex) {
 			throw new IllegalStateException(ex);
 		}
 	}
@@ -190,6 +202,8 @@ public class RestartClassLoader extends URLClassLoader implements SmartClassLoad
 	}
 
 	/**
+	 * 枚举组合
+	 * <p>
 	 * Compound {@link Enumeration} that adds an additional item to the front.
 	 */
 	private static class CompoundEnumeration<E> implements Enumeration<E> {

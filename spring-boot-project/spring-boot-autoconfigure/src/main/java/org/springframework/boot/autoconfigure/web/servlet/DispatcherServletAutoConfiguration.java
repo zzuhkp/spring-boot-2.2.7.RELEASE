@@ -52,6 +52,8 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
+ * DispatcherServlet 相关 bean 注册
+ * <p>
  * {@link EnableAutoConfiguration Auto-configuration} for the Spring
  * {@link DispatcherServlet}. Should work for a standalone application where an embedded
  * web server is already present and also for a deployable application using
@@ -83,7 +85,7 @@ public class DispatcherServletAutoConfiguration {
 	@Configuration(proxyBeanMethods = false)
 	@Conditional(DefaultDispatcherServletCondition.class)
 	@ConditionalOnClass(ServletRegistration.class)
-	@EnableConfigurationProperties({ HttpProperties.class, WebMvcProperties.class })
+	@EnableConfigurationProperties({HttpProperties.class, WebMvcProperties.class})
 	protected static class DispatcherServletConfiguration {
 
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
@@ -117,7 +119,7 @@ public class DispatcherServletAutoConfiguration {
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME)
 		@ConditionalOnBean(value = DispatcherServlet.class, name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServletRegistrationBean dispatcherServletRegistration(DispatcherServlet dispatcherServlet,
-				WebMvcProperties webMvcProperties, ObjectProvider<MultipartConfigElement> multipartConfig) {
+																			   WebMvcProperties webMvcProperties, ObjectProvider<MultipartConfigElement> multipartConfig) {
 			DispatcherServletRegistrationBean registration = new DispatcherServletRegistrationBean(dispatcherServlet,
 					webMvcProperties.getServlet().getPath());
 			registration.setName(DEFAULT_DISPATCHER_SERVLET_BEAN_NAME);
@@ -146,8 +148,10 @@ public class DispatcherServletAutoConfiguration {
 						message.found("non dispatcher servlet bean").items(DEFAULT_DISPATCHER_SERVLET_BEAN_NAME));
 			}
 			if (dispatchServletBeans.isEmpty()) {
+				// 没有 DispatcherServlet 类型的 bean
 				return ConditionOutcome.match(message.didNotFind("dispatcher servlet beans").atAll());
 			}
+			// 没有名称为 dispatcherServlet 且类型为 DispatcherServlet 的 bean
 			return ConditionOutcome.match(message.found("dispatcher servlet bean", "dispatcher servlet beans")
 					.items(Style.QUOTE, dispatchServletBeans)
 					.append("and none is named " + DEFAULT_DISPATCHER_SERVLET_BEAN_NAME));

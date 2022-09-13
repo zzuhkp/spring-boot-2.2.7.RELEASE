@@ -17,6 +17,8 @@
 package org.springframework.boot.loader.tools;
 
 /**
+ * 启动脚本
+ * <p>
  * A script that can be prepended to the front of a JAR file to make it executable.
  *
  * @author Phillip Webb
@@ -27,6 +29,7 @@ public interface LaunchScript {
 
 	/**
 	 * The content of the launch script as a byte array.
+	 *
 	 * @return the script bytes
 	 */
 	byte[] toByteArray();

@@ -16,14 +16,16 @@
 
 package org.springframework.boot.autoconfigure.data.jpa;
 
-import javax.persistence.EntityManagerFactory;
-
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.AbstractDependsOnBeanFactoryPostProcessor;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 
+import javax.persistence.EntityManagerFactory;
+
 /**
+ * 设置 EntityManagerFactory 依赖的 bean
+ * <p>
  * {@link BeanFactoryPostProcessor} that can be used to dynamically declare that all
  * {@link EntityManagerFactory} beans should "depend on" one or more specific beans.
  *
@@ -32,14 +34,15 @@ import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
  * @author Phillip Webb
  * @author Andy Wilkinson
  * @author Andrii Hrytsiuk
- * @since 1.1.0
  * @see BeanDefinition#setDependsOn(String[])
+ * @since 1.1.0
  */
 public class EntityManagerFactoryDependsOnPostProcessor extends AbstractDependsOnBeanFactoryPostProcessor {
 
 	/**
 	 * Creates a new {@code EntityManagerFactoryDependsOnPostProcessor} that will set up
 	 * dependencies upon beans with the given names.
+	 *
 	 * @param dependsOn names of the beans to depend upon
 	 */
 	public EntityManagerFactoryDependsOnPostProcessor(String... dependsOn) {
@@ -49,6 +52,7 @@ public class EntityManagerFactoryDependsOnPostProcessor extends AbstractDependsO
 	/**
 	 * Creates a new {@code EntityManagerFactoryDependsOnPostProcessor} that will set up
 	 * dependencies upon beans with the given types.
+	 *
 	 * @param dependsOn types of the beans to depend upon
 	 * @since 2.1.8
 	 */

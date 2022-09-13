@@ -26,7 +26,10 @@ package org.springframework.boot.loader.tools;
 public interface RepackagingLayout extends Layout {
 
 	/**
+	 * 标准打包生成的类在重新打包文件中的路径
+	 * <p>
 	 * Returns the location to which classes should be moved.
+	 *
 	 * @return the repackaged classes location
 	 */
 	String getRepackagedClassesLocation();

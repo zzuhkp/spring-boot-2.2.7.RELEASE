@@ -35,6 +35,8 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
+ * 文件上传处理
+ *
  * {@link EnableAutoConfiguration Auto-configuration} for multi-part uploads. Adds a
  * {@link StandardServletMultipartResolver} if none is present, and adds a
  * {@link javax.servlet.MultipartConfigElement multipartConfigElement} if none is

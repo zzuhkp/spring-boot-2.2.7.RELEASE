@@ -19,6 +19,8 @@ package org.springframework.boot.loader.tools;
 import java.io.File;
 
 /**
+ * Layout 工厂
+ *
  * Factory interface used to create a {@link Layout}.
  *
  * @author Dave Syer

@@ -30,6 +30,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 /**
+ * 真正的数据源配置
+ *
  * Actual DataSource configurations imported by {@link DataSourceAutoConfiguration}.
  *
  * @author Dave Syer
@@ -38,12 +40,22 @@ import org.springframework.util.StringUtils;
  */
 abstract class DataSourceConfiguration {
 
+	/**
+	 * 创建数据源
+	 *
+	 * @param properties
+	 * @param type
+	 * @return
+	 * @param <T>
+	 */
 	@SuppressWarnings("unchecked")
 	protected static <T> T createDataSource(DataSourceProperties properties, Class<? extends DataSource> type) {
 		return (T) properties.initializeDataSourceBuilder().type(type).build();
 	}
 
 	/**
+	 * Tomcat 数据源配置
+	 *
 	 * Tomcat Pool DataSource configuration.
 	 */
 	@Configuration(proxyBeanMethods = false)
@@ -70,6 +82,8 @@ abstract class DataSourceConfiguration {
 	}
 
 	/**
+	 * HikariDataSource 配置
+	 *
 	 * Hikari DataSource configuration.
 	 */
 	@Configuration(proxyBeanMethods = false)
@@ -92,6 +106,8 @@ abstract class DataSourceConfiguration {
 	}
 
 	/**
+	 * Dbcp2 数据库配置
+	 *
 	 * DBCP DataSource configuration.
 	 */
 	@Configuration(proxyBeanMethods = false)
@@ -110,6 +126,8 @@ abstract class DataSourceConfiguration {
 	}
 
 	/**
+	 * 通用数据源配置
+	 *
 	 * Generic DataSource configuration.
 	 */
 	@Configuration(proxyBeanMethods = false)

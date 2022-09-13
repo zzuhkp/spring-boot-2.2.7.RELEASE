@@ -19,6 +19,8 @@ package org.springframework.boot.web.server;
 import java.security.KeyStore;
 
 /**
+ * KeyStore 提供
+ * <p>
  * Interface to provide SSL key stores for an {@link WebServer} to use. Can be used when
  * file based key stores cannot be used.
  *
@@ -28,14 +30,20 @@ import java.security.KeyStore;
 public interface SslStoreProvider {
 
 	/**
+	 * 使用的密钥存储
+	 * <p>
 	 * Return the key store that should be used.
+	 *
 	 * @return the key store to use
 	 * @throws Exception on load error
 	 */
 	KeyStore getKeyStore() throws Exception;
 
 	/**
+	 * 使用的信任存储
+	 * <p>
 	 * Return the trust store that should be used.
+	 *
 	 * @return the trust store to use
 	 * @throws Exception on load error
 	 */

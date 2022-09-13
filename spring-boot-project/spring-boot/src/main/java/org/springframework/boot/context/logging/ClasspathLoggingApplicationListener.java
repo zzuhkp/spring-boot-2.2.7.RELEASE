@@ -30,6 +30,8 @@ import org.springframework.context.event.SmartApplicationListener;
 import org.springframework.core.ResolvableType;
 
 /**
+ * 日志打印
+ * <p>
  * A {@link SmartApplicationListener} that reacts to
  * {@link ApplicationEnvironmentPreparedEvent environment prepared events} and to
  * {@link ApplicationFailedEvent failed events} by logging the classpath of the thread
@@ -49,8 +51,7 @@ public final class ClasspathLoggingApplicationListener implements GenericApplica
 		if (logger.isDebugEnabled()) {
 			if (event instanceof ApplicationEnvironmentPreparedEvent) {
 				logger.debug("Application started with classpath: " + getClasspath());
-			}
-			else if (event instanceof ApplicationFailedEvent) {
+			} else if (event instanceof ApplicationFailedEvent) {
 				logger.debug("Application failed to start with classpath: " + getClasspath());
 			}
 		}

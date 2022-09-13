@@ -28,6 +28,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.log.LogMessage;
 
 /**
+ * 初始化脚本运行
+ * <p>
  * Bean to handle {@link DataSource} initialization by running {@literal schema-*.sql} on
  * {@link InitializingBean#afterPropertiesSet()} and {@literal data-*.sql} SQL scripts on
  * a {@link DataSourceSchemaCreatedEvent}.
@@ -50,7 +52,7 @@ class DataSourceInitializerInvoker implements ApplicationListener<DataSourceSche
 	private boolean initialized;
 
 	DataSourceInitializerInvoker(ObjectProvider<DataSource> dataSource, DataSourceProperties properties,
-			ApplicationContext applicationContext) {
+								 ApplicationContext applicationContext) {
 		this.dataSource = dataSource;
 		this.properties = properties;
 		this.applicationContext = applicationContext;
@@ -75,8 +77,7 @@ class DataSourceInitializerInvoker implements ApplicationListener<DataSourceSche
 				this.dataSourceInitializer.initSchema();
 				this.initialized = true;
 			}
-		}
-		catch (IllegalStateException ex) {
+		} catch (IllegalStateException ex) {
 			logger.warn(LogMessage.format("Could not send event to complete DataSource initialization (%s)",
 					ex.getMessage()));
 		}

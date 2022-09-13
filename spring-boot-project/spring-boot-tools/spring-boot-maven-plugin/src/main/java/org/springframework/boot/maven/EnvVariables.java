@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 环境变量工具类
+ * <p>
  * Utility class for working with Env variables.
  *
  * @author Dmytro Nosan
@@ -35,6 +37,12 @@ class EnvVariables {
 		this.variables = parseEnvVariables(variables);
 	}
 
+	/**
+	 * 解析环境变量
+	 *
+	 * @param args
+	 * @return
+	 */
 	private static Map<String, String> parseEnvVariables(Map<String, String> args) {
 		if (args == null || args.isEmpty()) {
 			return Collections.emptyMap();

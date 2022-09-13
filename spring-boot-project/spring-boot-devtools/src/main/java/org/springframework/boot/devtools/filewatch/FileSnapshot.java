@@ -21,18 +21,31 @@ import java.io.File;
 import org.springframework.util.Assert;
 
 /**
+ * 给定时间点的文件快照
  * A snapshot of a File at a given point in time.
  *
  * @author Phillip Webb
  */
 class FileSnapshot {
 
+	/**
+	 * 文件
+	 */
 	private final File file;
 
+	/**
+	 * 是否存在
+	 */
 	private final boolean exists;
 
+	/**
+	 * 文件大小
+	 */
 	private final long length;
 
+	/**
+	 * 最后修改时间
+	 */
 	private final long lastModified;
 
 	FileSnapshot(File file) {

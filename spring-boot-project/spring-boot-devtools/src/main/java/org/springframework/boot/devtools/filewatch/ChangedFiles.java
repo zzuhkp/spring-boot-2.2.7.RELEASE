@@ -22,17 +22,25 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
+ * 指定目录下改变的文件
+ * <p>
  * A collections of files from a specific source folder that have changed.
  *
  * @author Phillip Webb
- * @since 1.3.0
  * @see FileChangeListener
  * @see ChangedFiles
+ * @since 1.3.0
  */
 public final class ChangedFiles implements Iterable<ChangedFile> {
 
+	/**
+	 * 目录
+	 */
 	private final File sourceFolder;
 
+	/**
+	 * 改变的文件
+	 */
 	private final Set<ChangedFile> files;
 
 	public ChangedFiles(File sourceFolder, Set<ChangedFile> files) {
@@ -42,6 +50,7 @@ public final class ChangedFiles implements Iterable<ChangedFile> {
 
 	/**
 	 * The source folder being watched.
+	 *
 	 * @return the source folder
 	 */
 	public File getSourceFolder() {
@@ -55,6 +64,7 @@ public final class ChangedFiles implements Iterable<ChangedFile> {
 
 	/**
 	 * The files that have been changed.
+	 *
 	 * @return the changed files
 	 */
 	public Set<ChangedFile> getFiles() {

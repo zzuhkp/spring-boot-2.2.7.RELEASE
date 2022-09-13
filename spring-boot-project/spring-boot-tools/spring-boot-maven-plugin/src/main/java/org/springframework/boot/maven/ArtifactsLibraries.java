@@ -54,8 +54,14 @@ public class ArtifactsLibraries implements Libraries {
 		SCOPES = Collections.unmodifiableMap(libraryScopes);
 	}
 
+	/**
+	 * 依赖
+	 */
 	private final Set<Artifact> artifacts;
 
+	/**
+	 * 需要解压的依赖
+	 */
 	private final Collection<Dependency> unpacks;
 
 	private final Log log;
@@ -83,6 +89,12 @@ public class ArtifactsLibraries implements Libraries {
 		}
 	}
 
+	/**
+	 * 重复的 Artifact
+	 *
+	 * @param artifacts
+	 * @return
+	 */
 	private Set<String> getDuplicates(Set<Artifact> artifacts) {
 		Set<String> duplicates = new HashSet<>();
 		Set<String> seen = new HashSet<>();
@@ -95,6 +107,12 @@ public class ArtifactsLibraries implements Libraries {
 		return duplicates;
 	}
 
+	/**
+	 * 是否需要解压
+	 *
+	 * @param artifact
+	 * @return
+	 */
 	private boolean isUnpackRequired(Artifact artifact) {
 		if (this.unpacks != null) {
 			for (Dependency unpack : this.unpacks) {
@@ -107,6 +125,12 @@ public class ArtifactsLibraries implements Libraries {
 		return false;
 	}
 
+	/**
+	 * 获取 Artifact 对应的文件名
+	 *
+	 * @param artifact
+	 * @return
+	 */
 	private String getFileName(Artifact artifact) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(artifact.getArtifactId()).append("-").append(artifact.getBaseVersion());

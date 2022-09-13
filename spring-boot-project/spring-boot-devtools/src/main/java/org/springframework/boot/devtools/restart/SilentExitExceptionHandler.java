@@ -20,6 +20,8 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
 
 /**
+ * 静默退出
+ * <p>
  * {@link UncaughtExceptionHandler} decorator that allows a thread to exit silently.
  *
  * @author Phillip Webb
@@ -27,6 +29,9 @@ import java.util.Arrays;
  */
 class SilentExitExceptionHandler implements UncaughtExceptionHandler {
 
+	/**
+	 * 代理的对象
+	 */
 	private final UncaughtExceptionHandler delegate;
 
 	SilentExitExceptionHandler(UncaughtExceptionHandler delegate) {
@@ -39,6 +44,7 @@ class SilentExitExceptionHandler implements UncaughtExceptionHandler {
 			if (isJvmExiting(thread)) {
 				preventNonZeroExitCode();
 			}
+			// 退出主线程
 			return;
 		}
 		if (this.delegate != null) {
@@ -46,6 +52,12 @@ class SilentExitExceptionHandler implements UncaughtExceptionHandler {
 		}
 	}
 
+	/**
+	 * JVM 退出
+	 *
+	 * @param exceptionThread
+	 * @return
+	 */
 	private boolean isJvmExiting(Thread exceptionThread) {
 		for (Thread thread : getAllThreads()) {
 			if (thread != exceptionThread && thread.isAlive() && !thread.isDaemon()) {
@@ -55,6 +67,11 @@ class SilentExitExceptionHandler implements UncaughtExceptionHandler {
 		return true;
 	}
 
+	/**
+	 * 获取所有线程
+	 *
+	 * @return
+	 */
 	protected Thread[] getAllThreads() {
 		ThreadGroup rootThreadGroup = getRootThreadGroup();
 		Thread[] threads = new Thread[32];
@@ -66,6 +83,11 @@ class SilentExitExceptionHandler implements UncaughtExceptionHandler {
 		return Arrays.copyOf(threads, count);
 	}
 
+	/**
+	 * 获取根 ThreadGroup
+	 *
+	 * @return
+	 */
 	private ThreadGroup getRootThreadGroup() {
 		ThreadGroup candidate = Thread.currentThread().getThreadGroup();
 		while (candidate.getParent() != null) {
@@ -74,10 +96,18 @@ class SilentExitExceptionHandler implements UncaughtExceptionHandler {
 		return candidate;
 	}
 
+	/**
+	 * 退出
+	 */
 	protected void preventNonZeroExitCode() {
 		System.exit(0);
 	}
 
+	/**
+	 * 设置线程异常处理器为当前类的对象实例
+	 *
+	 * @param thread
+	 */
 	static void setup(Thread thread) {
 		UncaughtExceptionHandler handler = thread.getUncaughtExceptionHandler();
 		if (!(handler instanceof SilentExitExceptionHandler)) {

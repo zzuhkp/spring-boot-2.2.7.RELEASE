@@ -21,6 +21,8 @@ import java.net.URL;
 import org.springframework.boot.devtools.system.DevToolsEnablementDeducer;
 
 /**
+ * 默认 RestartInitializer 实现
+ * <p>
  * Default {@link RestartInitializer} that only enable initial restart when running a
  * standard "main" method. Skips initialization when running "fat" jars (included
  * exploded) or when running from a test.
@@ -43,8 +45,11 @@ public class DefaultRestartInitializer implements RestartInitializer {
 	}
 
 	/**
+	 * 是否为主线程
+	 * <p>
 	 * Returns if the thread is for a main invocation. By default checks the name of the
 	 * thread and the context classloader.
+	 *
 	 * @param thread the thread to check
 	 * @return {@code true} if the thread is a main invocation
 	 */
@@ -54,7 +59,10 @@ public class DefaultRestartInitializer implements RestartInitializer {
 	}
 
 	/**
+	 * 用来初始化的 URL
+	 * <p>
 	 * Return the URLs that should be used with initialization.
+	 *
 	 * @param thread the source thread
 	 * @return the URLs
 	 */

@@ -53,24 +53,37 @@ import org.springframework.validation.annotation.Validated;
  * basis (for example, in a {@link BeanPostProcessor}).
  *
  * @author Phillip Webb
- * @since 2.2.0
  * @see #getAll(ApplicationContext)
  * @see #get(ApplicationContext, Object, String)
+ * @since 2.2.0
  */
 public final class ConfigurationPropertiesBean {
 
+	/**
+	 * bean 名称
+	 */
 	private final String name;
 
+	/**
+	 * bean 实例
+	 */
 	private final Object instance;
+
 
 	private final ConfigurationProperties annotation;
 
+	/**
+	 * bean 实例对应的 Bindable
+	 */
 	private final Bindable<?> bindTarget;
 
+	/**
+	 * 绑定方式
+	 */
 	private final BindMethod bindMethod;
 
 	private ConfigurationPropertiesBean(String name, Object instance, ConfigurationProperties annotation,
-			Bindable<?> bindTarget) {
+										Bindable<?> bindTarget) {
 		this.name = name;
 		this.instance = instance;
 		this.annotation = annotation;
@@ -80,6 +93,7 @@ public final class ConfigurationPropertiesBean {
 
 	/**
 	 * Return the name of the Spring bean.
+	 *
 	 * @return the bean name
 	 */
 	public String getName() {
@@ -88,6 +102,7 @@ public final class ConfigurationPropertiesBean {
 
 	/**
 	 * Return the actual Spring bean instance.
+	 *
 	 * @return the bean instance
 	 */
 	public Object getInstance() {
@@ -96,6 +111,7 @@ public final class ConfigurationPropertiesBean {
 
 	/**
 	 * Return the bean type.
+	 *
 	 * @return the bean type
 	 */
 	Class<?> getType() {
@@ -104,6 +120,7 @@ public final class ConfigurationPropertiesBean {
 
 	/**
 	 * Return the property binding method that was used for the bean.
+	 *
 	 * @return the bind type
 	 */
 	public BindMethod getBindMethod() {
@@ -114,6 +131,7 @@ public final class ConfigurationPropertiesBean {
 	 * Return the {@link ConfigurationProperties} annotation for the bean. The annotation
 	 * may be defined on the bean itself or from the factory method that create the bean
 	 * (usually a {@link Bean @Bean} method).
+	 *
 	 * @return the configuration properties annotation
 	 */
 	public ConfigurationProperties getAnnotation() {
@@ -123,6 +141,7 @@ public final class ConfigurationPropertiesBean {
 	/**
 	 * Return a {@link Bindable} instance suitable that can be used as a target for the
 	 * {@link Binder}.
+	 *
 	 * @return a bind target for use with the {@link Binder}
 	 */
 	public Bindable<?> asBindTarget() {
@@ -134,6 +153,7 @@ public final class ConfigurationPropertiesBean {
 	 * in the given application context. Both directly annotated beans, as well as beans
 	 * that have {@link ConfigurationProperties @ConfigurationProperties} annotated
 	 * factory methods are included.
+	 *
 	 * @param applicationContext the source application context
 	 * @return a map of all configuration properties beans keyed by the bean name
 	 */
@@ -159,8 +179,7 @@ public final class ConfigurationPropertiesBean {
 					Object bean = beanFactory.getBean(beanName);
 					ConfigurationPropertiesBean propertiesBean = get(applicationContext, bean, beanName);
 					propertiesBeans.put(beanName, propertiesBean);
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 				}
 			}
 		}
@@ -177,8 +196,7 @@ public final class ConfigurationPropertiesBean {
 			}
 			Method factoryMethod = findFactoryMethod(beanFactory, beanName);
 			return findMergedAnnotation(factoryMethod, ConfigurationProperties.class).isPresent();
-		}
-		catch (NoSuchBeanDefinitionException ex) {
+		} catch (NoSuchBeanDefinitionException ex) {
 			return false;
 		}
 	}
@@ -189,9 +207,10 @@ public final class ConfigurationPropertiesBean {
 	 * {@link ConfigurationProperties @ConfigurationProperties} object. Annotations are
 	 * considered both on the bean itself, as well as any factory method (for example a
 	 * {@link Bean @Bean} method).
+	 *
 	 * @param applicationContext the source application context
-	 * @param bean the bean to consider
-	 * @param beanName the bean name
+	 * @param bean               the bean to consider
+	 * @param beanName           the bean name
 	 * @return a configuration properties bean or {@code null} if the neither the bean or
 	 * factory method are annotated with
 	 * {@link ConfigurationProperties @ConfigurationProperties}
@@ -201,6 +220,13 @@ public final class ConfigurationPropertiesBean {
 		return create(beanName, bean, bean.getClass(), factoryMethod);
 	}
 
+	/**
+	 * 查找工厂方法
+	 *
+	 * @param applicationContext
+	 * @param beanName
+	 * @return
+	 */
 	private static Method findFactoryMethod(ApplicationContext applicationContext, String beanName) {
 		if (applicationContext instanceof ConfigurableApplicationContext) {
 			return findFactoryMethod((ConfigurableApplicationContext) applicationContext, beanName);
@@ -208,10 +234,24 @@ public final class ConfigurationPropertiesBean {
 		return null;
 	}
 
+	/**
+	 * 查找工厂方法
+	 *
+	 * @param applicationContext
+	 * @param beanName
+	 * @return
+	 */
 	private static Method findFactoryMethod(ConfigurableApplicationContext applicationContext, String beanName) {
 		return findFactoryMethod(applicationContext.getBeanFactory(), beanName);
 	}
 
+	/**
+	 * 查找工厂方法
+	 *
+	 * @param beanFactory
+	 * @param beanName
+	 * @return
+	 */
 	private static Method findFactoryMethod(ConfigurableListableBeanFactory beanFactory, String beanName) {
 		if (beanFactory.containsBeanDefinition(beanName)) {
 			BeanDefinition beanDefinition = beanFactory.getMergedBeanDefinition(beanName);
@@ -226,8 +266,15 @@ public final class ConfigurationPropertiesBean {
 		return null;
 	}
 
+	/**
+	 * 使用反射查找工厂方法
+	 *
+	 * @param beanFactory
+	 * @param beanDefinition
+	 * @return
+	 */
 	private static Method findFactoryMethodUsingReflection(ConfigurableListableBeanFactory beanFactory,
-			BeanDefinition beanDefinition) {
+														   BeanDefinition beanDefinition) {
 		String factoryMethodName = beanDefinition.getFactoryMethodName();
 		String factoryBeanName = beanDefinition.getFactoryBeanName();
 		if (factoryMethodName == null || factoryBeanName == null) {
@@ -253,14 +300,23 @@ public final class ConfigurationPropertiesBean {
 		return propertiesBean;
 	}
 
+	/**
+	 * 创建实例
+	 *
+	 * @param name
+	 * @param instance
+	 * @param type
+	 * @param factory
+	 * @return
+	 */
 	private static ConfigurationPropertiesBean create(String name, Object instance, Class<?> type, Method factory) {
 		ConfigurationProperties annotation = findAnnotation(instance, type, factory, ConfigurationProperties.class);
 		if (annotation == null) {
 			return null;
 		}
 		Validated validated = findAnnotation(instance, type, factory, Validated.class);
-		Annotation[] annotations = (validated != null) ? new Annotation[] { annotation, validated }
-				: new Annotation[] { annotation };
+		Annotation[] annotations = (validated != null) ? new Annotation[]{annotation, validated}
+				: new Annotation[]{annotation};
 		ResolvableType bindType = (factory != null) ? ResolvableType.forMethodReturnType(factory)
 				: ResolvableType.forClass(type);
 		Bindable<Object> bindTarget = Bindable.of(bindType).withAnnotations(annotations);
@@ -270,8 +326,18 @@ public final class ConfigurationPropertiesBean {
 		return new ConfigurationPropertiesBean(name, instance, annotation, bindTarget);
 	}
 
+	/**
+	 * 查找 bean 方法或 bean 类型上的给定注解
+	 *
+	 * @param instance
+	 * @param type
+	 * @param factory
+	 * @param annotationType
+	 * @param <A>
+	 * @return
+	 */
 	private static <A extends Annotation> A findAnnotation(Object instance, Class<?> type, Method factory,
-			Class<A> annotationType) {
+														   Class<A> annotationType) {
 		MergedAnnotation<A> annotation = MergedAnnotation.missing();
 		if (factory != null) {
 			annotation = findMergedAnnotation(factory, annotationType);
@@ -286,8 +352,16 @@ public final class ConfigurationPropertiesBean {
 		return annotation.isPresent() ? annotation.synthesize() : null;
 	}
 
+	/**
+	 * 获取注解
+	 *
+	 * @param element
+	 * @param annotationType
+	 * @param <A>
+	 * @return
+	 */
 	private static <A extends Annotation> MergedAnnotation<A> findMergedAnnotation(AnnotatedElement element,
-			Class<A> annotationType) {
+																				   Class<A> annotationType) {
 		return (element != null) ? MergedAnnotations.from(element, SearchStrategy.TYPE_HIERARCHY).get(annotationType)
 				: MergedAnnotation.missing();
 	}

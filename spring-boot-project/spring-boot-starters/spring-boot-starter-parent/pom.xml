@@ -22,7 +22,15 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 	</properties>
-	<build>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.8.4</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
 		<!-- Turn on filtering by default for application properties -->
 		<resources>
 			<resource>

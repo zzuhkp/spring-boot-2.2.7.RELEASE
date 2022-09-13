@@ -76,6 +76,7 @@ public abstract class MainClassFinder {
 
 	/**
 	 * Find the main class from a given folder.
+	 *
 	 * @param rootFolder the root folder to search
 	 * @return the main class or {@code null}
 	 * @throws IOException if the folder cannot be read
@@ -86,6 +87,7 @@ public abstract class MainClassFinder {
 
 	/**
 	 * Find a single main class from the given {@code rootFolder}.
+	 *
 	 * @param rootFolder the root folder to search
 	 * @return the main class or {@code null}
 	 * @throws IOException if the folder cannot be read
@@ -95,12 +97,15 @@ public abstract class MainClassFinder {
 	}
 
 	/**
+	 * 查找单个主类
+	 * <p>
 	 * Find a single main class from the given {@code rootFolder}. A main class annotated
 	 * with an annotation with the given {@code annotationName} will be preferred over a
 	 * main class with no such annotation.
-	 * @param rootFolder the root folder to search
+	 *
+	 * @param rootFolder     the root folder to search
 	 * @param annotationName the name of the annotation that may be present on the main
-	 * class
+	 *                       class
 	 * @return the main class or {@code null}
 	 * @throws IOException if the folder cannot be read
 	 */
@@ -111,11 +116,14 @@ public abstract class MainClassFinder {
 	}
 
 	/**
+	 * 从给定目录中查找有 main 方法的类，然后回调给定接口方法
+	 * <p>
 	 * Perform the given callback operation on all main classes from the given root
 	 * folder.
-	 * @param <T> the result type
+	 *
+	 * @param <T>        the result type
 	 * @param rootFolder the root folder
-	 * @param callback the callback
+	 * @param callback   the callback
 	 * @return the first callback result or {@code null}
 	 * @throws IOException in case of I/O errors
 	 */
@@ -135,6 +143,7 @@ public abstract class MainClassFinder {
 				try (InputStream inputStream = new FileInputStream(file)) {
 					ClassDescriptor classDescriptor = createClassDescriptor(inputStream);
 					if (classDescriptor != null && classDescriptor.isMainMethodFound()) {
+						// 找到 main 方法
 						String className = convertToClassName(file.getAbsolutePath(), prefix);
 						T result = callback.doWith(new MainClass(className, classDescriptor.getAnnotationNames()));
 						if (result != null) {
@@ -160,7 +169,8 @@ public abstract class MainClassFinder {
 
 	/**
 	 * Find the main class in a given jar file.
-	 * @param jarFile the jar file to search
+	 *
+	 * @param jarFile         the jar file to search
 	 * @param classesLocation the location within the jar containing classes
 	 * @return the main class or {@code null}
 	 * @throws IOException if the jar file cannot be read
@@ -171,7 +181,8 @@ public abstract class MainClassFinder {
 
 	/**
 	 * Find a single main class in a given jar file.
-	 * @param jarFile the jar file to search
+	 *
+	 * @param jarFile         the jar file to search
 	 * @param classesLocation the location within the jar containing classes
 	 * @return the main class or {@code null}
 	 * @throws IOException if the jar file cannot be read
@@ -181,13 +192,16 @@ public abstract class MainClassFinder {
 	}
 
 	/**
+	 * 查找主类
+	 * <p>
 	 * Find a single main class in a given jar file. A main class annotated with an
 	 * annotation with the given {@code annotationName} will be preferred over a main
 	 * class with no such annotation.
-	 * @param jarFile the jar file to search
+	 *
+	 * @param jarFile         the jar file to search
 	 * @param classesLocation the location within the jar containing classes
-	 * @param annotationName the name of the annotation that may be present on the main
-	 * class
+	 * @param annotationName  the name of the annotation that may be present on the main
+	 *                        class
 	 * @return the main class or {@code null}
 	 * @throws IOException if the jar file cannot be read
 	 */
@@ -199,11 +213,14 @@ public abstract class MainClassFinder {
 	}
 
 	/**
+	 * 主类操作
+	 * <p>
 	 * Perform the given callback operation on all main classes from the given jar.
-	 * @param <T> the result type
-	 * @param jarFile the jar file to search
+	 *
+	 * @param <T>             the result type
+	 * @param jarFile         the jar file to search
 	 * @param classesLocation the location within the jar containing classes
-	 * @param callback the callback
+	 * @param callback        the callback
 	 * @return the first callback result or {@code null}
 	 * @throws IOException in case of I/O errors
 	 */
@@ -249,14 +266,19 @@ public abstract class MainClassFinder {
 		return classEntries;
 	}
 
+	/**
+	 * 创建 ClassDescriptor
+	 *
+	 * @param inputStream
+	 * @return
+	 */
 	private static ClassDescriptor createClassDescriptor(InputStream inputStream) {
 		try {
 			ClassReader classReader = new ClassReader(inputStream);
 			ClassDescriptor classDescriptor = new ClassDescriptor();
 			classReader.accept(classDescriptor, ClassReader.SKIP_CODE);
 			return classDescriptor;
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			return null;
 		}
 	}
@@ -333,6 +355,7 @@ public abstract class MainClassFinder {
 
 		/**
 		 * Handle the specified main class.
+		 *
 		 * @param mainClass the main class
 		 * @return a non-null value if processing should end or {@code null} to continue
 		 */
@@ -345,15 +368,22 @@ public abstract class MainClassFinder {
 	 */
 	static final class MainClass {
 
+		/**
+		 * 类名称
+		 */
 		private final String name;
 
+		/**
+		 * 类上的注解名称
+		 */
 		private final Set<String> annotationNames;
 
 		/**
 		 * Creates a new {@code MainClass} rather represents the main class with the given
 		 * {@code name}. The class is annotated with the annotations with the given
 		 * {@code annotationNames}.
-		 * @param name the name of the class
+		 *
+		 * @param name            the name of the class
 		 * @param annotationNames the names of the annotations on the class
 		 */
 		MainClass(String name, Set<String> annotationNames) {
@@ -405,6 +435,9 @@ public abstract class MainClassFinder {
 	 */
 	private static final class SingleMainClassCallback implements MainClassCallback<Object> {
 
+		/**
+		 * 主类列表
+		 */
 		private final Set<MainClass> mainClasses = new LinkedHashSet<>();
 
 		private final String annotationName;
@@ -419,6 +452,11 @@ public abstract class MainClassFinder {
 			return null;
 		}
 
+		/**
+		 * 获取主类
+		 *
+		 * @return
+		 */
 		private String getMainClassName() {
 			Set<MainClass> matchingMainClasses = new LinkedHashSet<>();
 			if (this.annotationName != null) {

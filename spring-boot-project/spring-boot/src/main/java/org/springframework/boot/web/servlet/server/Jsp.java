@@ -29,14 +29,21 @@ import java.util.Map;
 public class Jsp {
 
 	/**
+	 * 类名
+	 * <p>
 	 * Class name of the servlet to use for JSPs. If registered is true and this class is
 	 * on the classpath then it will be registered.
 	 */
 	private String className = "org.apache.jasper.servlet.JspServlet";
 
+	/**
+	 * 初始化参数
+	 */
 	private Map<String, String> initParameters = new HashMap<>();
 
 	/**
+	 * 是否被注册
+	 * <p>
 	 * Whether the JSP servlet is registered.
 	 */
 	private boolean registered = true;
@@ -49,6 +56,7 @@ public class Jsp {
 	 * Return the class name of the servlet to use for JSPs. If {@link #getRegistered()
 	 * registered} is {@code true} and this class is on the classpath then it will be
 	 * registered.
+	 *
 	 * @return the class name of the servlet to use for JSPs
 	 */
 	public String getClassName() {
@@ -61,6 +69,7 @@ public class Jsp {
 
 	/**
 	 * Return the init parameters used to configure the JSP servlet.
+	 *
 	 * @return the init parameters
 	 */
 	public Map<String, String> getInitParameters() {
@@ -73,6 +82,7 @@ public class Jsp {
 
 	/**
 	 * Return whether the JSP servlet is registered.
+	 *
 	 * @return {@code true} to register the JSP servlet
 	 */
 	public boolean getRegistered() {

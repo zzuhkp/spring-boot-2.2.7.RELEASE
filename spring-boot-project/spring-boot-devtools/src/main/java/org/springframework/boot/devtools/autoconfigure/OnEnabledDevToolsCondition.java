@@ -36,6 +36,7 @@ public class OnEnabledDevToolsCondition extends SpringBootCondition {
 		ConditionMessage.Builder message = ConditionMessage.forCondition("Devtools");
 		boolean shouldEnable = DevToolsEnablementDeducer.shouldEnable(Thread.currentThread());
 		if (!shouldEnable) {
+			// 不启用
 			return ConditionOutcome.noMatch(message.because("devtools is disabled for current context."));
 		}
 		return ConditionOutcome.match(message.because("devtools enabled."));

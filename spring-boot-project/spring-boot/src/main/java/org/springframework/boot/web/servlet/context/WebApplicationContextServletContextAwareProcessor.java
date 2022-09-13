@@ -24,6 +24,8 @@ import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.support.ServletContextAwareProcessor;
 
 /**
+ * 使用 ConfigurableWebApplicationContext 获取 ServletContext、ServletConfig
+ * <p>
  * Variant of {@link ServletContextAwareProcessor} for use with a
  * {@link ConfigurableWebApplicationContext}. Can be used when registering the processor
  * can occur before the {@link ServletContext} or {@link ServletConfig} have been

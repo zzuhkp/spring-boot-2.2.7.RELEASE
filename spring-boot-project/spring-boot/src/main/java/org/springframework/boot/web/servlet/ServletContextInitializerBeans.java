@@ -45,6 +45,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * ServletContext 初始化
+ * <p>
  * A collection {@link ServletContextInitializer}s obtained from a
  * {@link ListableBeanFactory}. Includes all {@link ServletContextInitializer} beans and
  * also adapts {@link Servlet}, {@link Filter} and certain {@link EventListener} beans.
@@ -74,11 +76,14 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 
 	private final List<Class<? extends ServletContextInitializer>> initializerTypes;
 
+	/**
+	 * 处理后的 ServletContextInitializer
+	 */
 	private List<ServletContextInitializer> sortedList;
 
 	@SafeVarargs
 	public ServletContextInitializerBeans(ListableBeanFactory beanFactory,
-			Class<? extends ServletContextInitializer>... initializerTypes) {
+										  Class<? extends ServletContextInitializer>... initializerTypes) {
 		this.initializers = new LinkedMultiValueMap<>();
 		this.initializerTypes = (initializerTypes.length != 0) ? Arrays.asList(initializerTypes)
 				: Collections.singletonList(ServletContextInitializer.class);
@@ -91,6 +96,11 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		logMappings(this.initializers);
 	}
 
+	/**
+	 * 添加 BeanFactory 中的 ServletContextInitializer 到列表
+	 *
+	 * @param beanFactory
+	 */
 	private void addServletContextInitializerBeans(ListableBeanFactory beanFactory) {
 		for (Class<? extends ServletContextInitializer> initializerType : this.initializerTypes) {
 			for (Entry<String, ? extends ServletContextInitializer> initializerBean : getOrderedBeansOfType(beanFactory,
@@ -100,32 +110,44 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		}
 	}
 
+	/**
+	 * 添加 ServletContextInitializer 到列表
+	 *
+	 * @param beanName
+	 * @param initializer
+	 * @param beanFactory
+	 */
 	private void addServletContextInitializerBean(String beanName, ServletContextInitializer initializer,
-			ListableBeanFactory beanFactory) {
+												  ListableBeanFactory beanFactory) {
 		if (initializer instanceof ServletRegistrationBean) {
 			Servlet source = ((ServletRegistrationBean<?>) initializer).getServlet();
 			addServletContextInitializerBean(Servlet.class, beanName, initializer, beanFactory, source);
-		}
-		else if (initializer instanceof FilterRegistrationBean) {
+		} else if (initializer instanceof FilterRegistrationBean) {
 			Filter source = ((FilterRegistrationBean<?>) initializer).getFilter();
 			addServletContextInitializerBean(Filter.class, beanName, initializer, beanFactory, source);
-		}
-		else if (initializer instanceof DelegatingFilterProxyRegistrationBean) {
+		} else if (initializer instanceof DelegatingFilterProxyRegistrationBean) {
 			String source = ((DelegatingFilterProxyRegistrationBean) initializer).getTargetBeanName();
 			addServletContextInitializerBean(Filter.class, beanName, initializer, beanFactory, source);
-		}
-		else if (initializer instanceof ServletListenerRegistrationBean) {
+		} else if (initializer instanceof ServletListenerRegistrationBean) {
 			EventListener source = ((ServletListenerRegistrationBean<?>) initializer).getListener();
 			addServletContextInitializerBean(EventListener.class, beanName, initializer, beanFactory, source);
-		}
-		else {
+		} else {
 			addServletContextInitializerBean(ServletContextInitializer.class, beanName, initializer, beanFactory,
 					initializer);
 		}
 	}
 
+	/**
+	 * 添加 ServletContextInitializer 到列表
+	 *
+	 * @param type
+	 * @param beanName
+	 * @param initializer
+	 * @param beanFactory
+	 * @param source
+	 */
 	private void addServletContextInitializerBean(Class<?> type, String beanName, ServletContextInitializer initializer,
-			ListableBeanFactory beanFactory, Object source) {
+												  ListableBeanFactory beanFactory, Object source) {
 		this.initializers.add(type, initializer);
 		if (source != null) {
 			// Mark the underlying source as seen in case it wraps an existing bean
@@ -147,6 +169,10 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		return "unknown";
 	}
 
+	/**
+	 * 将 BeanFactory 的 MultipartConfigElement、Servlet、Filter 适配为 RegistrationBean 并添加到 ServletContextInitializer 列表
+	 * @param beanFactory
+	 */
 	@SuppressWarnings("unchecked")
 	protected void addAdaptableBeans(ListableBeanFactory beanFactory) {
 		MultipartConfigElement multipartConfig = getMultipartConfig(beanFactory);
@@ -158,19 +184,43 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		}
 	}
 
+	/**
+	 * 获取 MultipartConfigElement bean
+	 *
+	 * @param beanFactory
+	 * @return
+	 */
 	private MultipartConfigElement getMultipartConfig(ListableBeanFactory beanFactory) {
 		List<Entry<String, MultipartConfigElement>> beans = getOrderedBeansOfType(beanFactory,
 				MultipartConfigElement.class);
 		return beans.isEmpty() ? null : beans.get(0).getValue();
 	}
 
+	/**
+	 * 给定类型适配为 RegistrationBean，添加到 ServletContextInitializer 列表
+	 *
+	 * @param beanFactory
+	 * @param type
+	 * @param adapter
+	 * @param <T>
+	 */
 	protected <T> void addAsRegistrationBean(ListableBeanFactory beanFactory, Class<T> type,
-			RegistrationBeanAdapter<T> adapter) {
+											 RegistrationBeanAdapter<T> adapter) {
 		addAsRegistrationBean(beanFactory, type, type, adapter);
 	}
 
+	/**
+	 * 给定类型适配为 RegistrationBean，添加到 ServletContextInitializer 列表
+	 *
+	 * @param beanFactory
+	 * @param type
+	 * @param beanType
+	 * @param adapter
+	 * @param <T>
+	 * @param <B>
+	 */
 	private <T, B extends T> void addAsRegistrationBean(ListableBeanFactory beanFactory, Class<T> type,
-			Class<B> beanType, RegistrationBeanAdapter<T> adapter) {
+														Class<B> beanType, RegistrationBeanAdapter<T> adapter) {
 		List<Map.Entry<String, B>> entries = getOrderedBeansOfType(beanFactory, beanType, this.seen);
 		for (Entry<String, B> entry : entries) {
 			String beanName = entry.getKey();
@@ -198,12 +248,29 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		}.getOrder(value);
 	}
 
+	/**
+	 * 获取排序后的 bean
+	 *
+	 * @param beanFactory
+	 * @param type
+	 * @param <T>
+	 * @return
+	 */
 	private <T> List<Entry<String, T>> getOrderedBeansOfType(ListableBeanFactory beanFactory, Class<T> type) {
 		return getOrderedBeansOfType(beanFactory, type, Collections.emptySet());
 	}
 
+	/**
+	 * 获取排序后的 bean
+	 *
+	 * @param beanFactory
+	 * @param type
+	 * @param excludes
+	 * @param <T>
+	 * @return
+	 */
 	private <T> List<Entry<String, T>> getOrderedBeansOfType(ListableBeanFactory beanFactory, Class<T> type,
-			Set<?> excludes) {
+															 Set<?> excludes) {
 		String[] names = beanFactory.getBeanNamesForType(type, true, false);
 		Map<String, T> map = new LinkedHashMap<>();
 		for (String name : names) {
@@ -227,7 +294,7 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	}
 
 	private void logMappings(String name, MultiValueMap<Class<?>, ServletContextInitializer> initializers,
-			Class<?> type, Class<? extends RegistrationBean> registrationType) {
+							 Class<?> type, Class<? extends RegistrationBean> registrationType) {
 		List<ServletContextInitializer> registrations = new ArrayList<>();
 		registrations.addAll(initializers.getOrDefault(registrationType, Collections.emptyList()));
 		registrations.addAll(initializers.getOrDefault(type, Collections.emptyList()));
@@ -246,6 +313,8 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	}
 
 	/**
+	 * 将给定 bean 类型适配为 RegistrationBean
+	 * <p>
 	 * Adapter to convert a given Bean type into a {@link RegistrationBean} (and hence a
 	 * {@link ServletContextInitializer}).
 	 *
@@ -259,6 +328,8 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	}
 
 	/**
+	 * MultipartConfigElement 适配为 RegistrationBean
+	 * <p>
 	 * {@link RegistrationBeanAdapter} for {@link Servlet} beans.
 	 */
 	private static class ServletRegistrationBeanAdapter implements RegistrationBeanAdapter<Servlet> {
@@ -284,6 +355,8 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	}
 
 	/**
+	 * Filter 适配为 RegistrationBean
+	 * <p>
 	 * {@link RegistrationBeanAdapter} for {@link Filter} beans.
 	 */
 	private static class FilterRegistrationBeanAdapter implements RegistrationBeanAdapter<Filter> {
@@ -298,13 +371,15 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	}
 
 	/**
+	 * EventListener 适配为 EventListener
+	 * <p>
 	 * {@link RegistrationBeanAdapter} for certain {@link EventListener} beans.
 	 */
 	private static class ServletListenerRegistrationBeanAdapter implements RegistrationBeanAdapter<EventListener> {
 
 		@Override
 		public RegistrationBean createRegistrationBean(String name, EventListener source,
-				int totalNumberOfSourceBeans) {
+													   int totalNumberOfSourceBeans) {
 			return new ServletListenerRegistrationBean<>(source);
 		}
 

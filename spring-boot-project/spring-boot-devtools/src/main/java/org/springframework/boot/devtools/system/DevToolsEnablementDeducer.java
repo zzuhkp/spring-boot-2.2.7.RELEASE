@@ -43,8 +43,11 @@ public final class DevToolsEnablementDeducer {
 	}
 
 	/**
+	 * 根据线程堆栈信息判断是否应该启用
+	 * <p>
 	 * Checks if a specific {@link StackTraceElement} in the current thread's stacktrace
 	 * should cause devtools to be disabled.
+	 *
 	 * @param thread the current thread
 	 * @return {@code true} if devtools should be enabled
 	 */
@@ -57,6 +60,12 @@ public final class DevToolsEnablementDeducer {
 		return true;
 	}
 
+	/**
+	 * 是否跳过堆栈
+	 *
+	 * @param element
+	 * @return
+	 */
 	private static boolean isSkippedStackElement(StackTraceElement element) {
 		for (String skipped : SKIPPED_STACK_ELEMENTS) {
 			if (element.getClassName().startsWith(skipped)) {

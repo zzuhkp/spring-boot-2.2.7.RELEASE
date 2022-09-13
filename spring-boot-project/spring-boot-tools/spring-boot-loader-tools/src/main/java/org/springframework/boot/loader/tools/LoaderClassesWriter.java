@@ -29,22 +29,31 @@ import java.io.InputStream;
 public interface LoaderClassesWriter {
 
 	/**
+	 * 写默认 spring-boot-loader 类到 JAR 包中
+	 * <p>
 	 * Write the default required spring-boot-loader classes to the JAR.
+	 *
 	 * @throws IOException if the classes cannot be written
 	 */
 	void writeLoaderClasses() throws IOException;
 
 	/**
+	 * 写自定义 spring-boot-loader 类到 JAR 包
+	 * <p>
 	 * Write custom required spring-boot-loader classes to the JAR.
+	 *
 	 * @param loaderJarResourceName the name of the resource containing the loader classes
-	 * to be written
+	 *                              to be written
 	 * @throws IOException if the classes cannot be written
 	 */
 	void writeLoaderClasses(String loaderJarResourceName) throws IOException;
 
 	/**
+	 * 写 entry 到 JAR 包中
+	 * <p>
 	 * Write a single entry to the JAR.
-	 * @param name the name of the entry
+	 *
+	 * @param name        the name of the entry
 	 * @param inputStream the input stream content
 	 * @throws IOException if the entry cannot be written
 	 */

@@ -17,13 +17,15 @@
 package org.springframework.boot.web.server;
 
 /**
+ * 创建 WebServer 的工厂
+ * <p>
  * Tagging interface for factories that create a {@link WebServer}.
  *
  * @author Phillip Webb
- * @since 2.0.0
  * @see WebServer
  * @see org.springframework.boot.web.servlet.server.ServletWebServerFactory
  * @see org.springframework.boot.web.reactive.server.ReactiveWebServerFactory
+ * @since 2.0.0
  */
 public interface WebServerFactory {
 

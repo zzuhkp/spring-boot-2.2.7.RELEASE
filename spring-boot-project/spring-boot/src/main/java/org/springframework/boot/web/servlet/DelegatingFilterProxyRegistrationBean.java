@@ -28,6 +28,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 /**
+ * Filter 注册，代理容器中的 Filter
+ * <p>
  * A {@link ServletContextInitializer} to register {@link DelegatingFilterProxy}s in a
  * Servlet 3.0+ container. Similar to the {@link ServletContext#addFilter(String, Filter)
  * registration} features provided by {@link ServletContext} but with a Spring Bean

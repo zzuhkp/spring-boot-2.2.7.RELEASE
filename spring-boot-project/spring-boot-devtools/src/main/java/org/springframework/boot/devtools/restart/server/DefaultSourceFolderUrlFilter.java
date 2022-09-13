@@ -34,7 +34,7 @@ import org.springframework.util.StringUtils;
  */
 public class DefaultSourceFolderUrlFilter implements SourceFolderUrlFilter {
 
-	private static final String[] COMMON_ENDINGS = { "/target/classes", "/bin" };
+	private static final String[] COMMON_ENDINGS = {"/target/classes", "/bin"};
 
 	private static final Pattern URL_MODULE_PATTERN = Pattern.compile(".*\\/(.+)\\.jar");
 
@@ -52,6 +52,12 @@ public class DefaultSourceFolderUrlFilter implements SourceFolderUrlFilter {
 		return isMatch(sourceFolder, jarName);
 	}
 
+	/**
+	 * 类路径 URL 为 jar 包时，URL 对应的 jar 名称
+	 *
+	 * @param url
+	 * @return
+	 */
 	private String getJarName(URL url) {
 		Matcher matcher = URL_MODULE_PATTERN.matcher(url.toString());
 		if (matcher.find()) {
@@ -60,6 +66,13 @@ public class DefaultSourceFolderUrlFilter implements SourceFolderUrlFilter {
 		return null;
 	}
 
+	/**
+	 * 目录是否与 jar 名称匹配
+	 *
+	 * @param sourceFolder
+	 * @param jarName
+	 * @return
+	 */
 	private boolean isMatch(String sourceFolder, String jarName) {
 		sourceFolder = stripTrailingSlash(sourceFolder);
 		sourceFolder = stripCommonEnds(sourceFolder);
@@ -72,14 +85,29 @@ public class DefaultSourceFolderUrlFilter implements SourceFolderUrlFilter {
 		return false;
 	}
 
+	/**
+	 * 文件名是否与目录匹配
+	 *
+	 * @param folder
+	 * @param jarName
+	 * @return
+	 */
 	private boolean isFolderMatch(String folder, String jarName) {
 		if (!jarName.startsWith(folder) || SKIPPED_PROJECTS.contains(folder)) {
+			// jar 包的名称要以目录名开头
 			return false;
 		}
+		// 版本号匹配
 		String version = jarName.substring(folder.length());
 		return version.isEmpty() || VERSION_PATTERN.matcher(version).matches();
 	}
 
+	/**
+	 * 去除尾部 /
+	 *
+	 * @param string
+	 * @return
+	 */
 	private String stripTrailingSlash(String string) {
 		if (string.endsWith("/")) {
 			return string.substring(0, string.length() - 1);
@@ -87,6 +115,12 @@ public class DefaultSourceFolderUrlFilter implements SourceFolderUrlFilter {
 		return string;
 	}
 
+	/**
+	 * 去除通用后缀
+	 *
+	 * @param string
+	 * @return
+	 */
 	private String stripCommonEnds(String string) {
 		for (String ending : COMMON_ENDINGS) {
 			if (string.endsWith(ending)) {

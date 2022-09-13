@@ -19,20 +19,28 @@ package org.springframework.boot.devtools.restart;
 import java.lang.reflect.Method;
 
 /**
+ * 重启应用的线程
+ * <p>
  * Thread used to launch a restarted application.
  *
  * @author Phillip Webb
  */
 class RestartLauncher extends Thread {
 
+	/**
+	 * 主类
+	 */
 	private final String mainClassName;
 
+	/**
+	 * main 方法参数
+	 */
 	private final String[] args;
 
 	private Throwable error;
 
 	RestartLauncher(ClassLoader classLoader, String mainClassName, String[] args,
-			UncaughtExceptionHandler exceptionHandler) {
+					UncaughtExceptionHandler exceptionHandler) {
 		this.mainClassName = mainClassName;
 		this.args = args;
 		setName("restartedMain");
@@ -44,11 +52,11 @@ class RestartLauncher extends Thread {
 	@Override
 	public void run() {
 		try {
+			// 重启应用
 			Class<?> mainClass = getContextClassLoader().loadClass(this.mainClassName);
 			Method mainMethod = mainClass.getDeclaredMethod("main", String[].class);
-			mainMethod.invoke(null, new Object[] { this.args });
-		}
-		catch (Throwable ex) {
+			mainMethod.invoke(null, new Object[]{this.args});
+		} catch (Throwable ex) {
 			this.error = ex;
 			getUncaughtExceptionHandler().uncaughtException(this, ex);
 		}

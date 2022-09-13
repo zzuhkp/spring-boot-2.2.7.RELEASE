@@ -20,6 +20,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 /**
+ * 应用启动后回调
+ * <p>
  * Interface used to indicate that a bean should <em>run</em> when it is contained within
  * a {@link SpringApplication}. Multiple {@link CommandLineRunner} beans can be defined
  * within the same application context and can be ordered using the {@link Ordered}
@@ -29,14 +31,15 @@ import org.springframework.core.annotation.Order;
  * consider using {@link ApplicationRunner}.
  *
  * @author Dave Syer
- * @since 1.0.0
  * @see ApplicationRunner
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface CommandLineRunner {
 
 	/**
 	 * Callback used to run the bean.
+	 *
 	 * @param args incoming main method arguments
 	 * @throws Exception on error
 	 */

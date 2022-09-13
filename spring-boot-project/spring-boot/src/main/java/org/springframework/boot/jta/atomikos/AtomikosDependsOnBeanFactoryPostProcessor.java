@@ -32,6 +32,8 @@ import org.springframework.core.Ordered;
 import org.springframework.util.StringUtils;
 
 /**
+ * 依赖配置
+ *
  * {@link BeanFactoryPostProcessor} to automatically setup the recommended
  * {@link BeanDefinition#setDependsOn(String[]) dependsOn} settings for
  * <a href="https://www.atomikos.com/Documentation/SpringIntegration">correct Atomikos
@@ -55,8 +57,14 @@ public class AtomikosDependsOnBeanFactoryPostProcessor implements BeanFactoryPos
 		addMessageDrivenContainerDependencies(beanFactory, transactionManagers);
 	}
 
+	/**
+	 * 设置依赖 bean
+	 *
+	 * @param beanFactory
+	 * @param transactionManager
+	 */
 	private void addTransactionManagerDependencies(ConfigurableListableBeanFactory beanFactory,
-			String transactionManager) {
+												   String transactionManager) {
 		BeanDefinition bean = beanFactory.getBeanDefinition(transactionManager);
 		Set<String> dependsOn = new LinkedHashSet<>(asList(bean.getDependsOn()));
 		int initialSize = dependsOn.size();
@@ -67,8 +75,14 @@ public class AtomikosDependsOnBeanFactoryPostProcessor implements BeanFactoryPos
 		}
 	}
 
+	/**
+	 * 添加 MessageDrivenContainer 依赖
+	 *
+	 * @param beanFactory
+	 * @param transactionManagers
+	 */
 	private void addMessageDrivenContainerDependencies(ConfigurableListableBeanFactory beanFactory,
-			String[] transactionManagers) {
+													   String[] transactionManagers) {
 		String[] messageDrivenContainers = getBeanNamesForType(beanFactory,
 				"com.atomikos.jms.extra.MessageDrivenContainer");
 		for (String messageDrivenContainer : messageDrivenContainers) {
@@ -86,8 +100,7 @@ public class AtomikosDependsOnBeanFactoryPostProcessor implements BeanFactoryPos
 	private String[] getBeanNamesForType(ConfigurableListableBeanFactory beanFactory, String type) {
 		try {
 			return beanFactory.getBeanNamesForType(Class.forName(type), true, false);
-		}
-		catch (ClassNotFoundException | NoClassDefFoundError ex) {
+		} catch (ClassNotFoundException | NoClassDefFoundError ex) {
 			// Ignore
 		}
 		return NO_BEANS;

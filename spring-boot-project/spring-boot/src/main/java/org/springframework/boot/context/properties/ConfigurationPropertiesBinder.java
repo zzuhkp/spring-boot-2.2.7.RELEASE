@@ -49,6 +49,8 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 
 /**
+ * 绑定属性
+ * <p>
  * Internal class used by the {@link ConfigurationPropertiesBindingPostProcessor} to
  * handle the actual {@link ConfigurationProperties @ConfigurationProperties} binding.
  *
@@ -96,6 +98,12 @@ class ConfigurationPropertiesBinder {
 		return getBinder().bindOrCreate(annotation.prefix(), target, bindHandler);
 	}
 
+	/**
+	 * 获取 Validator bean
+	 *
+	 * @param applicationContext
+	 * @return
+	 */
 	private Validator getConfigurationPropertiesValidator(ApplicationContext applicationContext) {
 		if (applicationContext.containsBean(VALIDATOR_BEAN_NAME)) {
 			return applicationContext.getBean(VALIDATOR_BEAN_NAME, Validator.class);
@@ -122,6 +130,12 @@ class ConfigurationPropertiesBinder {
 		return handler;
 	}
 
+	/**
+	 * 获取 Validator
+	 *
+	 * @param target
+	 * @return
+	 */
 	private List<Validator> getValidators(Bindable<?> target) {
 		List<Validator> validators = new ArrayList<>(3);
 		if (this.configurationPropertiesValidator != null) {
@@ -178,12 +192,14 @@ class ConfigurationPropertiesBinder {
 
 	static void register(BeanDefinitionRegistry registry) {
 		if (!registry.containsBeanDefinition(FACTORY_BEAN_NAME)) {
+			// 注册 ConfigurationPropertiesBinder.Factory 作为 bean
 			GenericBeanDefinition definition = new GenericBeanDefinition();
 			definition.setBeanClass(ConfigurationPropertiesBinder.Factory.class);
 			definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 			registry.registerBeanDefinition(ConfigurationPropertiesBinder.FACTORY_BEAN_NAME, definition);
 		}
 		if (!registry.containsBeanDefinition(BEAN_NAME)) {
+			// 注册 ConfigurationPropertiesBinder 作为 bean
 			GenericBeanDefinition definition = new GenericBeanDefinition();
 			definition.setBeanClass(ConfigurationPropertiesBinder.class);
 			definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);

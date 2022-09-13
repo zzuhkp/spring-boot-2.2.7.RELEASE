@@ -60,8 +60,9 @@ class DataSourceInitializer {
 	/**
 	 * Create a new instance with the {@link DataSource} to initialize and its matching
 	 * {@link DataSourceProperties configuration}.
-	 * @param dataSource the datasource to initialize
-	 * @param properties the matching configuration
+	 *
+	 * @param dataSource     the datasource to initialize
+	 * @param properties     the matching configuration
 	 * @param resourceLoader the resource loader to use (can be null)
 	 */
 	DataSourceInitializer(DataSource dataSource, DataSourceProperties properties, ResourceLoader resourceLoader) {
@@ -73,6 +74,7 @@ class DataSourceInitializer {
 	/**
 	 * Create a new instance with the {@link DataSource} to initialize and its matching
 	 * {@link DataSourceProperties configuration}.
+	 *
 	 * @param dataSource the datasource to initialize
 	 * @param properties the matching configuration
 	 */
@@ -86,6 +88,7 @@ class DataSourceInitializer {
 
 	/**
 	 * Create the schema if necessary.
+	 *
 	 * @return {@code true} if the schema was created
 	 * @see DataSourceProperties#getSchema()
 	 */
@@ -105,6 +108,7 @@ class DataSourceInitializer {
 
 	/**
 	 * Initialize the schema if necessary.
+	 *
 	 * @see DataSourceProperties#getData()
 	 */
 	void initSchema() {
@@ -134,13 +138,20 @@ class DataSourceInitializer {
 	private boolean isEmbedded() {
 		try {
 			return EmbeddedDatabaseConnection.isEmbedded(this.dataSource);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Could not determine if datasource is embedded", ex);
 			return false;
 		}
 	}
 
+	/**
+	 * 获取脚本文件
+	 *
+	 * @param propertyName
+	 * @param resources
+	 * @param fallback
+	 * @return
+	 */
 	private List<Resource> getScripts(String propertyName, List<String> resources, String fallback) {
 		if (resources != null) {
 			return getResources(propertyName, resources, true);
@@ -152,14 +163,21 @@ class DataSourceInitializer {
 		return getResources(propertyName, fallbackResources, false);
 	}
 
+	/**
+	 * 获取文件
+	 *
+	 * @param propertyName
+	 * @param locations
+	 * @param validate
+	 * @return
+	 */
 	private List<Resource> getResources(String propertyName, List<String> locations, boolean validate) {
 		List<Resource> resources = new ArrayList<>();
 		for (String location : locations) {
 			for (Resource resource : doGetResources(location)) {
 				if (resource.exists()) {
 					resources.add(resource);
-				}
-				else if (validate) {
+				} else if (validate) {
 					throw new InvalidConfigurationPropertyValueException(propertyName, resource,
 							"The specified resource does not exist.");
 				}
@@ -168,18 +186,30 @@ class DataSourceInitializer {
 		return resources;
 	}
 
+	/**
+	 * 获取文件
+	 *
+	 * @param location
+	 * @return
+	 */
 	private Resource[] doGetResources(String location) {
 		try {
 			SortedResourcesFactoryBean factory = new SortedResourcesFactoryBean(this.resourceLoader,
 					Collections.singletonList(location));
 			factory.afterPropertiesSet();
 			return factory.getObject();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new IllegalStateException("Unable to load resources from " + location, ex);
 		}
 	}
 
+	/**
+	 * 运行脚本文件中的脚本
+	 *
+	 * @param resources
+	 * @param username
+	 * @param password
+	 */
 	private void runScripts(List<Resource> resources, String username, String password) {
 		if (resources.isEmpty()) {
 			return;

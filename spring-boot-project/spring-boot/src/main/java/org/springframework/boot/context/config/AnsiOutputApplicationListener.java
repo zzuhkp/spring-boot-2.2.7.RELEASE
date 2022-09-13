@@ -25,6 +25,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
+ * ANSI 变量设置
+ * <p>
  * An {@link ApplicationListener} that configures {@link AnsiOutput} depending on the
  * value of the property {@code spring.output.ansi.enabled}. See {@link Enabled} for valid
  * values.

@@ -115,13 +115,21 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 		if (!isEnabled(annotationMetadata)) {
 			return EMPTY_ENTRY;
 		}
+		// 获取配置类上的注解属性
 		AnnotationAttributes attributes = getAttributes(annotationMetadata);
+		// 获取候配置类
 		List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);
+		// 移除重复的配置类
 		configurations = removeDuplicates(configurations);
+		// 获取排除的配置类
 		Set<String> exclusions = getExclusions(annotationMetadata, attributes);
+		// 检查排除类
 		checkExcludedClasses(configurations, exclusions);
+		// 移除排除类
 		configurations.removeAll(exclusions);
+		// 过滤排除类
 		configurations = filter(configurations, autoConfigurationMetadata);
+		// 发布事件
 		fireAutoConfigurationImportEvents(configurations, exclusions);
 		return new AutoConfigurationEntry(configurations, exclusions);
 	}

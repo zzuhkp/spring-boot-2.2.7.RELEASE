@@ -29,6 +29,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * DataSourcePoolMetadataProvider bean 配置
+ * <p>
  * Register the {@link DataSourcePoolMetadataProvider} instances for the supported data
  * sources.
  *

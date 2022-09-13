@@ -45,6 +45,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * 支持 XA 的 DataSource 配置
+ * <p>
  * {@link EnableAutoConfiguration Auto-configuration} for {@link DataSource} with XA.
  *
  * @author Phillip Webb
@@ -55,7 +57,7 @@ import org.springframework.util.StringUtils;
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(DataSourceProperties.class)
-@ConditionalOnClass({ DataSource.class, TransactionManager.class, EmbeddedDatabaseType.class })
+@ConditionalOnClass({DataSource.class, TransactionManager.class, EmbeddedDatabaseType.class})
 @ConditionalOnBean(XADataSourceWrapper.class)
 @ConditionalOnMissingBean(DataSource.class)
 public class XADataSourceAutoConfiguration implements BeanClassLoaderAware {
@@ -64,7 +66,7 @@ public class XADataSourceAutoConfiguration implements BeanClassLoaderAware {
 
 	@Bean
 	public DataSource dataSource(XADataSourceWrapper wrapper, DataSourceProperties properties,
-			ObjectProvider<XADataSource> xaDataSource) throws Exception {
+								 ObjectProvider<XADataSource> xaDataSource) throws Exception {
 		return wrapper.wrapDataSource(xaDataSource.getIfAvailable(() -> createXaDataSource(properties)));
 	}
 
@@ -73,6 +75,12 @@ public class XADataSourceAutoConfiguration implements BeanClassLoaderAware {
 		this.classLoader = classLoader;
 	}
 
+	/**
+	 * 创建 XADataSource
+	 *
+	 * @param properties
+	 * @return
+	 */
 	private XADataSource createXaDataSource(DataSourceProperties properties) {
 		String className = properties.getXa().getDataSourceClassName();
 		if (!StringUtils.hasLength(className)) {
@@ -84,23 +92,40 @@ public class XADataSourceAutoConfiguration implements BeanClassLoaderAware {
 		return dataSource;
 	}
 
+	/**
+	 * 创建 XADataSource 实例
+	 *
+	 * @param className
+	 * @return
+	 */
 	private XADataSource createXaDataSourceInstance(String className) {
 		try {
 			Class<?> dataSourceClass = ClassUtils.forName(className, this.classLoader);
 			Object instance = BeanUtils.instantiateClass(dataSourceClass);
 			Assert.isInstanceOf(XADataSource.class, instance);
 			return (XADataSource) instance;
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new IllegalStateException("Unable to create XADataSource instance from '" + className + "'");
 		}
 	}
 
+	/**
+	 * 设置 XADataSource 属性
+	 *
+	 * @param target
+	 * @param dataSourceProperties
+	 */
 	private void bindXaProperties(XADataSource target, DataSourceProperties dataSourceProperties) {
 		Binder binder = new Binder(getBinderSource(dataSourceProperties));
 		binder.bind(ConfigurationPropertyName.EMPTY, Bindable.ofInstance(target));
 	}
 
+	/**
+	 * 获取属性源
+	 *
+	 * @param dataSourceProperties
+	 * @return
+	 */
 	private ConfigurationPropertySource getBinderSource(DataSourceProperties dataSourceProperties) {
 		MapConfigurationPropertySource source = new MapConfigurationPropertySource();
 		source.put("user", dataSourceProperties.determineUsername());

@@ -39,6 +39,11 @@ public class JavaExecutable {
 		this.file = findInJavaHome(javaHome);
 	}
 
+	/**
+	 * home 目录下查找 java 程序
+	 * @param javaHome
+	 * @return
+	 */
 	private File findInJavaHome(String javaHome) {
 		File bin = new File(new File(javaHome), "bin");
 		File command = new File(bin, "java.exe");

@@ -20,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 错误页面
+ * <p>
  * Simple server-independent abstraction for error pages. Roughly equivalent to the
  * {@literal &lt;error-page&gt;} element traditionally found in web.xml.
  *
@@ -28,10 +30,19 @@ import org.springframework.util.ObjectUtils;
  */
 public class ErrorPage {
 
+	/**
+	 * 状态码
+	 */
 	private final HttpStatus status;
 
+	/**
+	 * 异常
+	 */
 	private final Class<? extends Throwable> exception;
 
+	/**
+	 * 页面路径
+	 */
 	private final String path;
 
 	public ErrorPage(String path) {
@@ -56,6 +67,7 @@ public class ErrorPage {
 	 * The path to render (usually implemented as a forward), starting with "/". A custom
 	 * controller or servlet path can be used, or if the server supports it, a template
 	 * path (e.g. "/error.jsp").
+	 *
 	 * @return the path that will be rendered for this error
 	 */
 	public String getPath() {
@@ -64,6 +76,7 @@ public class ErrorPage {
 
 	/**
 	 * Returns the exception type (or {@code null} for a page that matches by status).
+	 *
 	 * @return the exception type or {@code null}
 	 */
 	public Class<? extends Throwable> getException() {
@@ -73,6 +86,7 @@ public class ErrorPage {
 	/**
 	 * The HTTP status value that this error page matches (or {@code null} for a page that
 	 * matches by exception).
+	 *
 	 * @return the status or {@code null}
 	 */
 	public HttpStatus getStatus() {
@@ -81,6 +95,7 @@ public class ErrorPage {
 
 	/**
 	 * The HTTP status value that this error page matches.
+	 *
 	 * @return the status value (or 0 for a page that matches any status)
 	 */
 	public int getStatusCode() {
@@ -89,6 +104,7 @@ public class ErrorPage {
 
 	/**
 	 * The exception type name.
+	 *
 	 * @return the exception type name (or {@code null} if there is none)
 	 */
 	public String getExceptionName() {
@@ -98,6 +114,7 @@ public class ErrorPage {
 	/**
 	 * Return if this error page is a global one (matches all unmatched status and
 	 * exception types).
+	 *
 	 * @return if this is a global error page
 	 */
 	public boolean isGlobal() {

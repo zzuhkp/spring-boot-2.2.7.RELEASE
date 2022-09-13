@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * 表示连接的输入流
+ * <p>
  * {@link InputStream} for a server connection.
  *
  * @author Phillip Webb
@@ -36,9 +38,12 @@ class ConnectionInputStream extends FilterInputStream {
 	}
 
 	/**
+	 * 读取 HTTP 请求头
+	 * <p>
 	 * Read the HTTP header from the {@link InputStream}. Note: This method doesn't expect
 	 * any HTTP content after the header since the initial request is usually just a
 	 * WebSocket upgrade.
+	 *
 	 * @return the HTTP header
 	 * @throws IOException in case of I/O errors
 	 */
@@ -53,8 +58,11 @@ class ConnectionInputStream extends FilterInputStream {
 	}
 
 	/**
+	 * 读取给定长度的字节
+	 * <p>
 	 * Repeatedly read the underlying {@link InputStream} until the requested number of
 	 * bytes have been loaded.
+	 *
 	 * @param buffer the destination buffer
 	 * @param offset the buffer offset
 	 * @param length the amount of data to read
@@ -69,8 +77,11 @@ class ConnectionInputStream extends FilterInputStream {
 	}
 
 	/**
+	 * 读取单个字节
+	 * <p>
 	 * Read a single byte from the stream (checking that the end of the stream hasn't been
 	 * reached.
+	 *
 	 * @return the content
 	 * @throws IOException in case of I/O errors
 	 */
@@ -83,8 +94,11 @@ class ConnectionInputStream extends FilterInputStream {
 	}
 
 	/**
+	 * 从流中读取字节
+	 * <p>
 	 * Read a number of bytes from the stream (checking that the end of the stream hasn't
 	 * been reached).
+	 *
 	 * @param buffer the destination buffer
 	 * @param offset the buffer offset
 	 * @param length the length to read

@@ -29,12 +29,14 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.Assert;
 
 /**
+ * HTTP 重启
+ * <p>
  * A HTTP server that can be used to upload updated {@link ClassLoaderFiles} and trigger
  * restarts.
  *
  * @author Phillip Webb
- * @since 1.3.0
  * @see RestartServer
+ * @since 1.3.0
  */
 public class HttpRestartServer {
 
@@ -44,8 +46,9 @@ public class HttpRestartServer {
 
 	/**
 	 * Create a new {@link HttpRestartServer} instance.
+	 *
 	 * @param sourceFolderUrlFilter the source filter used to link remote folder to the
-	 * local classpath
+	 *                              local classpath
 	 */
 	public HttpRestartServer(SourceFolderUrlFilter sourceFolderUrlFilter) {
 		Assert.notNull(sourceFolderUrlFilter, "SourceFolderUrlFilter must not be null");
@@ -54,6 +57,7 @@ public class HttpRestartServer {
 
 	/**
 	 * Create a new {@link HttpRestartServer} instance.
+	 *
 	 * @param restartServer the underlying restart server
 	 */
 	public HttpRestartServer(RestartServer restartServer) {
@@ -62,8 +66,11 @@ public class HttpRestartServer {
 	}
 
 	/**
+	 * 处理请求，使用给定的类路径信息重启应用
+	 * <p>
 	 * Handle a server request.
-	 * @param request the request
+	 *
+	 * @param request  the request
 	 * @param response the response
 	 * @throws IOException in case of I/O errors
 	 */
@@ -71,12 +78,12 @@ public class HttpRestartServer {
 		try {
 			Assert.state(request.getHeaders().getContentLength() > 0, "No content");
 			ObjectInputStream objectInputStream = new ObjectInputStream(request.getBody());
+			// 请求体转类路径
 			ClassLoaderFiles files = (ClassLoaderFiles) objectInputStream.readObject();
 			objectInputStream.close();
 			this.server.updateAndRestart(files);
 			response.setStatusCode(HttpStatus.OK);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.warn("Unable to handler restart server HTTP request", ex);
 			response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

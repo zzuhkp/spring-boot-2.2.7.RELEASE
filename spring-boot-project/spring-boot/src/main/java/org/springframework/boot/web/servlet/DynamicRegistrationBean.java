@@ -30,6 +30,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * 基于 Servlet 3.0 Registration.Dynamic 的 RegistrationBean
+ * <p>
  * Base class for Servlet 3.0+ {@link javax.servlet.Registration.Dynamic dynamic} based
  * registration beans.
  *
@@ -121,6 +123,11 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 
 	protected abstract D addRegistration(String description, ServletContext servletContext);
 
+	/**
+	 * 配置
+	 *
+	 * @param registration
+	 */
 	protected void configure(D registration) {
 		registration.setAsyncSupported(this.asyncSupported);
 		if (!this.initParameters.isEmpty()) {

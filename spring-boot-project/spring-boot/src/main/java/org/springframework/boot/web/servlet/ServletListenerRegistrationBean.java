@@ -33,6 +33,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * EventListener 实现注册
+ *
  * A {@link ServletContextInitializer} to register {@link EventListener}s in a Servlet
  * 3.0+ container. Similar to the {@link ServletContext#addListener(EventListener)
  * registration} features provided by {@link ServletContext} but with a Spring Bean

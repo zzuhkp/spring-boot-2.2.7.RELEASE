@@ -19,6 +19,8 @@ package org.springframework.boot.jdbc.metadata;
 import javax.sql.DataSource;
 
 /**
+ * 数据源元数据
+ *
  * Provide a {@link DataSourcePoolMetadata} based on a {@link DataSource}.
  *
  * @author Stephane Nicoll

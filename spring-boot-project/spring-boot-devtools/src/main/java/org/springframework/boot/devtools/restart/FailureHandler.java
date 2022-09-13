@@ -17,6 +17,8 @@
 package org.springframework.boot.devtools.restart;
 
 /**
+ * 启动失败处理
+ * <p>
  * Strategy used to handle launch failures.
  *
  * @author Phillip Webb
@@ -33,6 +35,7 @@ public interface FailureHandler {
 	/**
 	 * Handle a run failure. Implementations may block, for example to wait until specific
 	 * files are updated.
+	 *
 	 * @param failure the exception
 	 * @return the outcome
 	 */
@@ -44,11 +47,14 @@ public interface FailureHandler {
 	enum Outcome {
 
 		/**
+		 * 中断重启
 		 * Abort the relaunch.
 		 */
 		ABORT,
 
 		/**
+		 * 再次尝试重启
+		 * <p>
 		 * Try again to relaunch the application.
 		 */
 		RETRY

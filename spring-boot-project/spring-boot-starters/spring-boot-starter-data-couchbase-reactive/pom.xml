@@ -50,5 +50,11 @@
 			<groupId>io.reactivex</groupId>
 			<artifactId>rxjava-reactive-streams</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.8.4</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

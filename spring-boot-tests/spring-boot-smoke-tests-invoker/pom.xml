@@ -15,7 +15,15 @@
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 	</properties>
-	<build>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.8.4</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
 		<plugins>
 			<plugin>
 				<!-- We use invoker so that the spring-boot-maven-plugin can be used -->

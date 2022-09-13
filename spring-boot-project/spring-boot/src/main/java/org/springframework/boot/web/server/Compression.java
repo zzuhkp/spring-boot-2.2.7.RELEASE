@@ -19,6 +19,8 @@ package org.springframework.boot.web.server;
 import org.springframework.util.unit.DataSize;
 
 /**
+ * 压缩配置
+ * <p>
  * Simple server-independent abstraction for compression configuration.
  *
  * @author Ivan Sopov
@@ -28,17 +30,27 @@ import org.springframework.util.unit.DataSize;
  */
 public class Compression {
 
+	/**
+	 * 是否压缩响应
+	 */
 	private boolean enabled = false;
 
-	private String[] mimeTypes = new String[] { "text/html", "text/xml", "text/plain", "text/css", "text/javascript",
-			"application/javascript", "application/json", "application/xml" };
+	/**
+	 * 应该被压缩的内容类型
+	 */
+	private String[] mimeTypes = new String[]{"text/html", "text/xml", "text/plain", "text/css", "text/javascript",
+			"application/javascript", "application/json", "application/xml"};
 
 	private String[] excludedUserAgents = null;
 
+	/**
+	 * 执行压缩的最小内容长度
+	 */
 	private DataSize minResponseSize = DataSize.ofKilobytes(2);
 
 	/**
 	 * Return whether response compression is enabled.
+	 *
 	 * @return {@code true} if response compression is enabled
 	 */
 	public boolean getEnabled() {
@@ -51,6 +63,7 @@ public class Compression {
 
 	/**
 	 * Return the MIME types that should be compressed.
+	 *
 	 * @return the MIME types that should be compressed
 	 */
 	public String[] getMimeTypes() {
@@ -72,6 +85,7 @@ public class Compression {
 	/**
 	 * Return the minimum "Content-Length" value that is required for compression to be
 	 * performed.
+	 *
 	 * @return the minimum content size in bytes that is required for compression
 	 */
 	public DataSize getMinResponseSize() {

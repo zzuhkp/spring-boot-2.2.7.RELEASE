@@ -22,6 +22,8 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
+ * restart 作用域注册
+ * <p>
  * Support for a 'restart' {@link Scope} that allows beans to remain between restarts.
  *
  * @author Phillip Webb

@@ -37,6 +37,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.MBeanExporter;
 
 /**
+ * DataSource 关联的 MBean 配置
+ *
  * Configures DataSource related MBeans.
  *
  * @author Stephane Nicoll

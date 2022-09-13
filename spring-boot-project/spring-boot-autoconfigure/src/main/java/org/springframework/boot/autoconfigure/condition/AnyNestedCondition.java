@@ -24,6 +24,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 /**
+ * 任意成员内部类条件匹配则匹配
+ * <p>
  * {@link Condition} that will match when any nested class condition matches. Can be used
  * to create composite conditions, for example:
  *

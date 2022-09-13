@@ -104,6 +104,7 @@ public class LocalDevToolsAutoConfiguration {
 				FileSystemWatcherFactory fileSystemWatcherFactory) {
 			return (event) -> {
 				if (event.isRestartRequired()) {
+					// 类路径发生变化时重启应用上下文
 					Restarter.getInstance().restart(new FileWatchingFailureHandler(fileSystemWatcherFactory));
 				}
 			};
@@ -112,7 +113,7 @@ public class LocalDevToolsAutoConfiguration {
 		@Bean
 		@ConditionalOnMissingBean
 		ClassPathFileSystemWatcher classPathFileSystemWatcher(FileSystemWatcherFactory fileSystemWatcherFactory,
-				ClassPathRestartStrategy classPathRestartStrategy) {
+															  ClassPathRestartStrategy classPathRestartStrategy) {
 			URL[] urls = Restarter.getInstance().getInitialUrls();
 			ClassPathFileSystemWatcher watcher = new ClassPathFileSystemWatcher(fileSystemWatcherFactory,
 					classPathRestartStrategy, urls);
@@ -138,6 +139,11 @@ public class LocalDevToolsAutoConfiguration {
 			return new ConditionEvaluationDeltaLoggingListener();
 		}
 
+		/**
+		 * 创建新的 FileSystemWatcher
+		 *
+		 * @return
+		 */
 		private FileSystemWatcher newFileSystemWatcher() {
 			Restart restartProperties = this.properties.getRestart();
 			FileSystemWatcher watcher = new FileSystemWatcher(true, restartProperties.getPollInterval(),
@@ -155,6 +161,9 @@ public class LocalDevToolsAutoConfiguration {
 
 	}
 
+	/**
+	 * 类路径变化重新加载
+	 */
 	static class LiveReloadServerEventListener implements GenericApplicationListener {
 
 		private final OptionalLiveReloadServer liveReloadServer;
@@ -182,6 +191,7 @@ public class LocalDevToolsAutoConfiguration {
 		public void onApplicationEvent(ApplicationEvent event) {
 			if (event instanceof ContextRefreshedEvent || (event instanceof ClassPathChangedEvent
 					&& !((ClassPathChangedEvent) event).isRestartRequired())) {
+				// 重新加载
 				this.liveReloadServer.triggerReload();
 			}
 		}

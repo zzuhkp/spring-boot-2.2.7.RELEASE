@@ -60,10 +60,10 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 @ConditionalOnClass(ServletRequest.class)
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @EnableConfigurationProperties(ServerProperties.class)
-@Import({ ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
+@Import({ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
 		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,
 		ServletWebServerFactoryConfiguration.EmbeddedJetty.class,
-		ServletWebServerFactoryConfiguration.EmbeddedUndertow.class })
+		ServletWebServerFactoryConfiguration.EmbeddedUndertow.class})
 public class ServletWebServerFactoryAutoConfiguration {
 
 	@Bean
@@ -90,6 +90,8 @@ public class ServletWebServerFactoryAutoConfiguration {
 	}
 
 	/**
+	 * WebServerFactoryCustomizer、ErrorPageRegistrar 回调
+	 * <p>
 	 * Registers a {@link WebServerFactoryCustomizerBeanPostProcessor}. Registered via
 	 * {@link ImportBeanDefinitionRegistrar} for early registration.
 	 */
@@ -106,7 +108,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
-				BeanDefinitionRegistry registry) {
+											BeanDefinitionRegistry registry) {
 			if (this.beanFactory == null) {
 				return;
 			}

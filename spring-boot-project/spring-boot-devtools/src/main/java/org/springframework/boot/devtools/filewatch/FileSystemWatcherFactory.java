@@ -17,6 +17,8 @@
 package org.springframework.boot.devtools.filewatch;
 
 /**
+ * FileSystemWatcher 工厂
+ * <p>
  * Factory used to create new {@link FileSystemWatcher} instances.
  *
  * @author Phillip Webb
@@ -27,6 +29,7 @@ public interface FileSystemWatcherFactory {
 
 	/**
 	 * Create a new {@link FileSystemWatcher}.
+	 *
 	 * @return a new {@link FileSystemWatcher}
 	 */
 	FileSystemWatcher getFileSystemWatcher();

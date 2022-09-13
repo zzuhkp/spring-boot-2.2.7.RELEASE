@@ -198,6 +198,7 @@ public class ServletRegistrationBean<T extends Servlet> extends DynamicRegistrat
 	 */
 	@Override
 	protected void configure(ServletRegistration.Dynamic registration) {
+		// 配置 Servlet
 		super.configure(registration);
 		String[] urlMapping = StringUtils.toStringArray(this.urlMappings);
 		if (urlMapping.length == 0 && this.alwaysMapUrl) {

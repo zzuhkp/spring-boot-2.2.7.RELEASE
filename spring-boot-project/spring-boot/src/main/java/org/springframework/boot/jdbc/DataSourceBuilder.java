@@ -46,8 +46,8 @@ import org.springframework.util.ClassUtils;
  */
 public final class DataSourceBuilder<T extends DataSource> {
 
-	private static final String[] DATA_SOURCE_TYPE_NAMES = new String[] { "com.zaxxer.hikari.HikariDataSource",
-			"org.apache.tomcat.jdbc.pool.DataSource", "org.apache.commons.dbcp2.BasicDataSource" };
+	private static final String[] DATA_SOURCE_TYPE_NAMES = new String[]{"com.zaxxer.hikari.HikariDataSource",
+			"org.apache.tomcat.jdbc.pool.DataSource", "org.apache.commons.dbcp2.BasicDataSource"};
 
 	private Class<? extends DataSource> type;
 
@@ -76,6 +76,9 @@ public final class DataSourceBuilder<T extends DataSource> {
 		return (T) result;
 	}
 
+	/**
+	 * 获取驱动名称
+	 */
 	private void maybeGetDriverClassName() {
 		if (!this.properties.containsKey("driverClassName") && this.properties.containsKey("url")) {
 			String url = this.properties.get("url");
@@ -119,13 +122,18 @@ public final class DataSourceBuilder<T extends DataSource> {
 		return this;
 	}
 
+	/**
+	 * 查找数据源类型
+	 *
+	 * @param classLoader
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static Class<? extends DataSource> findType(ClassLoader classLoader) {
 		for (String name : DATA_SOURCE_TYPE_NAMES) {
 			try {
 				return (Class<? extends DataSource>) ClassUtils.forName(name, classLoader);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				// Swallow and continue
 			}
 		}

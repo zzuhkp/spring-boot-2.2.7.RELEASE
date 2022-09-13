@@ -24,6 +24,8 @@ import java.util.Set;
 import org.springframework.boot.convert.DurationUnit;
 
 /**
+ * Session 配置
+ *
  * Session properties.
  *
  * @author Andy Wilkinson
@@ -34,11 +36,20 @@ public class Session {
 	@DurationUnit(ChronoUnit.SECONDS)
 	private Duration timeout = Duration.ofMinutes(30);
 
+	/**
+	 * Session 跟踪模式
+	 *
+	 */
 	private Set<Session.SessionTrackingMode> trackingModes;
 
+	/**
+	 * 重启是否保留 session 数据
+	 */
 	private boolean persistent;
 
 	/**
+	 * 存储 session 数据的目录
+	 *
 	 * Directory used to store session data.
 	 */
 	private File storeDir;
@@ -61,6 +72,7 @@ public class Session {
 
 	/**
 	 * Return the {@link SessionTrackingMode session tracking modes}.
+	 *
 	 * @return the session tracking modes
 	 */
 	public Set<Session.SessionTrackingMode> getTrackingModes() {
@@ -73,6 +85,7 @@ public class Session {
 
 	/**
 	 * Return whether to persist session data between restarts.
+	 *
 	 * @return {@code true} to persist session data between restarts.
 	 */
 	public boolean isPersistent() {
@@ -85,6 +98,7 @@ public class Session {
 
 	/**
 	 * Return the directory used to store session data.
+	 *
 	 * @return the session data store directory
 	 */
 	public File getStoreDir() {
@@ -101,6 +115,8 @@ public class Session {
 	}
 
 	/**
+	 * Cookie 配置
+	 *
 	 * Cookie properties.
 	 */
 	public static class Cookie {
@@ -122,6 +138,7 @@ public class Session {
 
 		/**
 		 * Return the session cookie name.
+		 *
 		 * @return the session cookie name
 		 */
 		public String getName() {
@@ -134,6 +151,7 @@ public class Session {
 
 		/**
 		 * Return the domain for the session cookie.
+		 *
 		 * @return the session cookie domain
 		 */
 		public String getDomain() {
@@ -146,6 +164,7 @@ public class Session {
 
 		/**
 		 * Return the path of the session cookie.
+		 *
 		 * @return the session cookie path
 		 */
 		public String getPath() {
@@ -158,6 +177,7 @@ public class Session {
 
 		/**
 		 * Return the comment for the session cookie.
+		 *
 		 * @return the session cookie comment
 		 */
 		public String getComment() {
@@ -170,6 +190,7 @@ public class Session {
 
 		/**
 		 * Return whether to use "HttpOnly" cookies for session cookies.
+		 *
 		 * @return {@code true} to use "HttpOnly" cookies for session cookies.
 		 */
 		public Boolean getHttpOnly() {
@@ -182,6 +203,7 @@ public class Session {
 
 		/**
 		 * Return whether to always mark the session cookie as secure.
+		 *
 		 * @return {@code true} to mark the session cookie as secure even if the request
 		 * that initiated the corresponding session is using plain HTTP
 		 */
@@ -195,6 +217,7 @@ public class Session {
 
 		/**
 		 * Return the maximum age of the session cookie.
+		 *
 		 * @return the maximum age of the session cookie
 		 */
 		public Duration getMaxAge() {
@@ -208,22 +231,29 @@ public class Session {
 	}
 
 	/**
+	 * 会话跟踪模式
+	 *
 	 * Available session tracking modes (mirrors
 	 * {@link javax.servlet.SessionTrackingMode}.
 	 */
 	public enum SessionTrackingMode {
 
 		/**
+		 * 发送 Cookie
 		 * Send a cookie in response to the client's first request.
 		 */
 		COOKIE,
 
 		/**
+		 * 添加 session id 到 URL
+		 *
 		 * Rewrite the URL to append a session ID.
 		 */
 		URL,
 
 		/**
+		 * 使用 SSL 内建机制跟踪会话
+		 *
 		 * Use SSL build-in mechanism to track the session.
 		 */
 		SSL

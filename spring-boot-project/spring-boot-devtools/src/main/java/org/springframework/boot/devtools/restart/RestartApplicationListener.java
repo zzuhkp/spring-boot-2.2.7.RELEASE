@@ -33,8 +33,8 @@ import org.springframework.core.log.LogMessage;
  *
  * @author Phillip Webb
  * @author Andy Wilkinson
- * @since 1.3.0
  * @see Restarter
+ * @since 1.3.0
  */
 public class RestartApplicationListener implements ApplicationListener<ApplicationEvent>, Ordered {
 
@@ -60,6 +60,11 @@ public class RestartApplicationListener implements ApplicationListener<Applicati
 		}
 	}
 
+	/**
+	 * 应用启动时初始化 Restarter
+	 *
+	 * @param event
+	 */
 	private void onApplicationStartingEvent(ApplicationStartingEvent event) {
 		// It's too early to use the Spring environment but we should still allow
 		// users to disable restart using a System property.
@@ -72,8 +77,7 @@ public class RestartApplicationListener implements ApplicationListener<Applicati
 				logger.info("Restart disabled due to an agent-based reloader being active");
 			}
 			Restarter.initialize(args, false, initializer, restartOnInitialize);
-		}
-		else {
+		} else {
 			logger.info(LogMessage.format("Restart disabled due to System property '%s' being set to false",
 					ENABLED_PROPERTY));
 			Restarter.disable();
@@ -95,6 +99,7 @@ public class RestartApplicationListener implements ApplicationListener<Applicati
 
 	/**
 	 * Set the order of the listener.
+	 *
 	 * @param order the order of the listener
 	 */
 	public void setOrder(int order) {

@@ -25,6 +25,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
+ * 编码检查
+ * <p>
  * An {@link ApplicationListener} that halts application startup if the system file
  * encoding does not match an expected value set in the environment. By default has no
  * effect, but if you set {@code spring.mandatory_file_encoding} (or some camelCase or

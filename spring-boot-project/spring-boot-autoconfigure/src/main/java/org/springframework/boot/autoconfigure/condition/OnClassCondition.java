@@ -107,6 +107,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 	public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
 		ClassLoader classLoader = context.getClassLoader();
 		ConditionMessage matchMessage = ConditionMessage.empty();
+		// @ConditionalOnClass 注解处理
 		List<String> onClasses = getCandidates(metadata, ConditionalOnClass.class);
 		if (onClasses != null) {
 			List<String> missing = filter(onClasses, ClassNameFilter.MISSING, classLoader);
@@ -119,6 +120,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 					.found("required class", "required classes")
 					.items(Style.QUOTE, filter(onClasses, ClassNameFilter.PRESENT, classLoader));
 		}
+		// @ConditionalOnMissingClass 注解处理
 		List<String> onMissingClasses = getCandidates(metadata, ConditionalOnMissingClass.class);
 		if (onMissingClasses != null) {
 			List<String> present = filter(onMissingClasses, ClassNameFilter.PRESENT, classLoader);
@@ -200,12 +202,18 @@ class OnClassCondition extends FilteringSpringBootCondition {
 	 */
 	private final class StandardOutcomesResolver implements OutcomesResolver {
 
+		/**
+		 * 配置类
+		 */
 		private final String[] autoConfigurationClasses;
 
 		private final int start;
 
 		private final int end;
 
+		/**
+		 * 配置类元数据
+		 */
 		private final AutoConfigurationMetadata autoConfigurationMetadata;
 
 		private final ClassLoader beanClassLoader;
@@ -224,6 +232,15 @@ class OnClassCondition extends FilteringSpringBootCondition {
 			return getOutcomes(this.autoConfigurationClasses, this.start, this.end, this.autoConfigurationMetadata);
 		}
 
+		/**
+		 * 获取匹配结果
+		 *
+		 * @param autoConfigurationClasses
+		 * @param start
+		 * @param end
+		 * @param autoConfigurationMetadata
+		 * @return
+		 */
 		private ConditionOutcome[] getOutcomes(String[] autoConfigurationClasses, int start, int end,
 											   AutoConfigurationMetadata autoConfigurationMetadata) {
 			ConditionOutcome[] outcomes = new ConditionOutcome[end - start];
@@ -240,6 +257,12 @@ class OnClassCondition extends FilteringSpringBootCondition {
 			return outcomes;
 		}
 
+		/**
+		 * 获取匹配结果
+		 *
+		 * @param candidates
+		 * @return
+		 */
 		private ConditionOutcome getOutcome(String candidates) {
 			try {
 				if (!candidates.contains(",")) {
@@ -248,7 +271,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 				for (String candidate : StringUtils.commaDelimitedListToStringArray(candidates)) {
 					ConditionOutcome outcome = getOutcome(candidate, this.beanClassLoader);
 					if (outcome != null) {
-						// 或关系
+						// 只要有一个不匹配则不匹配
 						return outcome;
 					}
 				}

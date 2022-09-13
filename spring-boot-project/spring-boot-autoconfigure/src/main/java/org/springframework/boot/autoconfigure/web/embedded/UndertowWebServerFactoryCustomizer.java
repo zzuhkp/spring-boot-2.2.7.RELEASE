@@ -42,6 +42,8 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.unit.DataSize;
 
 /**
+ * 基于 Undertow 的 WebServerFactory 自定义
+ *
  * Customization for Undertow-specific features common for both Servlet and Reactive
  * servers.
  *

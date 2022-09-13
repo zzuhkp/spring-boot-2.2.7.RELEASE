@@ -28,6 +28,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
+ * JTA 配置
+ *
  * {@link EnableAutoConfiguration Auto-configuration} for JTA.
  *
  * @author Josh Long
@@ -38,9 +40,9 @@ import org.springframework.context.annotation.Import;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(javax.transaction.Transaction.class)
 @ConditionalOnProperty(prefix = "spring.jta", value = "enabled", matchIfMissing = true)
-@AutoConfigureBefore({ XADataSourceAutoConfiguration.class, ActiveMQAutoConfiguration.class,
-		ArtemisAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
-@Import({ JndiJtaConfiguration.class, BitronixJtaConfiguration.class, AtomikosJtaConfiguration.class })
+@AutoConfigureBefore({XADataSourceAutoConfiguration.class, ActiveMQAutoConfiguration.class,
+		ArtemisAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+@Import({JndiJtaConfiguration.class, BitronixJtaConfiguration.class, AtomikosJtaConfiguration.class})
 public class JtaAutoConfiguration {
 
 }

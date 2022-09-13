@@ -55,16 +55,31 @@ public class LiveReloadServer {
 
 	private final ExecutorService executor = Executors.newCachedThreadPool(new WorkerThreadFactory());
 
+	/**
+	 * 连接对象列表
+	 */
 	private final List<Connection> connections = new ArrayList<>();
 
 	private final Object monitor = new Object();
 
+	/**
+	 * 监听端口
+	 */
 	private final int port;
 
+	/**
+	 * 线程工厂
+	 */
 	private final ThreadFactory threadFactory;
 
+	/**
+	 * 服务端 Socket
+	 */
 	private ServerSocket serverSocket;
 
+	/**
+	 * 监听客户端连接的线程
+	 */
 	private Thread listenThread;
 
 	/**
@@ -77,6 +92,7 @@ public class LiveReloadServer {
 	/**
 	 * Create a new {@link LiveReloadServer} listening on the default port with a specific
 	 * {@link ThreadFactory}.
+	 *
 	 * @param threadFactory the thread factory
 	 */
 	public LiveReloadServer(ThreadFactory threadFactory) {
@@ -85,6 +101,7 @@ public class LiveReloadServer {
 
 	/**
 	 * Create a new {@link LiveReloadServer} listening on the specified port.
+	 *
 	 * @param port the listen port
 	 */
 	public LiveReloadServer(int port) {
@@ -94,7 +111,8 @@ public class LiveReloadServer {
 	/**
 	 * Create a new {@link LiveReloadServer} listening on the specified port with a
 	 * specific {@link ThreadFactory}.
-	 * @param port the listen port
+	 *
+	 * @param port          the listen port
 	 * @param threadFactory the thread factory
 	 */
 	public LiveReloadServer(int port, ThreadFactory threadFactory) {
@@ -103,7 +121,10 @@ public class LiveReloadServer {
 	}
 
 	/**
+	 * 启动服务端 Socket
+	 * <p>
 	 * Start the livereload server and accept incoming connections.
+	 *
 	 * @return the port on which the server is listening
 	 * @throws IOException in case of I/O errors
 	 */
@@ -122,7 +143,10 @@ public class LiveReloadServer {
 	}
 
 	/**
+	 * 是否已启动
+	 *
 	 * Return if the server has been started.
+	 *
 	 * @return {@code true} if the server is running
 	 */
 	public boolean isStarted() {
@@ -133,23 +157,25 @@ public class LiveReloadServer {
 
 	/**
 	 * Return the port that the server is listening on.
+	 *
 	 * @return the server port
 	 */
 	public int getPort() {
 		return this.port;
 	}
 
+	/**
+	 * 接受连接
+	 */
 	private void acceptConnections() {
 		do {
 			try {
 				Socket socket = this.serverSocket.accept();
 				socket.setSoTimeout(READ_TIMEOUT);
 				this.executor.execute(new ConnectionHandler(socket));
-			}
-			catch (SocketTimeoutException ex) {
+			} catch (SocketTimeoutException ex) {
 				// Ignore
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("LiveReload server error", ex);
 				}
@@ -159,25 +185,30 @@ public class LiveReloadServer {
 	}
 
 	/**
+	 * 停止 Socket
+	 *
 	 * Gracefully stop the livereload server.
+	 *
 	 * @throws IOException in case of I/O errors
 	 */
 	public void stop() throws IOException {
 		synchronized (this.monitor) {
 			if (this.listenThread != null) {
+				// 关闭连接
 				closeAllConnections();
 				try {
+					// 关闭线程池
 					this.executor.shutdown();
 					this.executor.awaitTermination(1, TimeUnit.MINUTES);
-				}
-				catch (InterruptedException ex) {
+				} catch (InterruptedException ex) {
 					Thread.currentThread().interrupt();
 				}
+				// 关闭 Socket
 				this.serverSocket.close();
 				try {
+					// 等待监听线程执行结束
 					this.listenThread.join();
-				}
-				catch (InterruptedException ex) {
+				} catch (InterruptedException ex) {
 					Thread.currentThread().interrupt();
 				}
 				this.listenThread = null;
@@ -186,6 +217,11 @@ public class LiveReloadServer {
 		}
 	}
 
+	/**
+	 * 关闭连接
+	 *
+	 * @throws IOException
+	 */
 	private void closeAllConnections() throws IOException {
 		synchronized (this.connections) {
 			for (Connection connection : this.connections) {
@@ -195,6 +231,8 @@ public class LiveReloadServer {
 	}
 
 	/**
+	 * 触发重新加载
+	 *
 	 * Trigger livereload of all connected clients.
 	 */
 	public void triggerReload() {
@@ -203,8 +241,7 @@ public class LiveReloadServer {
 				for (Connection connection : this.connections) {
 					try {
 						connection.triggerReload();
-					}
-					catch (Exception ex) {
+					} catch (Exception ex) {
 						logger.debug("Unable to send reload message", ex);
 					}
 				}
@@ -212,12 +249,22 @@ public class LiveReloadServer {
 		}
 	}
 
+	/**
+	 * 添加连接
+	 *
+	 * @param connection
+	 */
 	private void addConnection(Connection connection) {
 		synchronized (this.connections) {
 			this.connections.add(connection);
 		}
 	}
 
+	/**
+	 * 移除连接
+	 *
+	 * @param connection
+	 */
 	private void removeConnection(Connection connection) {
 		synchronized (this.connections) {
 			this.connections.remove(connection);
@@ -225,9 +272,12 @@ public class LiveReloadServer {
 	}
 
 	/**
+	 * 创建连接对象
+	 * <p>
 	 * Factory method used to create the {@link Connection}.
-	 * @param socket the source socket
-	 * @param inputStream the socket input stream
+	 *
+	 * @param socket       the source socket
+	 * @param inputStream  the socket input stream
 	 * @param outputStream the socket output stream
 	 * @return a connection
 	 * @throws IOException in case of I/O errors
@@ -238,14 +288,22 @@ public class LiveReloadServer {
 	}
 
 	/**
+	 * 处理连接
+	 * <p>
 	 * {@link Runnable} to handle a single connection.
 	 *
 	 * @see Connection
 	 */
 	private class ConnectionHandler implements Runnable {
 
+		/**
+		 * 表示客户端的 Socket
+		 */
 		private final Socket socket;
 
+		/**
+		 * Socket 对应的输入流
+		 */
 		private final InputStream inputStream;
 
 		ConnectionHandler(Socket socket) throws IOException {
@@ -257,38 +315,45 @@ public class LiveReloadServer {
 		public void run() {
 			try {
 				handle();
-			}
-			catch (ConnectionClosedException ex) {
+			} catch (ConnectionClosedException ex) {
 				logger.debug("LiveReload connection closed");
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("LiveReload error", ex);
 				}
 			}
 		}
 
+		/**
+		 * 处理连接
+		 *
+		 * @throws Exception
+		 */
 		private void handle() throws Exception {
 			try {
 				try (OutputStream outputStream = this.socket.getOutputStream()) {
 					Connection connection = createConnection(this.socket, this.inputStream, outputStream);
 					runConnection(connection);
-				}
-				finally {
+				} finally {
 					this.inputStream.close();
 				}
-			}
-			finally {
+			} finally {
 				this.socket.close();
 			}
 		}
 
+		/**
+		 * 运行连接
+		 *
+		 * @param connection
+		 * @throws IOException
+		 * @throws Exception
+		 */
 		private void runConnection(Connection connection) throws IOException, Exception {
 			try {
 				addConnection(connection);
 				connection.run();
-			}
-			finally {
+			} finally {
 				removeConnection(connection);
 			}
 		}
@@ -296,6 +361,8 @@ public class LiveReloadServer {
 	}
 
 	/**
+	 * 线程工厂
+	 * <p>
 	 * {@link ThreadFactory} to create the worker threads.
 	 */
 	private static class WorkerThreadFactory implements ThreadFactory {

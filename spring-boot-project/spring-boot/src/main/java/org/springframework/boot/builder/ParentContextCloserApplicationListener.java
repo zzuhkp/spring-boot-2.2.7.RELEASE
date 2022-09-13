@@ -16,8 +16,6 @@
 
 package org.springframework.boot.builder;
 
-import java.lang.ref.WeakReference;
-
 import org.springframework.beans.BeansException;
 import org.springframework.boot.builder.ParentContextApplicationContextInitializer.ParentContextAvailableEvent;
 import org.springframework.context.ApplicationContext;
@@ -28,7 +26,11 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.util.ObjectUtils;
 
+import java.lang.ref.WeakReference;
+
 /**
+ * 父应用上下文关闭时关闭子应用上下文
+ * <p>
  * Listener that closes the application context if its parent is closed. It listens for
  * refresh events and grabs the current context from there, and then listens for closed
  * events and propagates it down the hierarchy.
@@ -69,6 +71,7 @@ public class ParentContextCloserApplicationListener
 	/**
 	 * Subclasses may override to create their own subclass of ContextCloserListener. This
 	 * still enforces the use of a weak reference.
+	 *
 	 * @param child the child context
 	 * @return the {@link ContextCloserListener} to use
 	 */

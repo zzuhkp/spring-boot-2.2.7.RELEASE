@@ -25,6 +25,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
 /**
+ * 应用上下文刷新后发布 ParentContextAvailableEvent 事件
+ * <p>
  * {@link ApplicationContextInitializer} for setting the parent context. Also publishes
  * {@link ParentContextAvailableEvent} when the context is refreshed to signal to other
  * listeners that the context is available and has a parent.
@@ -73,6 +75,7 @@ public class ParentContextApplicationContextInitializer
 		public void onApplicationEvent(ContextRefreshedEvent event) {
 			ApplicationContext context = event.getApplicationContext();
 			if (context instanceof ConfigurableApplicationContext && context == event.getSource()) {
+				// 应用上下文刷新后发布事件
 				context.publishEvent(new ParentContextAvailableEvent((ConfigurableApplicationContext) context));
 			}
 		}

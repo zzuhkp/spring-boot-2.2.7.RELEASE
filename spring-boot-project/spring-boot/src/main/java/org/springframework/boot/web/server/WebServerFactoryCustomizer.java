@@ -19,6 +19,8 @@ package org.springframework.boot.web.server;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
+ * WebServerFactory 自定义
+ *
  * Strategy interface for customizing {@link WebServerFactory web server factories}. Any
  * beans of this type will get a callback with the server factory before the server itself
  * is started, so you can set the port, address, error pages etc.

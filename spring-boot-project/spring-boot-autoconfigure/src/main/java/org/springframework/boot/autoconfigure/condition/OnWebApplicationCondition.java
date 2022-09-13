@@ -33,6 +33,8 @@ import org.springframework.web.context.ConfigurableWebEnvironment;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
+ * web 条件
+ *
  * {@link Condition} that checks for the presence or absence of
  * {@link WebApplicationContext}.
  *
@@ -72,6 +74,7 @@ class OnWebApplicationCondition extends FilteringSpringBootCondition {
 		if (type == null) {
 			return null;
 		}
+		// 根据类是否存在判断 Web 环境
 		ConditionMessage.Builder message = ConditionMessage.forCondition(ConditionalOnWebApplication.class);
 		if (ConditionalOnWebApplication.Type.SERVLET.name().equals(type)) {
 			if (!ClassNameFilter.isPresent(SERVLET_WEB_APPLICATION_CLASS, getBeanClassLoader())) {
@@ -95,9 +98,11 @@ class OnWebApplicationCondition extends FilteringSpringBootCondition {
 		boolean required = metadata.isAnnotated(ConditionalOnWebApplication.class.getName());
 		ConditionOutcome outcome = isWebApplication(context, metadata, required);
 		if (required && !outcome.isMatch()) {
+			// 存在 @ConditionalOnWebApplication 注解，并且 Web 类型不匹配
 			return ConditionOutcome.noMatch(outcome.getConditionMessage());
 		}
 		if (!required && outcome.isMatch()) {
+			// 存在 @ConditionalOnNotWebApplication 注解，并且为 Web 类型
 			return ConditionOutcome.noMatch(outcome.getConditionMessage());
 		}
 		return ConditionOutcome.match(outcome.getConditionMessage());

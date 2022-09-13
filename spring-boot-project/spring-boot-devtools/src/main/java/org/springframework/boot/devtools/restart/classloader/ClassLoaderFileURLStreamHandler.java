@@ -24,6 +24,8 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
 /**
+ * 获取 ClassLoaderFile 内容的 URLStreamHandler
+ * <p>
  * {@link URLStreamHandler} for the contents of a {@link ClassLoaderFile}.
  *
  * @author Phillip Webb

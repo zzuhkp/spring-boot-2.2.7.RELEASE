@@ -56,8 +56,8 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Dave Syer
  * @author Stephane Nicoll
  * @author Vedran Pavic
- * @since 2.0.0
  * @see ErrorAttributes
+ * @since 2.0.0
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class DefaultErrorAttributes implements ErrorAttributes, HandlerExceptionResolver, Ordered {
@@ -76,6 +76,7 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 
 	/**
 	 * Create a new {@link DefaultErrorAttributes} instance.
+	 *
 	 * @param includeException whether to include the "exception" attribute
 	 */
 	public DefaultErrorAttributes(boolean includeException) {
@@ -89,7 +90,7 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
-			Exception ex) {
+										 Exception ex) {
 		storeErrorAttributes(request, ex);
 		return null;
 	}
@@ -108,6 +109,12 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 		return errorAttributes;
 	}
 
+	/**
+	 * 响应码
+	 *
+	 * @param errorAttributes
+	 * @param requestAttributes
+	 */
 	private void addStatus(Map<String, Object> errorAttributes, RequestAttributes requestAttributes) {
 		Integer status = getAttribute(requestAttributes, "javax.servlet.error.status_code");
 		if (status == null) {
@@ -118,15 +125,21 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 		errorAttributes.put("status", status);
 		try {
 			errorAttributes.put("error", HttpStatus.valueOf(status).getReasonPhrase());
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			// Unable to obtain a reason
 			errorAttributes.put("error", "Http Status " + status);
 		}
 	}
 
+	/**
+	 * 错误详情
+	 *
+	 * @param errorAttributes
+	 * @param webRequest
+	 * @param includeStackTrace
+	 */
 	private void addErrorDetails(Map<String, Object> errorAttributes, WebRequest webRequest,
-			boolean includeStackTrace) {
+								 boolean includeStackTrace) {
 		Throwable error = getError(webRequest);
 		if (error != null) {
 			while (error instanceof ServletException && error.getCause() != null) {
@@ -147,6 +160,12 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 		}
 	}
 
+	/**
+	 * 添加错误信息
+	 *
+	 * @param errorAttributes
+	 * @param error
+	 */
 	private void addErrorMessage(Map<String, Object> errorAttributes, Throwable error) {
 		BindingResult result = extractBindingResult(error);
 		if (result == null) {
@@ -157,8 +176,7 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 			errorAttributes.put("errors", result.getAllErrors());
 			errorAttributes.put("message", "Validation failed for object='" + result.getObjectName()
 					+ "'. Error count: " + result.getErrorCount());
-		}
-		else {
+		} else {
 			errorAttributes.put("message", "No errors");
 		}
 	}
@@ -173,6 +191,12 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 		return null;
 	}
 
+	/**
+	 * 添加堆栈信息
+	 *
+	 * @param errorAttributes
+	 * @param error
+	 */
 	private void addStackTrace(Map<String, Object> errorAttributes, Throwable error) {
 		StringWriter stackTrace = new StringWriter();
 		error.printStackTrace(new PrintWriter(stackTrace));
@@ -180,6 +204,12 @@ public class DefaultErrorAttributes implements ErrorAttributes, HandlerException
 		errorAttributes.put("trace", stackTrace.toString());
 	}
 
+	/**
+	 * 添加请求路径
+	 *
+	 * @param errorAttributes
+	 * @param requestAttributes
+	 */
 	private void addPath(Map<String, Object> errorAttributes, RequestAttributes requestAttributes) {
 		String path = getAttribute(requestAttributes, "javax.servlet.error.request_uri");
 		if (path != null) {

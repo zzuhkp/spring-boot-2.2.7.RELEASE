@@ -30,6 +30,8 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.util.Assert;
 
 /**
+ * ErrorPageRegistry 初始化前作为参数回调 ErrorPageRegistrar
+ * <p>
  * {@link BeanPostProcessor} that applies all {@link ErrorPageRegistrar}s from the bean
  * factory to {@link ErrorPageRegistry} beans.
  *
