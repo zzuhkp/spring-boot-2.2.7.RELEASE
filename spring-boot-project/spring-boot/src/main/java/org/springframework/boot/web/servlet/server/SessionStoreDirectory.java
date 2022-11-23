@@ -23,6 +23,8 @@ import org.springframework.boot.system.ApplicationTemp;
 import org.springframework.util.Assert;
 
 /**
+ * 管理 session 存储目录
+ * <p>
  * Manages a session store directory.
  *
  * @author Phillip Webb
@@ -40,6 +42,12 @@ class SessionStoreDirectory {
 		this.directory = directory;
 	}
 
+	/**
+	 * 获取有效的目录
+	 *
+	 * @param mkdirs
+	 * @return
+	 */
 	File getValidDirectory(boolean mkdirs) {
 		File dir = getDirectory();
 		if (dir == null) {

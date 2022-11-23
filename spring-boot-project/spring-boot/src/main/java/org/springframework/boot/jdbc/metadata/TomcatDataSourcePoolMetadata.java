@@ -20,6 +20,8 @@ import org.apache.tomcat.jdbc.pool.ConnectionPool;
 import org.apache.tomcat.jdbc.pool.DataSource;
 
 /**
+ * Tomcat 数据源元数据
+ *
  * {@link DataSourcePoolMetadata} for a Tomcat DataSource.
  *
  * @author Stephane Nicoll

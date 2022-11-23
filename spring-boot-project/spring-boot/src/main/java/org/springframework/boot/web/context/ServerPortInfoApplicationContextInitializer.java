@@ -33,6 +33,8 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.util.StringUtils;
 
 /**
+ * 端口信息设置到 Environment，用户可通过 local.server.port 获取端口信息
+ * <p>
  * {@link ApplicationContextInitializer} that sets {@link Environment} properties for the
  * ports that {@link WebServer} servers are actually listening on. The property
  * {@literal "local.server.port"} can be injected directly into tests using

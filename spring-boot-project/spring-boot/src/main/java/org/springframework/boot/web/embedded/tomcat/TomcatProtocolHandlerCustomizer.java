@@ -20,6 +20,8 @@ import org.apache.catalina.connector.Connector;
 import org.apache.coyote.ProtocolHandler;
 
 /**
+ * ProtocolHandler 自定义
+ * <p>
  * Callback interface that can be used to customize the {@link ProtocolHandler} on the
  * {@link Connector}.
  *
@@ -33,6 +35,7 @@ public interface TomcatProtocolHandlerCustomizer<T extends ProtocolHandler> {
 
 	/**
 	 * Customize the protocol handler.
+	 *
 	 * @param protocolHandler the protocol handler to customize
 	 */
 	void customize(T protocolHandler);

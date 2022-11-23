@@ -16,19 +16,14 @@
 
 package org.springframework.boot.devtools.settings;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.apache.commons.logging.Log;
-
 import org.springframework.boot.devtools.logger.DevToolsLogFactory;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+
+import java.net.URL;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * DevTools settings loaded from {@literal /META-INF/spring-devtools.properties} files.
@@ -45,15 +40,29 @@ public class DevToolsSettings {
 
 	private static final Log logger = DevToolsLogFactory.getLog(DevToolsSettings.class);
 
+	/**
+	 * 配置
+	 */
 	private static DevToolsSettings settings;
 
+	/**
+	 * restart.include.xxx 属性值列表
+	 */
 	private final List<Pattern> restartIncludePatterns = new ArrayList<>();
 
+	/**
+	 * restart.exclude.xxx 属性值列表
+	 */
 	private final List<Pattern> restartExcludePatterns = new ArrayList<>();
 
 	DevToolsSettings() {
 	}
 
+	/**
+	 * 添加配置
+	 *
+	 * @param properties
+	 */
 	void add(Map<?, ?> properties) {
 		Map<String, Pattern> includes = getPatterns(properties, "restart.include.");
 		this.restartIncludePatterns.addAll(includes.values());
@@ -73,14 +82,33 @@ public class DevToolsSettings {
 		return patterns;
 	}
 
+	/**
+	 * 包含
+	 *
+	 * @param url
+	 * @return
+	 */
 	public boolean isRestartInclude(URL url) {
 		return isMatch(url.toString(), this.restartIncludePatterns);
 	}
 
+	/**
+	 * 不包含
+	 *
+	 * @param url
+	 * @return
+	 */
 	public boolean isRestartExclude(URL url) {
 		return isMatch(url.toString(), this.restartExcludePatterns);
 	}
 
+	/**
+	 * 模式是否匹配
+	 *
+	 * @param url
+	 * @param patterns
+	 * @return
+	 */
 	private boolean isMatch(String url, List<Pattern> patterns) {
 		for (Pattern pattern : patterns) {
 			if (pattern.matcher(url).find()) {
@@ -90,6 +118,11 @@ public class DevToolsSettings {
 		return false;
 	}
 
+	/**
+	 * 获取配置
+	 *
+	 * @return
+	 */
 	public static DevToolsSettings get() {
 		if (settings == null) {
 			settings = load();
@@ -97,10 +130,21 @@ public class DevToolsSettings {
 		return settings;
 	}
 
+	/**
+	 * 加载配置
+	 *
+	 * @return
+	 */
 	static DevToolsSettings load() {
 		return load(SETTINGS_RESOURCE_LOCATION);
 	}
 
+	/**
+	 * 加载配置
+	 *
+	 * @param location
+	 * @return
+	 */
 	static DevToolsSettings load(String location) {
 		try {
 			DevToolsSettings settings = new DevToolsSettings();
@@ -113,8 +157,7 @@ public class DevToolsSettings {
 				logger.debug("Excluded patterns for restart : " + settings.restartExcludePatterns);
 			}
 			return settings;
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new IllegalStateException("Unable to load devtools settings from location [" + location + "]", ex);
 		}
 	}

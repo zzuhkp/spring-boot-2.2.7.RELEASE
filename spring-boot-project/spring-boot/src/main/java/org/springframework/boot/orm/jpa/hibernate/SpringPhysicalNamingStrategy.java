@@ -61,9 +61,11 @@ public class SpringPhysicalNamingStrategy implements PhysicalNamingStrategy {
 		if (name == null) {
 			return null;
 		}
+		// . 转下划线
 		StringBuilder builder = new StringBuilder(name.getText().replace('.', '_'));
 		for (int i = 1; i < builder.length() - 1; i++) {
 			if (isUnderscoreRequired(builder.charAt(i - 1), builder.charAt(i), builder.charAt(i + 1))) {
+				// 驼峰转下划线
 				builder.insert(i++, '_');
 			}
 		}
@@ -74,8 +76,9 @@ public class SpringPhysicalNamingStrategy implements PhysicalNamingStrategy {
 	 * Get an identifier for the specified details. By default this method will return an
 	 * identifier with the name adapted based on the result of
 	 * {@link #isCaseInsensitive(JdbcEnvironment)}
-	 * @param name the name of the identifier
-	 * @param quoted if the identifier is quoted
+	 *
+	 * @param name            the name of the identifier
+	 * @param quoted          if the identifier is quoted
 	 * @param jdbcEnvironment the JDBC environment
 	 * @return an identifier instance
 	 */
@@ -88,6 +91,7 @@ public class SpringPhysicalNamingStrategy implements PhysicalNamingStrategy {
 
 	/**
 	 * Specify whether the database is case sensitive.
+	 *
 	 * @param jdbcEnvironment the JDBC environment which can be used to determine case
 	 * @return true if the database is case insensitive sensitivity
 	 */
@@ -95,6 +99,14 @@ public class SpringPhysicalNamingStrategy implements PhysicalNamingStrategy {
 		return true;
 	}
 
+	/**
+	 * 是否可以转换为下划线
+	 *
+	 * @param before
+	 * @param current
+	 * @param after
+	 * @return
+	 */
 	private boolean isUnderscoreRequired(char before, char current, char after) {
 		return Character.isLowerCase(before) && Character.isUpperCase(current) && Character.isLowerCase(after);
 	}

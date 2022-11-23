@@ -21,6 +21,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 
 /**
+ * Environment 准备好的回调
+ * <p>
  * Allows for customization of the application's {@link Environment} prior to the
  * application context being refreshed.
  * <p>
@@ -42,6 +44,7 @@ public interface EnvironmentPostProcessor {
 
 	/**
 	 * Post-process the given {@code environment}.
+	 *
 	 * @param environment the environment to post-process
 	 * @param application the application to which the environment belongs
 	 */

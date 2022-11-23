@@ -63,10 +63,10 @@ import org.springframework.http.server.ServerHttpRequest;
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnEnabledDevToolsCondition.class)
 @ConditionalOnProperty(prefix = "spring.devtools.remote", name = "secret")
-@ConditionalOnClass({ Filter.class, ServerHttpRequest.class })
+@ConditionalOnClass({Filter.class, ServerHttpRequest.class})
 @AutoConfigureAfter(SecurityAutoConfiguration.class)
 @Import(RemoteDevtoolsSecurityConfiguration.class)
-@EnableConfigurationProperties({ ServerProperties.class, DevToolsProperties.class })
+@EnableConfigurationProperties({ServerProperties.class, DevToolsProperties.class})
 public class RemoteDevToolsAutoConfiguration {
 
 	private static final Log logger = LogFactory.getLog(RemoteDevToolsAutoConfiguration.class);
@@ -95,7 +95,7 @@ public class RemoteDevToolsAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public DispatcherFilter remoteDevToolsDispatcherFilter(AccessManager accessManager,
-			Collection<HandlerMapper> mappers) {
+														   Collection<HandlerMapper> mappers) {
 		Dispatcher dispatcher = new Dispatcher(accessManager, mappers);
 		return new DispatcherFilter(dispatcher);
 	}
@@ -122,7 +122,7 @@ public class RemoteDevToolsAutoConfiguration {
 		@Bean
 		@ConditionalOnMissingBean(name = "remoteRestartHandlerMapper")
 		UrlHandlerMapper remoteRestartHandlerMapper(HttpRestartServer server, ServerProperties serverProperties,
-				DevToolsProperties properties) {
+													DevToolsProperties properties) {
 			Servlet servlet = serverProperties.getServlet();
 			RemoteDevToolsProperties remote = properties.getRemote();
 			String servletContextPath = (servlet.getContextPath() != null) ? servlet.getContextPath() : "";

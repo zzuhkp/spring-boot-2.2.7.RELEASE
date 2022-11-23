@@ -45,6 +45,7 @@ public class JarLauncher extends ExecutableArchiveLauncher {
 	@Override
 	protected boolean isNestedArchive(Archive.Entry entry) {
 		if (entry.isDirectory()) {
+			// 归档文件内部文件是否为目录
 			return entry.getName().equals(BOOT_INF_CLASSES);
 		}
 		return entry.getName().startsWith(BOOT_INF_LIB);

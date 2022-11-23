@@ -30,13 +30,15 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * 内嵌数据库的数据源
+ *
  * Connection details for {@link EmbeddedDatabaseType embedded databases}.
  *
  * @author Phillip Webb
  * @author Dave Syer
  * @author Stephane Nicoll
- * @since 1.0.0
  * @see #get(ClassLoader)
+ * @since 1.0.0
  */
 public enum EmbeddedDatabaseConnection {
 
@@ -74,6 +76,7 @@ public enum EmbeddedDatabaseConnection {
 
 	/**
 	 * Returns the driver class name.
+	 *
 	 * @return the driver class name
 	 */
 	public String getDriverClassName() {
@@ -82,6 +85,7 @@ public enum EmbeddedDatabaseConnection {
 
 	/**
 	 * Returns the {@link EmbeddedDatabaseType} for the connection.
+	 *
 	 * @return the database type
 	 */
 	public EmbeddedDatabaseType getType() {
@@ -90,6 +94,7 @@ public enum EmbeddedDatabaseConnection {
 
 	/**
 	 * Returns the URL for the connection using the specified {@code databaseName}.
+	 *
 	 * @param databaseName the name of the database
 	 * @return the connection URL
 	 */
@@ -99,8 +104,11 @@ public enum EmbeddedDatabaseConnection {
 	}
 
 	/**
+	 * 给定驱动是否为内嵌数据库的驱动
+	 *
 	 * Convenience method to determine if a given driver class name represents an embedded
 	 * database type.
+	 *
 	 * @param driverClass the driver class
 	 * @return true if the driver class is one of the embedded types
 	 */
@@ -112,14 +120,14 @@ public enum EmbeddedDatabaseConnection {
 	/**
 	 * Convenience method to determine if a given data source represents an embedded
 	 * database type.
+	 *
 	 * @param dataSource the data source to interrogate
 	 * @return true if the data source is one of the embedded types
 	 */
 	public static boolean isEmbedded(DataSource dataSource) {
 		try {
 			return new JdbcTemplate(dataSource).execute(new IsEmbedded());
-		}
-		catch (DataAccessException ex) {
+		} catch (DataAccessException ex) {
 			// Could not connect, which means it's not embedded
 			return false;
 		}
@@ -128,6 +136,7 @@ public enum EmbeddedDatabaseConnection {
 	/**
 	 * Returns the most suitable {@link EmbeddedDatabaseConnection} for the given class
 	 * loader.
+	 *
 	 * @param classLoader the class loader used to check for classes
 	 * @return an {@link EmbeddedDatabaseConnection} or {@link #NONE}.
 	 */

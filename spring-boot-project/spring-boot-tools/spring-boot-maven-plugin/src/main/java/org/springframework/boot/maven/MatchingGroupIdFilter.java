@@ -20,6 +20,8 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.artifact.filter.collection.AbstractArtifactFeatureFilter;
 
 /**
+ * groupId 过滤
+ *
  * An {@link org.apache.maven.shared.artifact.filter.collection.ArtifactsFilter
  * ArtifactsFilter} that filters by matching groupId.
  *

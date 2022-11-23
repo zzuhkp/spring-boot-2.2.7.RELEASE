@@ -31,6 +31,8 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.util.Assert;
 
 /**
+ * WebServerFactory 初始化前回调 WebServerFactoryCustomizer bean
+ * <p>
  * {@link BeanPostProcessor} that applies all {@link WebServerFactoryCustomizer} beans
  * from the bean factory to {@link WebServerFactory} beans.
  *
@@ -82,7 +84,7 @@ public class WebServerFactoryCustomizerBeanPostProcessor implements BeanPostProc
 		return this.customizers;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private Collection<WebServerFactoryCustomizer<?>> getWebServerFactoryCustomizerBeans() {
 		return (Collection) this.beanFactory.getBeansOfType(WebServerFactoryCustomizer.class, false, false).values();
 	}

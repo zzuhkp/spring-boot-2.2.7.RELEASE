@@ -22,6 +22,8 @@ import java.io.FileFilter;
 import org.springframework.util.Assert;
 
 /**
+ * 过滤器，过滤触发文件
+ * <p>
  * {@link FileFilter} that accepts only a specific "trigger" file.
  *
  * @author Phillip Webb

@@ -26,6 +26,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /**
+ * NamedParameterJdbcTemplate 配置
+ * <p>
  * Configuration for {@link NamedParameterJdbcTemplate}.
  *
  * @author Stephane Nicoll

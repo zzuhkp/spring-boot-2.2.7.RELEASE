@@ -36,6 +36,7 @@ public abstract class FileUtils {
 	 * Utility to remove duplicate files from an "output" directory if they already exist
 	 * in an "origin". Recursively scans the origin directory looking for files (not
 	 * directories) that exist in both places and deleting the copy.
+	 *
 	 * @param outputDirectory the output directory
 	 * @param originDirectory the origin directory
 	 */
@@ -46,8 +47,7 @@ public abstract class FileUtils {
 				if (targetFile.exists() && targetFile.canWrite()) {
 					if (!targetFile.isDirectory()) {
 						targetFile.delete();
-					}
-					else {
+					} else {
 						FileUtils.removeDuplicatesFromOutputDirectory(targetFile, new File(originDirectory, name));
 					}
 				}
@@ -57,6 +57,7 @@ public abstract class FileUtils {
 
 	/**
 	 * Generate a SHA.1 Hash for a given file.
+	 *
 	 * @param file the file to hash
 	 * @return the hash value as a String
 	 * @throws IOException if the file cannot be read
@@ -71,8 +72,7 @@ public abstract class FileUtils {
 				}
 				return bytesToHex(inputStream.getMessageDigest().digest());
 			}
-		}
-		catch (NoSuchAlgorithmException ex) {
+		} catch (NoSuchAlgorithmException ex) {
 			throw new IllegalStateException(ex);
 		}
 	}

@@ -17,6 +17,8 @@
 package org.springframework.boot.web.server;
 
 /**
+ * HTTP 2 配置
+ * <p>
  * Simple server-independent abstraction for HTTP/2 configuration.
  *
  * @author Brian Clozel
@@ -27,7 +29,10 @@ public class Http2 {
 	private boolean enabled = false;
 
 	/**
+	 * 是否启用 HTTP/2 支持
+	 * <p>
 	 * Return whether to enable HTTP/2 support, if the current environment supports it.
+	 *
 	 * @return {@code true} to enable HTTP/2 support
 	 */
 	public boolean isEnabled() {

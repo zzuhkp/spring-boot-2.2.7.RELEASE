@@ -19,6 +19,8 @@ package org.springframework.boot.devtools.remote.server;
 import org.springframework.http.server.ServerHttpRequest;
 
 /**
+ * 处理器映射
+ *
  * Interface to provide a mapping between a {@link ServerHttpRequest} and a
  * {@link Handler}.
  *
@@ -30,6 +32,7 @@ public interface HandlerMapper {
 
 	/**
 	 * Return the handler for the given request or {@code null}.
+	 *
 	 * @param request the request
 	 * @return a {@link Handler} or {@code null}
 	 */

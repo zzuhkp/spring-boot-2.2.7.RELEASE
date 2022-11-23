@@ -26,6 +26,8 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
+ * JdbcTemplate 配置
+ * <p>
  * Configuration for {@link JdbcTemplateConfiguration}.
  *
  * @author Stephane Nicoll

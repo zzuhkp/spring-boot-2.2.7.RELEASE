@@ -33,6 +33,8 @@ import org.springframework.util.CollectionUtils;
 /**
  * 基于 AutoConfigurationImportFilter 的 SpringBootCondition
  * <p>
+ * 可从自动配置类的元数据文件从判断是否满足条件
+ * <p>
  * Abstract base class for a {@link SpringBootCondition} that also implements
  * {@link AutoConfigurationImportFilter}.
  *
@@ -85,7 +87,7 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 	}
 
 	/**
-	 * 获取匹配的列表
+	 * 类名匹配
 	 *
 	 * @param classNames
 	 * @param classNameFilter
@@ -107,6 +109,8 @@ abstract class FilteringSpringBootCondition extends SpringBootCondition
 	}
 
 	/**
+	 * 类名解析为 Class
+	 *
 	 * Slightly faster variant of {@link ClassUtils#forName(String, ClassLoader)} that
 	 * doesn't deal with primitives, arrays or inner types.
 	 *

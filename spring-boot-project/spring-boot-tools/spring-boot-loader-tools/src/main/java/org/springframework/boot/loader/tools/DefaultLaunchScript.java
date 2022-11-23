@@ -47,11 +47,15 @@ public class DefaultLaunchScript implements LaunchScript {
 	private static final Set<String> FILE_PATH_KEYS = Collections
 			.unmodifiableSet(Collections.singleton("inlinedConfScript"));
 
+	/**
+	 * 脚本文件内容
+	 */
 	private final String content;
 
 	/**
 	 * Create a new {@link DefaultLaunchScript} instance.
-	 * @param file the source script file or {@code null} to use the default
+	 *
+	 * @param file       the source script file or {@code null} to use the default
 	 * @param properties an optional set of script properties used for variable expansion
 	 * @throws IOException if the script cannot be loaded
 	 */
@@ -60,6 +64,13 @@ public class DefaultLaunchScript implements LaunchScript {
 		this.content = expandPlaceholders(content, properties);
 	}
 
+	/**
+	 * 读取文件内容
+	 *
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
 	private String loadContent(File file) throws IOException {
 		if (file == null) {
 			return loadContent(getClass().getResourceAsStream("launch.script"));
@@ -67,17 +78,30 @@ public class DefaultLaunchScript implements LaunchScript {
 		return loadContent(new FileInputStream(file));
 	}
 
+	/**
+	 * 读取文件输入流内容为字符串
+	 *
+	 * @param inputStream
+	 * @return
+	 * @throws IOException
+	 */
 	private String loadContent(InputStream inputStream) throws IOException {
 		try {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			copy(inputStream, outputStream);
 			return new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
-		}
-		finally {
+		} finally {
 			inputStream.close();
 		}
 	}
 
+	/**
+	 * 从输入流写到输出流
+	 *
+	 * @param inputStream
+	 * @param outputStream
+	 * @throws IOException
+	 */
 	private void copy(InputStream inputStream, OutputStream outputStream) throws IOException {
 		byte[] buffer = new byte[BUFFER_SIZE];
 		int bytesRead;
@@ -87,6 +111,14 @@ public class DefaultLaunchScript implements LaunchScript {
 		outputStream.flush();
 	}
 
+	/**
+	 * 占位符解析
+	 *
+	 * @param content
+	 * @param properties
+	 * @return
+	 * @throws IOException
+	 */
 	private String expandPlaceholders(String content, Map<?, ?> properties) throws IOException {
 		StringBuffer expanded = new StringBuffer();
 		Matcher matcher = PLACEHOLDER_PATTERN.matcher(content);
@@ -98,12 +130,10 @@ public class DefaultLaunchScript implements LaunchScript {
 				Object propertyValue = properties.get(name);
 				if (FILE_PATH_KEYS.contains(name)) {
 					value = parseFilePropertyValue(propertyValue);
-				}
-				else {
+				} else {
 					value = propertyValue.toString();
 				}
-			}
-			else {
+			} else {
 				value = (defaultValue != null) ? defaultValue.substring(1) : matcher.group(0);
 			}
 			matcher.appendReplacement(expanded, value.replace("$", "\\$"));
@@ -112,6 +142,13 @@ public class DefaultLaunchScript implements LaunchScript {
 		return expanded.toString();
 	}
 
+	/**
+	 * 见解析文件属性值
+	 *
+	 * @param propertyValue
+	 * @return
+	 * @throws IOException
+	 */
 	private String parseFilePropertyValue(Object propertyValue) throws IOException {
 		if (propertyValue instanceof File) {
 			return loadContent((File) propertyValue);

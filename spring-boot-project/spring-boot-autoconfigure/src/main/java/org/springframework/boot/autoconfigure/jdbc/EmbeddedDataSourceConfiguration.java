@@ -25,6 +25,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
 /**
+ * 内嵌数据库的数据源配置
+ *
  * Configuration for embedded data sources.
  *
  * @author Phillip Webb

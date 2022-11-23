@@ -23,11 +23,13 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
+ * 错误属性
+ * <p>
  * Provides access to error attributes which can be logged or presented to the user.
  *
  * @author Phillip Webb
- * @since 2.0.0
  * @see DefaultErrorAttributes
+ * @since 2.0.0
  */
 public interface ErrorAttributes {
 
@@ -35,7 +37,8 @@ public interface ErrorAttributes {
 	 * Returns a {@link Map} of the error attributes. The map can be used as the model of
 	 * an error page {@link ModelAndView}, or returned as a
 	 * {@link ResponseBody @ResponseBody}.
-	 * @param webRequest the source request
+	 *
+	 * @param webRequest        the source request
 	 * @param includeStackTrace if stack trace elements should be included
 	 * @return a map of error attributes
 	 */
@@ -44,6 +47,7 @@ public interface ErrorAttributes {
 	/**
 	 * Return the underlying cause of the error or {@code null} if the error cannot be
 	 * extracted.
+	 *
 	 * @param webRequest the source request
 	 * @return the {@link Exception} that caused the error or {@code null}
 	 */

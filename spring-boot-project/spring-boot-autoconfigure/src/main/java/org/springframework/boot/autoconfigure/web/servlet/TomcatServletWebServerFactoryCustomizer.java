@@ -24,6 +24,8 @@ import org.springframework.core.Ordered;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * Tomcat 自定义
+ * <p>
  * {@link WebServerFactoryCustomizer} to apply {@link ServerProperties} to Tomcat web
  * servers.
  *
@@ -63,7 +65,7 @@ public class TomcatServletWebServerFactoryCustomizer
 	}
 
 	private void customizeUseRelativeRedirects(ConfigurableTomcatWebServerFactory factory,
-			boolean useRelativeRedirects) {
+											   boolean useRelativeRedirects) {
 		factory.addContextCustomizers((context) -> context.setUseRelativeRedirects(useRelativeRedirects));
 	}
 

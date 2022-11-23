@@ -26,10 +26,11 @@ import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.type.AnnotationMetadata;
 
 /**
+ * @author Phillip Webb
+ * @EnableConfigurationProperties 注解处理
+ * <p>
  * {@link ImportBeanDefinitionRegistrar} for
  * {@link EnableConfigurationProperties @EnableConfigurationProperties}.
- *
- * @author Phillip Webb
  */
 class EnableConfigurationPropertiesRegistrar implements ImportBeanDefinitionRegistrar {
 

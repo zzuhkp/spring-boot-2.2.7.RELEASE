@@ -43,6 +43,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * 抽象的 ServletWebServerFactory
+ * <p>
  * Abstract base class for {@link ConfigurableServletWebServerFactory} implementations.
  *
  * @author Phillip Webb
@@ -59,24 +61,55 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 上下文路径
+	 */
 	private String contextPath = "";
 
+	/**
+	 * 应用名称
+	 */
 	private String displayName;
 
+	/**
+	 * Session 配置
+	 */
 	private Session session = new Session();
 
+	/**
+	 * 是否注册默认 Servlet
+	 *
+	 */
 	private boolean registerDefaultServlet = true;
 
+	/**
+	 * 文件扩展名到 mime 类型的映射
+	 */
 	private MimeMappings mimeMappings = new MimeMappings(MimeMappings.DEFAULT);
 
+	/**
+	 * 容器启动后的回调
+	 */
 	private List<ServletContextInitializer> initializers = new ArrayList<>();
 
+	/**
+	 * JSP 配置
+	 */
 	private Jsp jsp = new Jsp();
 
+	/**
+	 * Locale 到 Charset 的映射
+	 */
 	private Map<Locale, Charset> localeCharsetMappings = new HashMap<>();
 
+	/**
+	 * ServletContext 初始化参数
+	 */
 	private Map<String, String> initParameters = Collections.emptyMap();
 
+	/**
+	 * 文档根目录
+	 */
 	private final DocumentRoot documentRoot = new DocumentRoot(this.logger);
 
 	private final StaticResourceJars staticResourceJars = new StaticResourceJars();
@@ -90,6 +123,7 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 	/**
 	 * Create a new {@link AbstractServletWebServerFactory} instance with the specified
 	 * port.
+	 *
 	 * @param port the port number for the web server
 	 */
 	public AbstractServletWebServerFactory(int port) {
@@ -99,8 +133,9 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 	/**
 	 * Create a new {@link AbstractServletWebServerFactory} instance with the specified
 	 * context path and port.
+	 *
 	 * @param contextPath the context path for the web server
-	 * @param port the port number for the web server
+	 * @param port        the port number for the web server
 	 */
 	public AbstractServletWebServerFactory(String contextPath, int port) {
 		super(port);
@@ -111,6 +146,7 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 	/**
 	 * Returns the context path for the web server. The path will start with "/" and not
 	 * end with "/". The root context is represented by an empty string.
+	 *
 	 * @return the context path
 	 */
 	public String getContextPath() {
@@ -123,6 +159,11 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 		this.contextPath = contextPath;
 	}
 
+	/**
+	 * 检查上下文路径
+	 *
+	 * @param contextPath
+	 */
 	private void checkContextPath(String contextPath) {
 		Assert.notNull(contextPath, "ContextPath must not be null");
 		if (!contextPath.isEmpty()) {
@@ -146,6 +187,7 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 
 	/**
 	 * Flag to indicate that the default servlet should be registered.
+	 *
 	 * @return true if the default servlet is to be registered
 	 */
 	public boolean isRegisterDefaultServlet() {
@@ -159,6 +201,7 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 
 	/**
 	 * Returns the mime-type mappings.
+	 *
 	 * @return the mimeMappings the mime-type mappings.
 	 */
 	public MimeMappings getMimeMappings() {
@@ -173,6 +216,7 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 	/**
 	 * Returns the document root which will be used by the web context to serve static
 	 * files.
+	 *
 	 * @return the document root
 	 */
 	public File getDocumentRoot() {
@@ -216,6 +260,7 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 
 	/**
 	 * Return the Locale to Charset mappings.
+	 *
 	 * @return the charset mappings
 	 */
 	public Map<Locale, Charset> getLocaleCharsetMappings() {
@@ -238,23 +283,32 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 	}
 
 	/**
+	 * 合并 ServletContextInitializer
+	 *
 	 * Utility method that can be used by subclasses wishing to combine the specified
 	 * {@link ServletContextInitializer} parameters with those defined in this instance.
+	 *
 	 * @param initializers the initializers to merge
 	 * @return a complete set of merged initializers (with the specified parameters
 	 * appearing first)
 	 */
 	protected final ServletContextInitializer[] mergeInitializers(ServletContextInitializer... initializers) {
 		List<ServletContextInitializer> mergedInitializers = new ArrayList<>();
+		// 容器启动时设置 ServletContext 参数
 		mergedInitializers.add((servletContext) -> this.initParameters.forEach(servletContext::setInitParameter));
+		// 容器启动时配置 Session 信息
 		mergedInitializers.add(new SessionConfiguringInitializer(this.session));
+		// 添加方法参数和当前实例保存的 ServletContextInitializer 到列表
 		mergedInitializers.addAll(Arrays.asList(initializers));
 		mergedInitializers.addAll(this.initializers);
 		return mergedInitializers.toArray(new ServletContextInitializer[0]);
 	}
 
 	/**
+	 * 是否注册处理 JSP 的 Servlet
+	 *
 	 * Returns whether or not the JSP servlet should be registered with the web server.
+	 *
 	 * @return {@code true} if the servlet should be registered, otherwise {@code false}
 	 */
 	protected boolean shouldRegisterJspServlet() {
@@ -263,8 +317,11 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 	}
 
 	/**
+	 * 获取有效的文档根目录
+	 *
 	 * Returns the absolute document root when it points to a valid directory, logging a
 	 * warning and returning {@code null} otherwise.
+	 *
 	 * @return the valid document root
 	 */
 	protected final File getValidDocumentRoot() {
@@ -284,6 +341,8 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 	}
 
 	/**
+	 * Session 配置
+	 *
 	 * {@link ServletContextInitializer} to apply appropriate parts of the {@link Session}
 	 * configuration.
 	 */
@@ -303,6 +362,11 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 			configureSessionCookie(servletContext.getSessionCookieConfig());
 		}
 
+		/**
+		 * 配置 Session 的 Cookie 信息
+		 *
+		 * @param config
+		 */
 		private void configureSessionCookie(SessionCookieConfig config) {
 			Session.Cookie cookie = this.session.getCookie();
 			if (cookie.getName() != null) {
@@ -328,6 +392,12 @@ public abstract class AbstractServletWebServerFactory extends AbstractConfigurab
 			}
 		}
 
+		/**
+		 * 会话跟踪模式
+		 *
+		 * @param modes
+		 * @return
+		 */
 		private Set<javax.servlet.SessionTrackingMode> unwrap(Set<Session.SessionTrackingMode> modes) {
 			if (modes == null) {
 				return null;

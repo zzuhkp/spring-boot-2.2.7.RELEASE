@@ -19,6 +19,8 @@ package org.springframework.boot.web.embedded.jetty;
 import org.eclipse.jetty.server.Server;
 
 /**
+ * Server 自定义回调接口
+ *
  * Callback interface that can be used to customize a Jetty {@link Server}.
  *
  * @author Dave Syer

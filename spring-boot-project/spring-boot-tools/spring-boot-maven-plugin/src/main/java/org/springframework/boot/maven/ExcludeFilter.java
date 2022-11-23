@@ -22,6 +22,8 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 
 /**
+ * exclude 过滤
+ * <p>
  * An {DependencyFilter} that filters out any artifact matching an {@link Exclude}.
  *
  * @author Stephane Nicoll

@@ -26,6 +26,8 @@ import org.springframework.core.Ordered;
 import org.springframework.util.StringUtils;
 
 /**
+ * 基于 Servlt 3.0 的 RegistrationBean
+ * <p>
  * Base class for Servlet 3.0+ based registration beans.
  *
  * @author Phillip Webb

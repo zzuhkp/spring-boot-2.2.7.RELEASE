@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
 
 /**
  * BindHandler 抽象基类
- *
+ * <p>
  * Abstract base class for {@link BindHandler} implementations.
  *
  * @author Phillip Webb
@@ -41,6 +41,7 @@ public abstract class AbstractBindHandler implements BindHandler {
 
 	/**
 	 * Create a new binding handler instance with a specific parent.
+	 *
 	 * @param parent the parent handler
 	 */
 	public AbstractBindHandler(BindHandler parent) {

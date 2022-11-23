@@ -24,6 +24,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.Assert;
 
 /**
+ * 设置响应码的处理器
+ * <p>
  * {@link Handler} that responds with a specific {@link HttpStatus}.
  *
  * @author Phillip Webb
@@ -44,6 +46,7 @@ public class HttpStatusHandler implements Handler {
 	/**
 	 * Create a new {@link HttpStatusHandler} instance that will respond with the
 	 * specified status.
+	 *
 	 * @param status the status
 	 */
 	public HttpStatusHandler(HttpStatus status) {

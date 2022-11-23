@@ -33,6 +33,8 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * Connector 配置
+ *
  * {@link TomcatConnectorCustomizer} that configures SSL support on the given connector.
  *
  * @author Brian Clozel

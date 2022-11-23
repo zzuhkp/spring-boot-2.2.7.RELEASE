@@ -29,6 +29,8 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * 随机属性
+ *
  * {@link PropertySource} that returns a random value for any property that starts with
  * {@literal "random."}. Where the "unqualified property name" is the portion of the
  * requested property name beyond the "random." prefix, this {@link PropertySource}

@@ -16,6 +16,24 @@
 
 package org.springframework.boot.devtools.restart;
 
+import org.springframework.boot.devtools.restart.classloader.ClassLoaderFile;
+import org.springframework.boot.devtools.restart.classloader.ClassLoaderFile.Kind;
+import org.springframework.boot.devtools.restart.classloader.ClassLoaderFileURLStreamHandler;
+import org.springframework.boot.devtools.restart.classloader.ClassLoaderFiles;
+import org.springframework.boot.devtools.restart.classloader.ClassLoaderFiles.SourceFolder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.core.io.*;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.PathMatcher;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.ServletContextResource;
+import org.springframework.web.context.support.ServletContextResourcePatternResolver;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -27,30 +45,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
-import org.springframework.boot.devtools.restart.classloader.ClassLoaderFile;
-import org.springframework.boot.devtools.restart.classloader.ClassLoaderFile.Kind;
-import org.springframework.boot.devtools.restart.classloader.ClassLoaderFileURLStreamHandler;
-import org.springframework.boot.devtools.restart.classloader.ClassLoaderFiles;
-import org.springframework.boot.devtools.restart.classloader.ClassLoaderFiles.SourceFolder;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.io.AbstractResource;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ProtocolResolver;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.UrlResource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.PathMatcher;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.ServletContextResource;
-import org.springframework.web.context.support.ServletContextResourcePatternResolver;
-
 /**
+ * 支持 ClassLoaderFiles 的资源解析器
+ * <p>
  * A {@code ResourcePatternResolver} that considers {@link ClassLoaderFiles} when
  * resolving resources.
  *
@@ -60,7 +57,7 @@ import org.springframework.web.context.support.ServletContextResourcePatternReso
  */
 final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternResolver {
 
-	private static final String[] LOCATION_PATTERN_PREFIXES = { CLASSPATH_ALL_URL_PREFIX, CLASSPATH_URL_PREFIX };
+	private static final String[] LOCATION_PATTERN_PREFIXES = {CLASSPATH_ALL_URL_PREFIX, CLASSPATH_URL_PREFIX};
 
 	private static final String WEB_CONTEXT_CLASS = "org.springframework.web.context.WebApplicationContext";
 
@@ -71,12 +68,18 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 	private final ClassLoaderFiles classLoaderFiles;
 
 	ClassLoaderFilesResourcePatternResolver(AbstractApplicationContext applicationContext,
-			ClassLoaderFiles classLoaderFiles) {
+											ClassLoaderFiles classLoaderFiles) {
 		this.classLoaderFiles = classLoaderFiles;
 		this.patternResolverDelegate = getResourcePatternResolverFactory()
 				.getResourcePatternResolver(applicationContext, retrieveResourceLoader(applicationContext));
 	}
 
+	/**
+	 * 查找 ResourceLoader
+	 *
+	 * @param applicationContext
+	 * @return
+	 */
 	private ResourceLoader retrieveResourceLoader(ApplicationContext applicationContext) {
 		Field field = ReflectionUtils.findField(applicationContext.getClass(), "resourceLoader", ResourceLoader.class);
 		if (field == null) {
@@ -86,6 +89,11 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 		return (ResourceLoader) ReflectionUtils.getField(field, applicationContext);
 	}
 
+	/**
+	 * 获取 ResourcePatternResolverFactory
+	 *
+	 * @return
+	 */
 	private ResourcePatternResolverFactory getResourcePatternResolverFactory() {
 		if (ClassUtils.isPresent(WEB_CONTEXT_CLASS, null)) {
 			return new WebResourcePatternResolverFactory();
@@ -120,6 +128,13 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 		return resources.toArray(new Resource[0]);
 	}
 
+	/**
+	 * 获取附加的资源文件
+	 *
+	 * @param locationPattern
+	 * @return
+	 * @throws MalformedURLException
+	 */
 	private List<Resource> getAdditionalResources(String locationPattern) throws MalformedURLException {
 		List<Resource> additionalResources = new ArrayList<>();
 		String trimmedLocationPattern = trimLocationPattern(locationPattern);
@@ -128,6 +143,7 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 				String name = entry.getKey();
 				ClassLoaderFile file = entry.getValue();
 				if (file.getKind() != Kind.DELETED && this.antPathMatcher.match(trimmedLocationPattern, name)) {
+					// 重新加载的资源
 					URL url = new URL("reloaded", null, -1, "/" + name, new ClassLoaderFileURLStreamHandler(file));
 					UrlResource resource = new UrlResource(url);
 					additionalResources.add(resource);
@@ -137,6 +153,12 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 		return additionalResources;
 	}
 
+	/**
+	 * 去除前缀
+	 *
+	 * @param pattern
+	 * @return
+	 */
 	private String trimLocationPattern(String pattern) {
 		for (String prefix : LOCATION_PATTERN_PREFIXES) {
 			if (pattern.startsWith(prefix)) {
@@ -146,6 +168,12 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 		return pattern;
 	}
 
+	/**
+	 * 文件是否被删除
+	 *
+	 * @param resource
+	 * @return
+	 */
 	private boolean isDeleted(Resource resource) {
 		for (SourceFolder sourceFolder : this.classLoaderFiles.getSourceFolders()) {
 			for (Entry<String, ClassLoaderFile> entry : sourceFolder.getFilesEntrySet()) {
@@ -156,8 +184,7 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 							&& resource.getURI().toString().endsWith(name)) {
 						return true;
 					}
-				}
-				catch (IOException ex) {
+				} catch (IOException ex) {
 					throw new IllegalStateException("Failed to retrieve URI from '" + resource + "'", ex);
 				}
 			}
@@ -166,6 +193,8 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 	}
 
 	/**
+	 * 被删除的资源文件
+	 * <p>
 	 * A {@link Resource} that represents a {@link ClassLoaderFile} that has been
 	 * {@link Kind#DELETED deleted}.
 	 */
@@ -200,7 +229,7 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 	private static class ResourcePatternResolverFactory {
 
 		ResourcePatternResolver getResourcePatternResolver(AbstractApplicationContext applicationContext,
-				ResourceLoader resourceLoader) {
+														   ResourceLoader resourceLoader) {
 			ResourceLoader targetResourceLoader = (resourceLoader != null) ? resourceLoader
 					: new ApplicationContextResourceLoader(applicationContext::getProtocolResolvers);
 			return new PathMatchingResourcePatternResolver(targetResourceLoader);
@@ -216,7 +245,7 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 
 		@Override
 		public ResourcePatternResolver getResourcePatternResolver(AbstractApplicationContext applicationContext,
-				ResourceLoader resourceLoader) {
+																  ResourceLoader resourceLoader) {
 			if (applicationContext instanceof WebApplicationContext) {
 				return getServletContextResourcePatternResolver(applicationContext, resourceLoader);
 			}
@@ -227,7 +256,7 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 				AbstractApplicationContext applicationContext, ResourceLoader resourceLoader) {
 			ResourceLoader targetResourceLoader = (resourceLoader != null) ? resourceLoader
 					: new WebApplicationContextResourceLoader(applicationContext::getProtocolResolvers,
-							(WebApplicationContext) applicationContext);
+					(WebApplicationContext) applicationContext);
 			return new ServletContextResourcePatternResolver(targetResourceLoader);
 		}
 
@@ -257,7 +286,7 @@ final class ClassLoaderFilesResourcePatternResolver implements ResourcePatternRe
 		private final WebApplicationContext applicationContext;
 
 		WebApplicationContextResourceLoader(Supplier<Collection<ProtocolResolver>> protocolResolvers,
-				WebApplicationContext applicationContext) {
+											WebApplicationContext applicationContext) {
 			super(protocolResolvers);
 			this.applicationContext = applicationContext;
 		}

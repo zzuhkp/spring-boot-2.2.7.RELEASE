@@ -75,7 +75,7 @@ class HibernateJpaConfiguration extends JpaBaseConfiguration {
 	 */
 	private static final String[] NO_JTA_PLATFORM_CLASSES = {
 			"org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform",
-			"org.hibernate.service.jta.platform.internal.NoJtaPlatform" };
+			"org.hibernate.service.jta.platform.internal.NoJtaPlatform"};
 
 	private final HibernateProperties hibernateProperties;
 
@@ -86,13 +86,13 @@ class HibernateJpaConfiguration extends JpaBaseConfiguration {
 	private final List<HibernatePropertiesCustomizer> hibernatePropertiesCustomizers;
 
 	HibernateJpaConfiguration(DataSource dataSource, JpaProperties jpaProperties,
-			ConfigurableListableBeanFactory beanFactory, ObjectProvider<JtaTransactionManager> jtaTransactionManager,
-			HibernateProperties hibernateProperties,
-			ObjectProvider<Collection<DataSourcePoolMetadataProvider>> metadataProviders,
-			ObjectProvider<SchemaManagementProvider> providers,
-			ObjectProvider<PhysicalNamingStrategy> physicalNamingStrategy,
-			ObjectProvider<ImplicitNamingStrategy> implicitNamingStrategy,
-			ObjectProvider<HibernatePropertiesCustomizer> hibernatePropertiesCustomizers) {
+							  ConfigurableListableBeanFactory beanFactory, ObjectProvider<JtaTransactionManager> jtaTransactionManager,
+							  HibernateProperties hibernateProperties,
+							  ObjectProvider<Collection<DataSourcePoolMetadataProvider>> metadataProviders,
+							  ObjectProvider<SchemaManagementProvider> providers,
+							  ObjectProvider<PhysicalNamingStrategy> physicalNamingStrategy,
+							  ObjectProvider<ImplicitNamingStrategy> implicitNamingStrategy,
+							  ObjectProvider<HibernatePropertiesCustomizer> hibernatePropertiesCustomizers) {
 		super(dataSource, jpaProperties, jtaTransactionManager);
 		this.hibernateProperties = hibernateProperties;
 		this.defaultDdlAutoProvider = new HibernateDefaultDdlAutoProvider(providers);
@@ -174,11 +174,10 @@ class HibernateJpaConfiguration extends JpaBaseConfiguration {
 	}
 
 	private void configureSpringJtaPlatform(Map<String, Object> vendorProperties,
-			JtaTransactionManager jtaTransactionManager) {
+											JtaTransactionManager jtaTransactionManager) {
 		try {
 			vendorProperties.put(JTA_PLATFORM, new SpringJtaPlatform(jtaTransactionManager));
-		}
-		catch (LinkageError ex) {
+		} catch (LinkageError ex) {
 			// NoClassDefFoundError can happen if Hibernate 4.2 is used and some
 			// containers (e.g. JBoss EAP 6) wrap it in the superclass LinkageError
 			if (!isUsingJndi()) {
@@ -196,8 +195,7 @@ class HibernateJpaConfiguration extends JpaBaseConfiguration {
 	private boolean isUsingJndi() {
 		try {
 			return JndiLocatorDelegate.isDefaultJndiEnvironmentAvailable();
-		}
-		catch (Error ex) {
+		} catch (Error ex) {
 			return false;
 		}
 	}
@@ -206,8 +204,7 @@ class HibernateJpaConfiguration extends JpaBaseConfiguration {
 		for (String candidate : NO_JTA_PLATFORM_CLASSES) {
 			try {
 				return Class.forName(candidate).newInstance();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				// Continue searching
 			}
 		}
@@ -222,7 +219,7 @@ class HibernateJpaConfiguration extends JpaBaseConfiguration {
 		private final ImplicitNamingStrategy implicitNamingStrategy;
 
 		NamingStrategiesHibernatePropertiesCustomizer(PhysicalNamingStrategy physicalNamingStrategy,
-				ImplicitNamingStrategy implicitNamingStrategy) {
+													  ImplicitNamingStrategy implicitNamingStrategy) {
 			this.physicalNamingStrategy = physicalNamingStrategy;
 			this.implicitNamingStrategy = implicitNamingStrategy;
 		}

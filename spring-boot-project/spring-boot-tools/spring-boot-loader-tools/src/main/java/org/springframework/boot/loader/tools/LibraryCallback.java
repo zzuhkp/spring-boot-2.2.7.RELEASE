@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * 回调
+ * <p>
  * Callback interface used to iterate {@link Libraries}.
  *
  * @author Phillip Webb
@@ -30,6 +32,7 @@ public interface LibraryCallback {
 
 	/**
 	 * Callback for a single library backed by a {@link File}.
+	 *
 	 * @param library the library
 	 * @throws IOException if the operation fails
 	 */

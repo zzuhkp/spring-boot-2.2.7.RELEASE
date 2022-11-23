@@ -46,9 +46,9 @@ final class ConfigurationPropertiesValueObjectBeanDefinition extends GenericBean
 		ConfigurationPropertiesBean bean = ConfigurationPropertiesBean.forValueObject(getBeanClass(), this.beanName);
 		ConfigurationPropertiesBinder binder = ConfigurationPropertiesBinder.get(this.beanFactory);
 		try {
+			// 绑定或创建 bean
 			return binder.bindOrCreate(bean);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new ConfigurationPropertiesBindException(bean, ex);
 		}
 	}

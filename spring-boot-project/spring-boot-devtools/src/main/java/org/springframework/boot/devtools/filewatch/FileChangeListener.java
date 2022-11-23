@@ -19,6 +19,8 @@ package org.springframework.boot.devtools.filewatch;
 import java.util.Set;
 
 /**
+ * 文件改变的回调接口
+ * <p>
  * Callback interface when file changes are detected.
  *
  * @author Andy Clement
@@ -30,7 +32,9 @@ public interface FileChangeListener {
 
 	/**
 	 * Called when files have been changed.
-	 * @param changeSet a set of the {@link ChangedFiles}
+	 *
+	 * @param changeSet 改变的文件
+	 *                  a set of the {@link ChangedFiles}
 	 */
 	void onChange(Set<ChangedFiles> changeSet);
 

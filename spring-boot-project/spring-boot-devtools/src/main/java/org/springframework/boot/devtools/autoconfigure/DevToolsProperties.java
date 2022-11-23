@@ -26,6 +26,8 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.StringUtils;
 
 /**
+ * 配置
+ * <p>
  * Configuration properties for developer tools.
  *
  * @author Phillip Webb

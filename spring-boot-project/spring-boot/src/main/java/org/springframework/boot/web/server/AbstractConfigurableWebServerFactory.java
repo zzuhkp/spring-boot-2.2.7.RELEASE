@@ -26,6 +26,8 @@ import java.util.Set;
 import org.springframework.util.Assert;
 
 /**
+ * 抽象的 ConfigurableWebServerFactory
+ * <p>
  * Abstract base class for {@link ConfigurableWebServerFactory} implementations.
  *
  * @author Phillip Webb
@@ -64,6 +66,7 @@ public abstract class AbstractConfigurableWebServerFactory implements Configurab
 	/**
 	 * Create a new {@link AbstractConfigurableWebServerFactory} instance with the
 	 * specified port.
+	 *
 	 * @param port the port number for the web server
 	 */
 	public AbstractConfigurableWebServerFactory(int port) {
@@ -72,6 +75,7 @@ public abstract class AbstractConfigurableWebServerFactory implements Configurab
 
 	/**
 	 * The port that the web server listens on.
+	 *
 	 * @return the port
 	 */
 	public int getPort() {
@@ -85,6 +89,7 @@ public abstract class AbstractConfigurableWebServerFactory implements Configurab
 
 	/**
 	 * Return the address that the web server binds to.
+	 *
 	 * @return the address
 	 */
 	public InetAddress getAddress() {
@@ -99,6 +104,7 @@ public abstract class AbstractConfigurableWebServerFactory implements Configurab
 	/**
 	 * Returns a mutable set of {@link ErrorPage ErrorPages} that will be used when
 	 * handling exceptions.
+	 *
 	 * @return the error pages
 	 */
 	public Set<ErrorPage> getErrorPages() {
@@ -163,7 +169,10 @@ public abstract class AbstractConfigurableWebServerFactory implements Configurab
 	}
 
 	/**
+	 * 创建临时目录
+	 * <p>
 	 * Return the absolute temp dir for given web server.
+	 *
 	 * @param prefix server name
 	 * @return the temp dir for given server.
 	 */
@@ -174,8 +183,7 @@ public abstract class AbstractConfigurableWebServerFactory implements Configurab
 			tempDir.mkdir();
 			tempDir.deleteOnExit();
 			return tempDir;
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			throw new WebServerException(
 					"Unable to create tempDir. java.io.tmpdir is set to " + System.getProperty("java.io.tmpdir"), ex);
 		}

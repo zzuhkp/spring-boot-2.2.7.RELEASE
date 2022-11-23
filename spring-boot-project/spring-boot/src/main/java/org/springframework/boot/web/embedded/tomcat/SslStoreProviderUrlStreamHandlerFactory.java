@@ -29,6 +29,8 @@ import java.security.KeyStore;
 import org.springframework.boot.web.server.SslStoreProvider;
 
 /**
+ * 根据 URL 访问 key stroe 和 trust store
+ * <p>
  * A {@link URLStreamHandlerFactory} that provides a {@link URLStreamHandler} for
  * accessing an {@link SslStoreProvider}'s key store and trust store from a URL.
  *
@@ -68,8 +70,7 @@ class SslStoreProviderUrlStreamHandlerFactory implements URLStreamHandlerFactory
 							return new KeyStoreUrlConnection(url,
 									SslStoreProviderUrlStreamHandlerFactory.this.sslStoreProvider.getTrustStore());
 						}
-					}
-					catch (Exception ex) {
+					} catch (Exception ex) {
 						throw new IOException(ex);
 					}
 					throw new IOException("Invalid path: " + url.getPath());
@@ -100,8 +101,7 @@ class SslStoreProviderUrlStreamHandlerFactory implements URLStreamHandlerFactory
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				this.keyStore.store(stream, new char[0]);
 				return new ByteArrayInputStream(stream.toByteArray());
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				throw new IOException(ex);
 			}
 		}

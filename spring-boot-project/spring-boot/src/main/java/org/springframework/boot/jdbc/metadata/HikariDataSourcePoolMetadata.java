@@ -24,6 +24,8 @@ import com.zaxxer.hikari.pool.HikariPool;
 import org.springframework.beans.DirectFieldAccessor;
 
 /**
+ * Hikari 数据源元数据
+ * <p>
  * {@link DataSourcePoolMetadata} for a Hikari {@link DataSource}.
  *
  * @author Stephane Nicoll
@@ -39,8 +41,7 @@ public class HikariDataSourcePoolMetadata extends AbstractDataSourcePoolMetadata
 	public Integer getActive() {
 		try {
 			return getHikariPool().getActiveConnections();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return null;
 		}
 	}
@@ -49,8 +50,7 @@ public class HikariDataSourcePoolMetadata extends AbstractDataSourcePoolMetadata
 	public Integer getIdle() {
 		try {
 			return getHikariPool().getIdleConnections();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return null;
 		}
 	}

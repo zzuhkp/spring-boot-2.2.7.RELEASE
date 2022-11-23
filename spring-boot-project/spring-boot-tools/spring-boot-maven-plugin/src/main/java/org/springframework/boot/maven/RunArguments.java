@@ -32,6 +32,9 @@ class RunArguments {
 
 	private static final String[] NO_ARGS = {};
 
+	/**
+	 * 参数列表
+	 */
 	private final Deque<String> args = new LinkedList<>();
 
 	RunArguments(String arguments) {
@@ -52,6 +55,12 @@ class RunArguments {
 		return this.args.toArray(new String[0]);
 	}
 
+	/**
+	 * 解析参数
+	 *
+	 * @param arguments
+	 * @return
+	 */
 	private static String[] parseArgs(String arguments) {
 		if (arguments == null || arguments.trim().isEmpty()) {
 			return NO_ARGS;
@@ -59,8 +68,7 @@ class RunArguments {
 		try {
 			arguments = arguments.replace('\n', ' ').replace('\t', ' ');
 			return CommandLineUtils.translateCommandline(arguments);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new IllegalArgumentException("Failed to parse arguments [" + arguments + "]", ex);
 		}
 	}

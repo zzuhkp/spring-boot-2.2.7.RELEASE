@@ -38,6 +38,7 @@ public class OptionalLiveReloadServer implements InitializingBean {
 
 	/**
 	 * Create a new {@link OptionalLiveReloadServer} instance.
+	 *
 	 * @param server the server to manage or {@code null}
 	 */
 	public OptionalLiveReloadServer(LiveReloadServer server) {
@@ -53,11 +54,11 @@ public class OptionalLiveReloadServer implements InitializingBean {
 		if (this.server != null) {
 			try {
 				if (!this.server.isStarted()) {
+					// 启动
 					this.server.start();
 				}
 				logger.info(LogMessage.format("LiveReload server is running on port %s", this.server.getPort()));
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				logger.warn("Unable to start LiveReload server");
 				logger.debug("Live reload start error", ex);
 				this.server = null;
@@ -66,6 +67,8 @@ public class OptionalLiveReloadServer implements InitializingBean {
 	}
 
 	/**
+	 * 重新加载
+	 *
 	 * Trigger LiveReload if the server is up and running.
 	 */
 	public void triggerReload() {

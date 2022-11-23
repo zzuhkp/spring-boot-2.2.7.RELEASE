@@ -50,8 +50,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(PlatformTransactionManager.class)
-@AutoConfigureAfter({ JtaAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
-		DataSourceTransactionManagerAutoConfiguration.class, Neo4jDataAutoConfiguration.class })
+@AutoConfigureAfter({JtaAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
+		DataSourceTransactionManagerAutoConfiguration.class, Neo4jDataAutoConfiguration.class})
 @EnableConfigurationProperties(TransactionProperties.class)
 public class TransactionAutoConfiguration {
 

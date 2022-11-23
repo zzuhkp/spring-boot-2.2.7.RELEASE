@@ -26,6 +26,8 @@ import org.springframework.boot.web.server.Compression;
 import org.springframework.util.StringUtils;
 
 /**
+ * 压缩配置
+ *
  * {@link TomcatConnectorCustomizer} that configures compression support on the given
  * Connector.
  *

@@ -30,4 +30,12 @@
 		<module>spring-boot-cli</module>
 		<module>spring-boot-docs</module>
 	</modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.8.4</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

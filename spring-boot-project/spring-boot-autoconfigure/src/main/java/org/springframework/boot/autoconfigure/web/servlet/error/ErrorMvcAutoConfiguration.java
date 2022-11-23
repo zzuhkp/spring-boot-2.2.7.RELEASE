@@ -74,6 +74,8 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.util.HtmlUtils;
 
 /**
+ * 错误渲染
+ *
  * {@link EnableAutoConfiguration Auto-configuration} to render errors via an MVC error
  * controller.
  *
@@ -85,10 +87,10 @@ import org.springframework.web.util.HtmlUtils;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = Type.SERVLET)
-@ConditionalOnClass({ Servlet.class, DispatcherServlet.class })
+@ConditionalOnClass({Servlet.class, DispatcherServlet.class})
 // Load before the main WebMvcAutoConfiguration so that the error View is available
 @AutoConfigureBefore(WebMvcAutoConfiguration.class)
-@EnableConfigurationProperties({ ServerProperties.class, ResourceProperties.class, WebMvcProperties.class })
+@EnableConfigurationProperties({ServerProperties.class, ResourceProperties.class, WebMvcProperties.class})
 public class ErrorMvcAutoConfiguration {
 
 	private final ServerProperties serverProperties;
@@ -106,7 +108,7 @@ public class ErrorMvcAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(value = ErrorController.class, search = SearchStrategy.CURRENT)
 	public BasicErrorController basicErrorController(ErrorAttributes errorAttributes,
-			ObjectProvider<ErrorViewResolver> errorViewResolvers) {
+													 ObjectProvider<ErrorViewResolver> errorViewResolvers) {
 		return new BasicErrorController(errorAttributes, this.serverProperties.getError(),
 				errorViewResolvers.orderedStream().collect(Collectors.toList()));
 	}
@@ -129,7 +131,7 @@ public class ErrorMvcAutoConfiguration {
 		private final ResourceProperties resourceProperties;
 
 		DefaultErrorViewResolverConfiguration(ApplicationContext applicationContext,
-				ResourceProperties resourceProperties) {
+											  ResourceProperties resourceProperties) {
 			this.applicationContext = applicationContext;
 			this.resourceProperties = resourceProperties;
 		}
@@ -213,7 +215,7 @@ public class ErrorMvcAutoConfiguration {
 				response.setContentType(getContentType());
 			}
 			builder.append("<html><body><h1>Whitelabel Error Page</h1>").append(
-					"<p>This application has no explicit mapping for /error, so you are seeing this as a fallback.</p>")
+							"<p>This application has no explicit mapping for /error, so you are seeing this as a fallback.</p>")
 					.append("<div id='created'>").append(timestamp).append("</div>")
 					.append("<div>There was an unexpected error (type=").append(htmlEscape(model.get("error")))
 					.append(", status=").append(htmlEscape(model.get("status"))).append(").</div>");
@@ -290,8 +292,7 @@ public class ErrorMvcAutoConfiguration {
 				try {
 					beanFactory.getBeanDefinition(errorControllerBean)
 							.setAttribute(AutoProxyUtils.PRESERVE_TARGET_CLASS_ATTRIBUTE, Boolean.TRUE);
-				}
-				catch (Throwable ex) {
+				} catch (Throwable ex) {
 					// Ignore
 				}
 			}

@@ -97,6 +97,11 @@ public class ConfigurationPropertiesBindingPostProcessor
 		return bean;
 	}
 
+	/**
+	 * 绑定属性
+	 *
+	 * @param bean
+	 */
 	private void bind(ConfigurationPropertiesBean bean) {
 		if (bean == null || hasBoundValueObject(bean.getName())) {
 			return;
@@ -125,6 +130,7 @@ public class ConfigurationPropertiesBindingPostProcessor
 	public static void register(BeanDefinitionRegistry registry) {
 		Assert.notNull(registry, "Registry must not be null");
 		if (!registry.containsBeanDefinition(BEAN_NAME)) {
+			// 注册 ConfigurationPropertiesBindingPostProcessor 作为 bean
 			GenericBeanDefinition definition = new GenericBeanDefinition();
 			definition.setBeanClass(ConfigurationPropertiesBindingPostProcessor.class);
 			definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);

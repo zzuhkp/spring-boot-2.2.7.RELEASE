@@ -16,16 +16,17 @@
 
 package org.springframework.boot.devtools.logger;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
-
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.logging.DeferredLog;
 import org.springframework.context.ApplicationListener;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
+ * 日志工厂
+ * <p>
  * Devtools deferred logging support.
  *
  * @author Phillip Webb
@@ -42,6 +43,7 @@ public final class DevToolsLogFactory {
 	 * Get a {@link Log} instance for the specified source that will be automatically
 	 * {@link DeferredLog#switchTo(Class) switched} when the
 	 * {@link ApplicationPreparedEvent context is prepared}.
+	 *
 	 * @param source the source for logging
 	 * @return a {@link DeferredLog} instance
 	 */
@@ -54,6 +56,8 @@ public final class DevToolsLogFactory {
 	}
 
 	/**
+	 * 日志
+	 * <p>
 	 * Listener used to log and switch when the context is ready.
 	 */
 	static class Listener implements ApplicationListener<ApplicationPreparedEvent> {

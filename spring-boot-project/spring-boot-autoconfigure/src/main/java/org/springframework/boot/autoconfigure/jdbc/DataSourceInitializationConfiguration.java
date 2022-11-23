@@ -25,15 +25,19 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
 /**
+ * 数据源初始化，会执行一些初始化脚本
+ * <p>
  * Configures DataSource initialization.
  *
  * @author Stephane Nicoll
  */
 @Configuration(proxyBeanMethods = false)
-@Import({ DataSourceInitializerInvoker.class, DataSourceInitializationConfiguration.Registrar.class })
+@Import({DataSourceInitializerInvoker.class, DataSourceInitializationConfiguration.Registrar.class})
 class DataSourceInitializationConfiguration {
 
 	/**
+	 * DataSourceInitializerPostProcessor bean 配置
+	 * <p>
 	 * {@link ImportBeanDefinitionRegistrar} to register the
 	 * {@link DataSourceInitializerPostProcessor} without causing early bean instantiation
 	 * issues.
@@ -44,7 +48,7 @@ class DataSourceInitializationConfiguration {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
-				BeanDefinitionRegistry registry) {
+											BeanDefinitionRegistry registry) {
 			if (!registry.containsBeanDefinition(BEAN_NAME)) {
 				GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
 				beanDefinition.setBeanClass(DataSourceInitializerPostProcessor.class);

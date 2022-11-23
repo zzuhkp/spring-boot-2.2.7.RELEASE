@@ -54,8 +54,9 @@ public class RestartServer {
 
 	/**
 	 * Create a new {@link RestartServer} instance.
+	 *
 	 * @param sourceFolderUrlFilter the source filter used to link remote folder to the
-	 * local classpath
+	 *                              local classpath
 	 */
 	public RestartServer(SourceFolderUrlFilter sourceFolderUrlFilter) {
 		this(sourceFolderUrlFilter, Thread.currentThread().getContextClassLoader());
@@ -63,9 +64,10 @@ public class RestartServer {
 
 	/**
 	 * Create a new {@link RestartServer} instance.
+	 *
 	 * @param sourceFolderUrlFilter the source filter used to link remote folder to the
-	 * local classpath
-	 * @param classLoader the application classloader
+	 *                              local classpath
+	 * @param classLoader           the application classloader
 	 */
 	public RestartServer(SourceFolderUrlFilter sourceFolderUrlFilter, ClassLoader classLoader) {
 		Assert.notNull(sourceFolderUrlFilter, "SourceFolderUrlFilter must not be null");
@@ -75,12 +77,17 @@ public class RestartServer {
 	}
 
 	/**
+	 * 使用给定的类路径文件信息更新并重启应用
+	 * <p>
 	 * Update the current running application with the specified {@link ClassLoaderFiles}
 	 * and trigger a reload.
+	 *
 	 * @param files updated class loader files
 	 */
 	public void updateAndRestart(ClassLoaderFiles files) {
+		// 更新后的 URL
 		Set<URL> urls = new LinkedHashSet<>();
+		// 类加载器对应的类路径 URL
 		Set<URL> classLoaderUrls = getClassLoaderUrls();
 		for (SourceFolder folder : files.getSourceFolders()) {
 			for (Entry<String, ClassLoaderFile> entry : folder.getFilesEntrySet()) {
@@ -96,6 +103,14 @@ public class RestartServer {
 		restart(urls, files);
 	}
 
+	/**
+	 * 是否更新了文件系统中的文件
+	 *
+	 * @param url             类路径 URL
+	 * @param name            class 文件名称
+	 * @param classLoaderFile class 文件信息
+	 * @return
+	 */
 	private boolean updateFileSystem(URL url, String name, ClassLoaderFile classLoaderFile) {
 		if (!isFolderUrl(url.toString())) {
 			return false;
@@ -104,23 +119,37 @@ public class RestartServer {
 			File folder = ResourceUtils.getFile(url);
 			File file = new File(folder, name);
 			if (file.exists() && file.canWrite()) {
+				// 类路径下目录的给定文件存在，且被删除，执行删除
 				if (classLoaderFile.getKind() == Kind.DELETED) {
 					return file.delete();
 				}
+				// 文件被修改，复制给定文件内容到文件中
 				FileCopyUtils.copy(classLoaderFile.getContents(), file);
 				return true;
 			}
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			// Ignore
 		}
 		return false;
 	}
 
+	/**
+	 * URL 是否为文件系统中的目录
+	 *
+	 * @param urlString
+	 * @return
+	 */
 	private boolean isFolderUrl(String urlString) {
 		return urlString.startsWith("file:") && urlString.endsWith("/");
 	}
 
+	/**
+	 * 获取匹配给定的目录的类加载器对应类路径的目录 URL
+	 *
+	 * @param urls         类加载器对应类路径的 URL
+	 * @param sourceFolder request 中的目录
+	 * @return
+	 */
 	private Set<URL> getMatchingUrls(Set<URL> urls, String sourceFolder) {
 		Set<URL> matchingUrls = new LinkedHashSet<>();
 		for (URL url : urls) {
@@ -134,6 +163,11 @@ public class RestartServer {
 		return matchingUrls;
 	}
 
+	/**
+	 * 获取当前类路径的 URL
+	 *
+	 * @return
+	 */
 	private Set<URL> getClassLoaderUrls() {
 		Set<URL> urls = new LinkedHashSet<>();
 		ClassLoader classLoader = this.classLoader;
@@ -146,26 +180,38 @@ public class RestartServer {
 		return urls;
 	}
 
+	/**
+	 * 更新时间戳
+	 *
+	 * @param urls
+	 */
 	private void updateTimeStamp(Iterable<URL> urls) {
 		for (URL url : urls) {
 			updateTimeStamp(url);
 		}
 	}
 
+	/**
+	 * 更新时间戳
+	 *
+	 * @param url
+	 */
 	private void updateTimeStamp(URL url) {
 		try {
 			URL actualUrl = ResourceUtils.extractJarFileURL(url);
 			File file = ResourceUtils.getFile(actualUrl, "Jar URL");
 			file.setLastModified(System.currentTimeMillis());
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			// Ignore
 		}
 	}
 
 	/**
+	 * 重启
+	 * <p>
 	 * Called to restart the application.
-	 * @param urls the updated URLs
+	 *
+	 * @param urls  the updated URLs
 	 * @param files the updated files
 	 */
 	protected void restart(Set<URL> urls, ClassLoaderFiles files) {

@@ -28,6 +28,8 @@ import org.springframework.boot.devtools.restart.FailureHandler;
 import org.springframework.boot.devtools.restart.Restarter;
 
 /**
+ * 重启失败后等待文件发生变化再次尝试重启
+ * <p>
  * {@link FailureHandler} that waits for filesystem changes before retrying.
  *
  * @author Phillip Webb
@@ -48,9 +50,9 @@ class FileWatchingFailureHandler implements FailureHandler {
 		watcher.addListener(new Listener(latch));
 		watcher.start();
 		try {
+			// 重启失败后等待文件发生变化再次尝试重启
 			latch.await();
-		}
-		catch (InterruptedException ex) {
+		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
 		return Outcome.RETRY;

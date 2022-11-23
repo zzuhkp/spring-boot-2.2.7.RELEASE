@@ -75,11 +75,11 @@ import org.springframework.util.ReflectionUtils;
  *
  * @author Phillip Webb
  * @author Andy Wilkinson
- * @since 1.3.0
  * @see RestartApplicationListener
  * @see #initialize(String[])
  * @see #getInstance()
  * @see #restart()
+ * @since 1.3.0
  */
 public class Restarter {
 
@@ -87,14 +87,23 @@ public class Restarter {
 
 	private static final String[] NO_ARGS = {};
 
+	/**
+	 * 单例对象
+	 */
 	private static Restarter instance;
 
+	/**
+	 * URL
+	 */
 	private final Set<URL> urls = new LinkedHashSet<>();
 
 	private final ClassLoaderFiles classLoaderFiles = new ClassLoaderFiles();
 
 	private final Map<String, Object> attributes = new HashMap<>();
 
+	/**
+	 * LeakSafeThread 队列
+	 */
 	private final BlockingDeque<LeakSafeThread> leakSafeThreads = new LinkedBlockingDeque<>();
 
 	private final Lock stopLock = new ReentrantLock();
@@ -105,28 +114,50 @@ public class Restarter {
 
 	private final boolean forceReferenceCleanup;
 
+	/**
+	 * 是否启用
+	 */
 	private boolean enabled = true;
 
+	/**
+	 * 初始化 URL
+	 */
 	private URL[] initialUrls;
 
+	/**
+	 * 主类
+	 */
 	private final String mainClassName;
 
+	/**
+	 * 线程上下文类加载器
+	 */
 	private final ClassLoader applicationClassLoader;
 
+	/**
+	 * 主方法参数
+	 */
 	private final String[] args;
 
+	/**
+	 * 异常处理器
+	 */
 	private final UncaughtExceptionHandler exceptionHandler;
 
+	/**
+	 * 是否初始化结束
+	 */
 	private boolean finished = false;
 
 	private final List<ConfigurableApplicationContext> rootContexts = new CopyOnWriteArrayList<>();
 
 	/**
 	 * Internal constructor to create a new {@link Restarter} instance.
-	 * @param thread the source thread
-	 * @param args the application arguments
+	 *
+	 * @param thread                the source thread
+	 * @param args                  the application arguments
 	 * @param forceReferenceCleanup if soft/weak reference cleanup should be forced
-	 * @param initializer the restart initializer
+	 * @param initializer           the restart initializer
 	 * @see #initialize(String[])
 	 */
 	protected Restarter(Thread thread, String[] args, boolean forceReferenceCleanup, RestartInitializer initializer) {
@@ -136,6 +167,7 @@ public class Restarter {
 		if (this.logger.isDebugEnabled()) {
 			this.logger.debug("Creating new Restarter for thread " + thread);
 		}
+		// 先设置线程处理器，重启后通过抛出异常的方式退出主线程
 		SilentExitExceptionHandler.setup(thread);
 		this.forceReferenceCleanup = forceReferenceCleanup;
 		this.initialUrls = initializer.getInitialUrls(thread);
@@ -146,15 +178,25 @@ public class Restarter {
 		this.leakSafeThreads.add(new LeakSafeThread());
 	}
 
+	/**
+	 * 获取主方法所在类
+	 *
+	 * @param thread
+	 * @return
+	 */
 	private String getMainClassName(Thread thread) {
 		try {
 			return new MainMethod(thread).getDeclaringClassName();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return null;
 		}
 	}
 
+	/**
+	 * 初始化
+	 *
+	 * @param restartOnInitialize 是否重启
+	 */
 	protected void initialize(boolean restartOnInitialize) {
 		preInitializeLeakyClasses();
 		if (this.initialUrls != null) {
@@ -166,21 +208,27 @@ public class Restarter {
 		}
 	}
 
+	/**
+	 * 立即重启
+	 */
 	private void immediateRestart() {
 		try {
+			// 等待新线程执行结束
 			getLeakSafeThread().callAndWait(() -> {
 				start(FailureHandler.NONE);
 				cleanupCaches();
 				return null;
 			});
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			this.logger.warn("Unable to initialize restarter", ex);
 		}
+		// 再通过抛出异常的方式退出主线程
 		SilentExitExceptionHandler.exitCurrentThread();
 	}
 
 	/**
+	 * CGLIB ClassNameReader EARLY_EXIT 字段初始化
+	 * <p>
 	 * CGLIB has a private exception field which needs to initialized early to ensure that
 	 * the stacktrace doesn't retain a reference to the RestartClassLoader.
 	 */
@@ -190,14 +238,14 @@ public class Restarter {
 			Field field = readerClass.getDeclaredField("EARLY_EXIT");
 			field.setAccessible(true);
 			((Throwable) field.get(null)).fillInStackTrace();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			this.logger.warn("Unable to pre-initialize classes", ex);
 		}
 	}
 
 	/**
 	 * Set if restart support is enabled.
+	 *
 	 * @param enabled if restart support is enabled
 	 */
 	private void setEnabled(boolean enabled) {
@@ -206,6 +254,7 @@ public class Restarter {
 
 	/**
 	 * Add additional URLs to be includes in the next restart.
+	 *
 	 * @param urls the urls to add
 	 */
 	public void addUrls(Collection<URL> urls) {
@@ -215,6 +264,7 @@ public class Restarter {
 
 	/**
 	 * Add additional {@link ClassLoaderFiles} to be included in the next restart.
+	 *
 	 * @param classLoaderFiles the files to add
 	 */
 	public void addClassLoaderFiles(ClassLoaderFiles classLoaderFiles) {
@@ -224,6 +274,7 @@ public class Restarter {
 
 	/**
 	 * Return a {@link ThreadFactory} that can be used to create leak safe threads.
+	 *
 	 * @return a leak safe thread factory
 	 */
 	public ThreadFactory getThreadFactory() {
@@ -238,7 +289,10 @@ public class Restarter {
 	}
 
 	/**
+	 * 重启
+	 * <p>
 	 * Restart the running application.
+	 *
 	 * @param failureHandler a failure handler to deal with application that doesn't start
 	 */
 	public void restart(FailureHandler failureHandler) {
@@ -255,7 +309,10 @@ public class Restarter {
 	}
 
 	/**
+	 * 重启
+	 * <p>
 	 * Start the application.
+	 *
 	 * @param failureHandler a failure handler for application that won't start
 	 * @throws Exception in case of errors
 	 */
@@ -276,6 +333,7 @@ public class Restarter {
 		Assert.notNull(this.mainClassName, "Unable to find the main class to restart");
 		URL[] urls = this.urls.toArray(new URL[0]);
 		ClassLoaderFiles updatedFiles = new ClassLoaderFiles(this.classLoaderFiles);
+		// 使用新的类加载器加载变化的类
 		ClassLoader classLoader = new RestartClassLoader(this.applicationClassLoader, urls, updatedFiles, this.logger);
 		if (this.logger.isDebugEnabled()) {
 			this.logger.debug("Starting application " + this.mainClassName + " with URLs " + Arrays.asList(urls));
@@ -284,7 +342,10 @@ public class Restarter {
 	}
 
 	/**
+	 * 使用给定的类加载器重启应用
+	 * <p>
 	 * Relaunch the application using the specified classloader.
+	 *
 	 * @param classLoader the classloader to use
 	 * @return any exception that caused the launch to fail or {@code null}
 	 * @throws Exception in case of errors
@@ -298,7 +359,10 @@ public class Restarter {
 	}
 
 	/**
+	 * 停止
+	 * <p>
 	 * Stop the application.
+	 *
 	 * @throws Exception in case of errors
 	 */
 	protected void stop() throws Exception {
@@ -313,8 +377,7 @@ public class Restarter {
 			if (this.forceReferenceCleanup) {
 				forceReferenceCleanup();
 			}
-		}
-		finally {
+		} finally {
 			this.stopLock.unlock();
 		}
 		System.gc();
@@ -326,6 +389,11 @@ public class Restarter {
 		cleanupKnownCaches();
 	}
 
+	/**
+	 * 清理缓存
+	 *
+	 * @throws Exception
+	 */
 	private void cleanupKnownCaches() throws Exception {
 		// Whilst not strictly necessary it helps to cleanup soft reference caches
 		// early rather than waiting for memory limits to be reached
@@ -338,33 +406,54 @@ public class Restarter {
 		}
 	}
 
+	/**
+	 * 清理缓存
+	 *
+	 * @throws Exception
+	 */
 	private void cleanCachedIntrospectionResultsCache() throws Exception {
 		clear(CachedIntrospectionResults.class, "acceptedClassLoaders");
 		clear(CachedIntrospectionResults.class, "strongClassCache");
 		clear(CachedIntrospectionResults.class, "softClassCache");
 	}
 
+	/**
+	 * 清理缓存
+	 *
+	 * @throws Exception
+	 */
 	private void clearAnnotationUtilsCache() throws Exception {
 		try {
 			AnnotationUtils.clearCache();
-		}
-		catch (Throwable ex) {
+		} catch (Throwable ex) {
 			clear(AnnotationUtils.class, "findAnnotationCache");
 			clear(AnnotationUtils.class, "annotatedInterfaceCache");
 		}
 	}
 
+	/**
+	 * 清理缓存
+	 *
+	 * @param className
+	 * @param fieldName
+	 */
 	private void clear(String className, String fieldName) {
 		try {
 			clear(Class.forName(className), fieldName);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			if (this.logger.isDebugEnabled()) {
 				this.logger.debug("Unable to clear field " + className + " " + fieldName, ex);
 			}
 		}
 	}
 
+	/**
+	 * 清理缓存
+	 *
+	 * @param type
+	 * @param fieldName
+	 * @throws Exception
+	 */
 	private void clear(Class<?> type, String fieldName) throws Exception {
 		try {
 			Field field = type.getDeclaredField(fieldName);
@@ -376,19 +465,26 @@ public class Restarter {
 			if (instance instanceof Map) {
 				((Map<?, ?>) instance).keySet().removeIf(this::isFromRestartClassLoader);
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			if (this.logger.isDebugEnabled()) {
 				this.logger.debug("Unable to clear field " + type + " " + fieldName, ex);
 			}
 		}
 	}
 
+	/**
+	 * 是否 RestartClassLoader 加载的类
+	 *
+	 * @param object
+	 * @return
+	 */
 	private boolean isFromRestartClassLoader(Object object) {
 		return (object instanceof Class && ((Class<?>) object).getClassLoader() instanceof RestartClassLoader);
 	}
 
 	/**
+	 * 通过内存溢出清除软引用、弱引用
+	 * <p>
 	 * Cleanup any soft/weak references by forcing an {@link OutOfMemoryError} error.
 	 */
 	private void forceReferenceCleanup() {
@@ -397,13 +493,14 @@ public class Restarter {
 			while (true) {
 				memory.add(new long[102400]);
 			}
-		}
-		catch (OutOfMemoryError ex) {
+		} catch (OutOfMemoryError ex) {
 			// Expected
 		}
 	}
 
 	/**
+	 * 初始化结束
+	 * <p>
 	 * Called to finish {@link Restarter} initialization when application logging is
 	 * available.
 	 */
@@ -416,12 +513,22 @@ public class Restarter {
 		}
 	}
 
+	/**
+	 * 是否结束初始化
+	 *
+	 * @return
+	 */
 	boolean isFinished() {
 		synchronized (this.monitor) {
 			return this.finished;
 		}
 	}
 
+	/**
+	 * 准备上下文
+	 *
+	 * @param applicationContext
+	 */
 	void prepare(ConfigurableApplicationContext applicationContext) {
 		if (applicationContext != null && applicationContext.getParent() != null) {
 			return;
@@ -438,22 +545,38 @@ public class Restarter {
 		}
 	}
 
+	/**
+	 * 设置资源加载器
+	 *
+	 * @param applicationContext
+	 */
 	private void prepare(GenericApplicationContext applicationContext) {
 		ResourceLoader resourceLoader = new ClassLoaderFilesResourcePatternResolver(applicationContext,
 				this.classLoaderFiles);
 		applicationContext.setResourceLoader(resourceLoader);
 	}
 
+	/**
+	 * 获取 LeakSafeThread
+	 *
+	 * @return
+	 */
 	private LeakSafeThread getLeakSafeThread() {
 		try {
 			return this.leakSafeThreads.takeFirst();
-		}
-		catch (InterruptedException ex) {
+		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 			throw new IllegalStateException(ex);
 		}
 	}
 
+	/**
+	 * 获取或添加属性
+	 *
+	 * @param name
+	 * @param objectFactory
+	 * @return
+	 */
 	public Object getOrAddAttribute(String name, final ObjectFactory<?> objectFactory) {
 		synchronized (this.attributes) {
 			if (!this.attributes.containsKey(name)) {
@@ -463,6 +586,12 @@ public class Restarter {
 		}
 	}
 
+	/**
+	 * 移除属性
+	 *
+	 * @param name
+	 * @return
+	 */
 	public Object removeAttribute(String name) {
 		synchronized (this.attributes) {
 			return this.attributes.remove(name);
@@ -471,6 +600,7 @@ public class Restarter {
 
 	/**
 	 * Return the initial set of URLs as configured by the {@link RestartInitializer}.
+	 *
 	 * @return the initial URLs or {@code null}
 	 */
 	public URL[] getInitialUrls() {
@@ -486,8 +616,11 @@ public class Restarter {
 	}
 
 	/**
+	 * 初始化
+	 * <p>
 	 * Initialize restart support. See
 	 * {@link #initialize(String[], boolean, RestartInitializer)} for details.
+	 *
 	 * @param args main application arguments
 	 * @see #initialize(String[], boolean, RestartInitializer)
 	 */
@@ -496,9 +629,12 @@ public class Restarter {
 	}
 
 	/**
+	 * 初始化
+	 * <p>
 	 * Initialize restart support. See
 	 * {@link #initialize(String[], boolean, RestartInitializer)} for details.
-	 * @param args main application arguments
+	 *
+	 * @param args        main application arguments
 	 * @param initializer the restart initializer
 	 * @see #initialize(String[], boolean, RestartInitializer)
 	 */
@@ -507,9 +643,12 @@ public class Restarter {
 	}
 
 	/**
+	 * 初始化
+	 * <p>
 	 * Initialize restart support. See
 	 * {@link #initialize(String[], boolean, RestartInitializer)} for details.
-	 * @param args main application arguments
+	 *
+	 * @param args                  main application arguments
 	 * @param forceReferenceCleanup if forcing of soft/weak reference should happen on
 	 * @see #initialize(String[], boolean, RestartInitializer)
 	 */
@@ -518,11 +657,14 @@ public class Restarter {
 	}
 
 	/**
+	 * 初始化
+	 * <p>
 	 * Initialize restart support. See
 	 * {@link #initialize(String[], boolean, RestartInitializer, boolean)} for details.
-	 * @param args main application arguments
+	 *
+	 * @param args                  main application arguments
 	 * @param forceReferenceCleanup if forcing of soft/weak reference should happen on
-	 * @param initializer the restart initializer
+	 * @param initializer           the restart initializer
 	 * @see #initialize(String[], boolean, RestartInitializer)
 	 */
 	public static void initialize(String[] args, boolean forceReferenceCleanup, RestartInitializer initializer) {
@@ -530,22 +672,29 @@ public class Restarter {
 	}
 
 	/**
+	 * 初始化
+	 * <p>
 	 * Initialize restart support for the current application. Called automatically by
 	 * {@link RestartApplicationListener} but can also be called directly if main
 	 * application arguments are not the same as those passed to the
 	 * {@link SpringApplication}.
-	 * @param args main application arguments
+	 *
+	 * @param args                  main 方法参数
+	 *                              main application arguments
 	 * @param forceReferenceCleanup if forcing of soft/weak reference should happen on
-	 * each restart. This will slow down restarts and is intended primarily for testing
-	 * @param initializer the restart initializer
-	 * @param restartOnInitialize if the restarter should be restarted immediately when
-	 * the {@link RestartInitializer} returns non {@code null} results
+	 *                              each restart. This will slow down restarts and is intended primarily for testing
+	 * @param initializer           初始参数
+	 *                              the restart initializer
+	 * @param restartOnInitialize   是否重启
+	 *                              if the restarter should be restarted immediately when
+	 *                              the {@link RestartInitializer} returns non {@code null} results
 	 */
 	public static void initialize(String[] args, boolean forceReferenceCleanup, RestartInitializer initializer,
-			boolean restartOnInitialize) {
+								  boolean restartOnInitialize) {
 		Restarter localInstance = null;
 		synchronized (INSTANCE_MONITOR) {
 			if (instance == null) {
+				// 初始化
 				localInstance = new Restarter(Thread.currentThread(), args, forceReferenceCleanup, initializer);
 				instance = localInstance;
 			}
@@ -556,8 +705,11 @@ public class Restarter {
 	}
 
 	/**
+	 * 获取实例
+	 * <p>
 	 * Return the active {@link Restarter} instance. Cannot be called before
 	 * {@link #initialize(String[]) initialization}.
+	 *
 	 * @return the restarter
 	 */
 	public static Restarter getInstance() {
@@ -568,7 +720,10 @@ public class Restarter {
 	}
 
 	/**
+	 * 设置实例
+	 * <p>
 	 * Set the restarter instance (useful for testing).
+	 *
 	 * @param instance the instance to set
 	 */
 	static void setInstance(Restarter instance) {
@@ -610,10 +765,10 @@ public class Restarter {
 			this.callable = callable;
 			start();
 			try {
+				// 异步调用并等待 cllable 返回结果
 				join();
 				return (V) this.result;
-			}
-			catch (InterruptedException ex) {
+			} catch (InterruptedException ex) {
 				Thread.currentThread().interrupt();
 				throw new IllegalStateException(ex);
 			}
@@ -625,10 +780,10 @@ public class Restarter {
 			// AccessController.getContext()) since our stack doesn't include the
 			// RestartClassLoader
 			try {
+				// 当前线程对象从 leakSafeThreads 取出来后，异步执行任务前，再放一个线程到队列，便于下次获取
 				Restarter.this.leakSafeThreads.put(new LeakSafeThread());
 				this.result = this.callable.call();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				ex.printStackTrace();
 				System.exit(1);
 			}

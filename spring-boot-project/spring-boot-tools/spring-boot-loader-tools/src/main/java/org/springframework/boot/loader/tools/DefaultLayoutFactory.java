@@ -19,6 +19,8 @@ package org.springframework.boot.loader.tools;
 import java.io.File;
 
 /**
+ * LayoutFactory 默认实现
+ *
  * Default implementation of {@link LayoutFactory}.
  *
  * @author Phillip Webb

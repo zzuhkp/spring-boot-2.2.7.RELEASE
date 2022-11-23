@@ -55,7 +55,7 @@ public class DevToolsPropertyDefaultsPostProcessor implements EnvironmentPostPro
 
 	private static final String[] WEB_ENVIRONMENT_CLASSES = {
 			"org.springframework.web.context.ConfigurableWebEnvironment",
-			"org.springframework.boot.web.reactive.context.ConfigurableReactiveWebEnvironment" };
+			"org.springframework.boot.web.reactive.context.ConfigurableReactiveWebEnvironment"};
 
 	private static final Map<String, Object> PROPERTIES;
 
@@ -83,6 +83,7 @@ public class DevToolsPropertyDefaultsPostProcessor implements EnvironmentPostPro
 			if (canAddProperties(environment)) {
 				logger.info(LogMessage.format("Devtools property defaults active! Set '%s' to 'false' to disable",
 						ENABLED));
+				// 添加属性源
 				environment.getPropertySources().addLast(new MapPropertySource("devtools", PROPERTIES));
 			}
 			if (isWebApplication(environment) && !environment.containsProperty(WEB_LOGGING)) {
@@ -93,10 +94,22 @@ public class DevToolsPropertyDefaultsPostProcessor implements EnvironmentPostPro
 		}
 	}
 
+	/**
+	 * 是否为本地应用
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private boolean isLocalApplication(ConfigurableEnvironment environment) {
 		return environment.getPropertySources().get("remoteUrl") == null;
 	}
 
+	/**
+	 * 是否可以添加属性
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private boolean canAddProperties(Environment environment) {
 		if (environment.getProperty(ENABLED, Boolean.class, true)) {
 			return isRestarterInitialized() || isRemoteRestartEnabled(environment);
@@ -104,20 +117,36 @@ public class DevToolsPropertyDefaultsPostProcessor implements EnvironmentPostPro
 		return false;
 	}
 
+	/**
+	 * Restarter 是否已经被初始化
+	 *
+	 * @return
+	 */
 	private boolean isRestarterInitialized() {
 		try {
 			Restarter restarter = Restarter.getInstance();
 			return (restarter != null && restarter.getInitialUrls() != null);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return false;
 		}
 	}
 
+	/**
+	 * 远程 Restarter 是否已启用
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private boolean isRemoteRestartEnabled(Environment environment) {
 		return environment.containsProperty("spring.devtools.remote.secret");
 	}
 
+	/**
+	 * 是否为 Web 应用
+	 *
+	 * @param environment
+	 * @return
+	 */
 	private boolean isWebApplication(Environment environment) {
 		for (String candidate : WEB_ENVIRONMENT_CLASSES) {
 			Class<?> environmentClass = resolveClassName(candidate, environment.getClass().getClassLoader());
@@ -128,11 +157,17 @@ public class DevToolsPropertyDefaultsPostProcessor implements EnvironmentPostPro
 		return false;
 	}
 
+	/**
+	 * 解析类
+	 *
+	 * @param candidate
+	 * @param classLoader
+	 * @return
+	 */
 	private Class<?> resolveClassName(String candidate, ClassLoader classLoader) {
 		try {
 			return ClassUtils.resolveClassName(candidate, classLoader);
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			return null;
 		}
 	}

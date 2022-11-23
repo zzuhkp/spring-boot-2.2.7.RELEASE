@@ -30,6 +30,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.unit.DataSize;
 
 /**
+ * 基于 Netty 的 WebServerFactory 自定义
+ * <p>
  * Customization for Netty-specific features.
  *
  * @author Brian Clozel

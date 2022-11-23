@@ -17,6 +17,8 @@
 package org.springframework.boot.maven;
 
 /**
+ * include 依赖
+ *
  * A model for a dependency to include.
  *
  * @author David Turanski

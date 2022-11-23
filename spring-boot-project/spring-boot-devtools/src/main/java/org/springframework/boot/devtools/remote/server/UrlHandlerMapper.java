@@ -20,6 +20,8 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.util.Assert;
 
 /**
+ * 基于 URL 的处理器映射
+ * <p>
  * {@link HandlerMapper} implementation that maps incoming URLs.
  *
  * @author Rob Winch
@@ -34,7 +36,8 @@ public class UrlHandlerMapper implements HandlerMapper {
 
 	/**
 	 * Create a new {@link UrlHandlerMapper}.
-	 * @param url the URL to map
+	 *
+	 * @param url     the URL to map
 	 * @param handler the handler to use
 	 */
 	public UrlHandlerMapper(String url, Handler handler) {

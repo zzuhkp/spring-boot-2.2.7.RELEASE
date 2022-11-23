@@ -16,10 +16,6 @@
 
 package org.springframework.boot.context.config;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationContextException;
@@ -33,7 +29,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
+ * ApplicationListener 代理，委托给 context.listener.classes 指定的监听器处理
+ * <p>
  * {@link ApplicationListener} that delegates to other listeners that are specified under
  * a {@literal context.listener.classes} environment property.
  *
@@ -69,6 +71,12 @@ public class DelegatingApplicationListener implements ApplicationListener<Applic
 		}
 	}
 
+	/**
+	 * 获取 ApplicationListener 列表
+	 *
+	 * @param environment
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	private List<ApplicationListener<ApplicationEvent>> getListeners(ConfigurableEnvironment environment) {
 		if (environment == null) {
@@ -83,8 +91,7 @@ public class DelegatingApplicationListener implements ApplicationListener<Applic
 					Assert.isAssignable(ApplicationListener.class, clazz,
 							"class [" + className + "] must implement ApplicationListener");
 					listeners.add((ApplicationListener<ApplicationEvent>) BeanUtils.instantiateClass(clazz));
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 					throw new ApplicationContextException("Failed to load context listener class [" + className + "]",
 							ex);
 				}

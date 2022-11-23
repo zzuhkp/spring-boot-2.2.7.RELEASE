@@ -26,6 +26,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
+ * Spring Security 配置
+ * <p>
  * Spring Security configuration that allows anonymous access to the remote devtools
  * endpoint.
  *

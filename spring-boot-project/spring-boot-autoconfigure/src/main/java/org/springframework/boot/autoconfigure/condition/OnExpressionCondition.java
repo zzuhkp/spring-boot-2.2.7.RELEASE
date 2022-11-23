@@ -47,6 +47,7 @@ class OnExpressionCondition extends SpringBootCondition {
 		expression = context.getEnvironment().resolvePlaceholders(expression);
 		ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
 		if (beanFactory != null) {
+			// 表达式的值是否为 true
 			boolean result = evaluateExpression(beanFactory, expression);
 			return new ConditionOutcome(result, messageBuilder.resultedIn(result));
 		}

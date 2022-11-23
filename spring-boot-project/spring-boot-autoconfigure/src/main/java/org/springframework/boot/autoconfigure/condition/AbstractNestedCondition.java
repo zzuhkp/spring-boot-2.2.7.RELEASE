@@ -37,6 +37,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * 支持成员内部类的 Condition
+ *
  * Abstract base class for nested conditions.
  *
  * @author Phillip Webb
@@ -64,14 +66,29 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 		return getFinalMatchOutcome(memberOutcomes);
 	}
 
+	/**
+	 * 获取最终的匹配结果
+	 *
+	 * @param memberOutcomes
+	 * @return
+	 */
 	protected abstract ConditionOutcome getFinalMatchOutcome(MemberMatchOutcomes memberOutcomes);
 
 	protected static class MemberMatchOutcomes {
 
+		/**
+		 * 成员内部类 Condition 信息
+		 */
 		private final List<ConditionOutcome> all;
 
+		/**
+		 * 匹配的结果
+		 */
 		private final List<ConditionOutcome> matches;
 
+		/**
+		 * 不匹配的结果
+		 */
 		private final List<ConditionOutcome> nonMatches;
 
 		public MemberMatchOutcomes(MemberConditions memberConditions) {
@@ -105,6 +122,9 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 
 		private final MetadataReaderFactory readerFactory;
 
+		/**
+		 * 成员内部类注解元信息 -> @Conditional 指定的 Condition 实例列表
+		 */
 		private final Map<AnnotationMetadata, List<Condition>> memberConditions;
 
 		MemberConditions(ConditionContext context, ConfigurationPhase phase, String className) {
@@ -114,8 +134,16 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 			this.memberConditions = getMemberConditions(members, phase, className);
 		}
 
+		/**
+		 * 获取成员内部类的 Condition
+		 *
+		 * @param members
+		 * @param phase
+		 * @param className
+		 * @return
+		 */
 		private Map<AnnotationMetadata, List<Condition>> getMemberConditions(String[] members, ConfigurationPhase phase,
-				String className) {
+																			 String className) {
 			MultiValueMap<AnnotationMetadata, Condition> memberConditions = new LinkedMultiValueMap<>();
 			for (String member : members) {
 				AnnotationMetadata metadata = getMetadata(member);
@@ -130,8 +158,15 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 			return Collections.unmodifiableMap(memberConditions);
 		}
 
+		/**
+		 * 验证成员内部类与外部类解析阶段要保持一致
+		 *
+		 * @param condition
+		 * @param nestedPhase
+		 * @param nestedClassName
+		 */
 		private void validateMemberCondition(Condition condition, ConfigurationPhase nestedPhase,
-				String nestedClassName) {
+											 String nestedClassName) {
 			if (nestedPhase == ConfigurationPhase.PARSE_CONFIGURATION && condition instanceof ConfigurationCondition) {
 				ConfigurationPhase memberPhase = ((ConfigurationCondition) condition).getConfigurationPhase();
 				if (memberPhase == ConfigurationPhase.REGISTER_BEAN) {
@@ -141,15 +176,26 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 			}
 		}
 
+		/**
+		 * 获取类上的注解
+		 *
+		 * @param className
+		 * @return
+		 */
 		private AnnotationMetadata getMetadata(String className) {
 			try {
 				return this.readerFactory.getMetadataReader(className).getAnnotationMetadata();
-			}
-			catch (IOException ex) {
+			} catch (IOException ex) {
 				throw new IllegalStateException(ex);
 			}
 		}
 
+		/**
+		 * 获取 Condition 类名
+		 *
+		 * @param metadata
+		 * @return
+		 */
 		@SuppressWarnings("unchecked")
 		private List<String[]> getConditionClasses(AnnotatedTypeMetadata metadata) {
 			MultiValueMap<String, Object> attributes = metadata.getAllAnnotationAttributes(Conditional.class.getName(),
@@ -158,11 +204,22 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 			return (List<String[]>) ((values != null) ? values : Collections.emptyList());
 		}
 
+		/**
+		 * 实例化 Condition
+		 *
+		 * @param conditionClassName
+		 * @return
+		 */
 		private Condition getCondition(String conditionClassName) {
 			Class<?> conditionClass = ClassUtils.resolveClassName(conditionClassName, this.context.getClassLoader());
 			return (Condition) BeanUtils.instantiateClass(conditionClass);
 		}
 
+		/**
+		 * 获取成员内部类匹配结果
+		 *
+		 * @return
+		 */
 		List<ConditionOutcome> getMatchOutcomes() {
 			List<ConditionOutcome> outcomes = new ArrayList<>();
 			this.memberConditions.forEach((metadata, conditions) -> outcomes
@@ -172,12 +229,18 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 
 	}
 
+	/**
+	 * 成员内部类 Condition 匹配结果
+	 */
 	private static class MemberOutcomes {
 
 		private final ConditionContext context;
 
 		private final AnnotationMetadata metadata;
 
+		/**
+		 * 所有条件的匹配结果
+		 */
 		private final List<ConditionOutcome> outcomes;
 
 		MemberOutcomes(ConditionContext context, AnnotationMetadata metadata, List<Condition> conditions) {
@@ -189,6 +252,13 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 			}
 		}
 
+		/**
+		 * 获取匹配结果
+		 *
+		 * @param metadata
+		 * @param condition
+		 * @return
+		 */
 		private ConditionOutcome getConditionOutcome(AnnotationMetadata metadata, Condition condition) {
 			if (condition instanceof SpringBootCondition) {
 				return ((SpringBootCondition) condition).getMatchOutcome(this.context, metadata);
@@ -196,6 +266,11 @@ public abstract class AbstractNestedCondition extends SpringBootCondition implem
 			return new ConditionOutcome(condition.matches(this.context, metadata), ConditionMessage.empty());
 		}
 
+		/**
+		 * 多个匹配结果转一个匹配结果
+		 *
+		 * @return
+		 */
 		ConditionOutcome getUltimateOutcome() {
 			ConditionMessage.Builder message = ConditionMessage
 					.forCondition("NestedCondition on " + ClassUtils.getShortName(this.metadata.getClassName()));

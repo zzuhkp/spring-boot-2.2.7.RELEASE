@@ -32,8 +32,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
  */
 final class ConfigurationPropertiesJsr303Validator implements Validator {
 
-	private static final String[] VALIDATOR_CLASSES = { "javax.validation.Validator",
-			"javax.validation.ValidatorFactory", "javax.validation.bootstrap.GenericBootstrap" };
+	private static final String[] VALIDATOR_CLASSES = {"javax.validation.Validator",
+			"javax.validation.ValidatorFactory", "javax.validation.bootstrap.GenericBootstrap"};
 
 	private final Delegate delegate;
 
@@ -51,6 +51,12 @@ final class ConfigurationPropertiesJsr303Validator implements Validator {
 		this.delegate.validate(target, errors);
 	}
 
+	/**
+	 * 是否存在 JSR 303 规范注解
+	 *
+	 * @param applicationContext
+	 * @return
+	 */
 	static boolean isJsr303Present(ApplicationContext applicationContext) {
 		ClassLoader classLoader = applicationContext.getClassLoader();
 		for (String validatorClass : VALIDATOR_CLASSES) {

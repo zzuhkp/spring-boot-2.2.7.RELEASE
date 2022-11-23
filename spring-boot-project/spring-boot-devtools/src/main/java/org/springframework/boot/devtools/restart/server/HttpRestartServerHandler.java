@@ -24,6 +24,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.Assert;
 
 /**
+ * 重启应用
+ * <p>
  * Adapts {@link HttpRestartServer} to a {@link Handler}.
  *
  * @author Phillip Webb
@@ -35,6 +37,7 @@ public class HttpRestartServerHandler implements Handler {
 
 	/**
 	 * Create a new {@link HttpRestartServerHandler} instance.
+	 *
 	 * @param server the server to adapt
 	 */
 	public HttpRestartServerHandler(HttpRestartServer server) {

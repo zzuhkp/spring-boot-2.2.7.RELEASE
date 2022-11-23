@@ -25,6 +25,8 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.Ordered;
 
 /**
+ * DataSourceInitializerInvoker 初始化
+ * <p>
  * {@link BeanPostProcessor} used to ensure that {@link DataSourceInitializer} is
  * initialized as soon as a {@link DataSource} is.
  *

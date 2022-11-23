@@ -19,17 +19,20 @@ package org.springframework.boot.web.embedded.undertow;
 import io.undertow.Undertow.Builder;
 
 /**
+ * 自定义 Builder 回调接口
+ * <p>
  * Callback interface that can be used to customize an Undertow {@link Builder}.
  *
  * @author Andy Wilkinson
- * @since 2.0.0
  * @see UndertowServletWebServerFactory
+ * @since 2.0.0
  */
 @FunctionalInterface
 public interface UndertowBuilderCustomizer {
 
 	/**
 	 * Customize the builder.
+	 *
 	 * @param builder the {@code Builder} to customize
 	 */
 	void customize(Builder builder);

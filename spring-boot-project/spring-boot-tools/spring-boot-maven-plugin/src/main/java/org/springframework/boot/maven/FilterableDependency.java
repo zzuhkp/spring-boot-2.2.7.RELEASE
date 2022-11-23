@@ -19,6 +19,8 @@ package org.springframework.boot.maven;
 import org.apache.maven.plugins.annotations.Parameter;
 
 /**
+ * 依赖
+ * <p>
  * A model for a dependency to include or exclude.
  *
  * @author Stephane Nicoll

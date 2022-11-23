@@ -28,12 +28,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 /**
+ * 类路径监听
+ *
  * Encapsulates a {@link FileSystemWatcher} to watch the local classpath folders for
  * changes.
  *
  * @author Phillip Webb
- * @since 1.3.0
  * @see ClassPathFileChangeListener
+ * @since 1.3.0
  */
 public class ClassPathFileSystemWatcher implements InitializingBean, DisposableBean, ApplicationContextAware {
 
@@ -47,13 +49,14 @@ public class ClassPathFileSystemWatcher implements InitializingBean, DisposableB
 
 	/**
 	 * Create a new {@link ClassPathFileSystemWatcher} instance.
+	 *
 	 * @param fileSystemWatcherFactory a factory to create the underlying
-	 * {@link FileSystemWatcher} used to monitor the local file system
-	 * @param restartStrategy the classpath restart strategy
-	 * @param urls the URLs to watch
+	 *                                 {@link FileSystemWatcher} used to monitor the local file system
+	 * @param restartStrategy          the classpath restart strategy
+	 * @param urls                     the URLs to watch
 	 */
 	public ClassPathFileSystemWatcher(FileSystemWatcherFactory fileSystemWatcherFactory,
-			ClassPathRestartStrategy restartStrategy, URL[] urls) {
+									  ClassPathRestartStrategy restartStrategy, URL[] urls) {
 		Assert.notNull(fileSystemWatcherFactory, "FileSystemWatcherFactory must not be null");
 		Assert.notNull(urls, "Urls must not be null");
 		this.fileSystemWatcher = fileSystemWatcherFactory.getFileSystemWatcher();
@@ -63,6 +66,7 @@ public class ClassPathFileSystemWatcher implements InitializingBean, DisposableB
 
 	/**
 	 * Set if the {@link FileSystemWatcher} should be stopped when a full restart occurs.
+	 *
 	 * @param stopWatcherOnRestart if the watcher should be stopped when a restart occurs
 	 */
 	public void setStopWatcherOnRestart(boolean stopWatcherOnRestart) {

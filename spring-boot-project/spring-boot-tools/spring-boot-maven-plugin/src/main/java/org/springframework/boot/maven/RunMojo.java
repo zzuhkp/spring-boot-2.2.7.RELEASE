@@ -52,12 +52,17 @@ public class RunMojo extends AbstractRunMojo {
 	private static final String RESTARTER_CLASS_LOCATION = "org/springframework/boot/devtools/restart/Restarter.class";
 
 	/**
+	 * 是否存在 devtools 依赖
+	 * <p>
 	 * Devtools presence flag to avoid checking for it several times per execution.
 	 */
 	private Boolean hasDevtools;
 
 	/**
+	 * 是否优化 JVM 启动
+	 * <p>
 	 * Whether the JVM's launch should be optimized.
+	 *
 	 * @since 2.2.0
 	 */
 	@Parameter(property = "spring-boot.run.optimizedLaunch", defaultValue = "true")
@@ -108,14 +113,22 @@ public class RunMojo extends AbstractRunMojo {
 		throw new MojoExecutionException("Application finished with exit code: " + exitCode);
 	}
 
+	/**
+	 * 开启新进程执行应用
+	 *
+	 * @param workingDirectory
+	 * @param args
+	 * @param environmentVariables
+	 * @return
+	 * @throws MojoExecutionException
+	 */
 	private int forkJvm(File workingDirectory, List<String> args, Map<String, String> environmentVariables)
 			throws MojoExecutionException {
 		try {
 			RunProcess runProcess = new RunProcess(workingDirectory, new JavaExecutable().toString());
 			Runtime.getRuntime().addShutdownHook(new Thread(new RunProcessKiller(runProcess)));
 			return runProcess.run(true, args, environmentVariables);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new MojoExecutionException("Could not exec java", ex);
 		}
 	}
@@ -126,6 +139,7 @@ public class RunMojo extends AbstractRunMojo {
 		Thread launchThread = new Thread(threadGroup, new LaunchRunner(startClassName, arguments), "main");
 		launchThread.setContextClassLoader(new URLClassLoader(getClassPathUrls()));
 		launchThread.start();
+		// 等待子线程执行结束
 		join(threadGroup);
 		threadGroup.rethrowUncaughtException();
 	}
@@ -141,8 +155,7 @@ public class RunMojo extends AbstractRunMojo {
 					try {
 						hasNonDaemonThreads = true;
 						thread.join();
-					}
-					catch (InterruptedException ex) {
+					} catch (InterruptedException ex) {
 						Thread.currentThread().interrupt();
 					}
 				}
@@ -151,6 +164,11 @@ public class RunMojo extends AbstractRunMojo {
 		while (hasNonDaemonThreads);
 	}
 
+	/**
+	 * 是否存在 devtools 依赖
+	 *
+	 * @return
+	 */
 	private boolean hasDevtools() {
 		if (this.hasDevtools == null) {
 			this.hasDevtools = checkForDevtools();
@@ -158,18 +176,25 @@ public class RunMojo extends AbstractRunMojo {
 		return this.hasDevtools;
 	}
 
+	/**
+	 * 类路径下是否包含 devtools
+	 *
+	 * @return
+	 */
 	private boolean checkForDevtools() {
 		try {
 			URL[] urls = getClassPathUrls();
 			try (URLClassLoader classLoader = new URLClassLoader(urls)) {
 				return (classLoader.findResource(RESTARTER_CLASS_LOCATION) != null);
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return false;
 		}
 	}
 
+	/**
+	 * 杀进程
+	 */
 	private static final class RunProcessKiller implements Runnable {
 
 		private final RunProcess runProcess;

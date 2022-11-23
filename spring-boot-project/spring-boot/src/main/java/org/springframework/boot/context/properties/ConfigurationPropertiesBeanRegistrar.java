@@ -29,6 +29,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * 将标注了 @ConfigurationProperties 注解的类注册为 bean
+ * <p>
  * Delegate used by {@link EnableConfigurationPropertiesRegistrar} and
  * {@link ConfigurationPropertiesScanRegistrar} to register a bean definition for a
  * {@link ConfigurationProperties @ConfigurationProperties} class.
@@ -81,7 +83,7 @@ final class ConfigurationPropertiesBeanRegistrar {
 	}
 
 	private void registerBeanDefinition(String beanName, Class<?> type,
-			MergedAnnotation<ConfigurationProperties> annotation) {
+										MergedAnnotation<ConfigurationProperties> annotation) {
 		Assert.state(annotation.isPresent(), () -> "No " + ConfigurationProperties.class.getSimpleName()
 				+ " annotation found on  '" + type.getName() + "'.");
 		this.registry.registerBeanDefinition(beanName, createBeanDefinition(beanName, type));

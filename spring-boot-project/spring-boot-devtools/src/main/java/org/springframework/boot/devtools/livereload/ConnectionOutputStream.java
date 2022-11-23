@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import org.springframework.util.FileCopyUtils;
 
 /**
+ * Socket 输出流
  * {@link OutputStream} for a server connection.
  *
  * @author Phillip Webb
@@ -39,6 +40,13 @@ class ConnectionOutputStream extends FilterOutputStream {
 		this.out.write(b, off, len);
 	}
 
+	/**
+	 * 写响应
+	 *
+	 * @param content
+	 * @param contentType
+	 * @throws IOException
+	 */
 	void writeHttp(InputStream content, String contentType) throws IOException {
 		byte[] bytes = FileCopyUtils.copyToByteArray(content);
 		writeHeaders("HTTP/1.1 200 OK", "Content-Type: " + contentType, "Content-Length: " + bytes.length,
@@ -47,6 +55,12 @@ class ConnectionOutputStream extends FilterOutputStream {
 		flush();
 	}
 
+	/**
+	 * 写响应头
+	 *
+	 * @param headers
+	 * @throws IOException
+	 */
 	void writeHeaders(String... headers) throws IOException {
 		StringBuilder response = new StringBuilder();
 		for (String header : headers) {

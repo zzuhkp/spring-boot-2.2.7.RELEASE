@@ -35,6 +35,7 @@ public interface Libraries {
 
 	/**
 	 * Iterate all relevant libraries.
+	 *
 	 * @param callback a callback for each relevant library.
 	 * @throws IOException if the operation fails
 	 */

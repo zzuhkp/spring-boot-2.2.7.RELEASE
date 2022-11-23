@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
- * tomcat 服务器
+ * 基于 Tomcat 的 WebServer
  * <p>
  * {@link WebServer} that can be used to control a Tomcat web server. Usually this class
  * should be created using the {@link TomcatReactiveWebServerFactory} of
@@ -148,6 +148,11 @@ public class TomcatWebServer implements WebServer {
 		}
 	}
 
+	/**
+	 * 初始化异常抛出
+	 *
+	 * @throws Exception
+	 */
 	private void rethrowDeferredStartupExceptions() throws Exception {
 		Container[] children = this.tomcat.getHost().findChildren();
 		for (Container container : children) {
@@ -171,6 +176,7 @@ public class TomcatWebServer implements WebServer {
 
 			@Override
 			public void run() {
+				// 等待
 				TomcatWebServer.this.tomcat.getServer().await();
 			}
 

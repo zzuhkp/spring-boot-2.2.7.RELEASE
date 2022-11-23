@@ -16,16 +16,8 @@
 
 package org.springframework.boot.autoconfigure;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -38,7 +30,11 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.*;
+
 /**
+ * 将标注或元标注 @EnableAutoConfiguration 注解的类所在包名作为 BasePackages 构造方法参数，并将 BasePackages 注册为 bean
+ * <p>
  * Class for storing auto-configuration packages for reference later (e.g. by JPA entity
  * scanner).
  *
@@ -95,7 +91,8 @@ public abstract class AutoConfigurationPackages {
 	 * configuration class or classes.
 	 *
 	 * @param registry     the bean definition registry
-	 * @param packageNames the package names to set
+	 * @param packageNames 标注或元标注 @EnableAutoConfiguration 注解的配置类所在包名
+	 *                     the package names to set
 	 */
 	public static void register(BeanDefinitionRegistry registry, String... packageNames) {
 		if (registry.containsBeanDefinition(BEAN)) {
@@ -134,6 +131,7 @@ public abstract class AutoConfigurationPackages {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+			// 处理 @EnableAutoConfiguration 标注的类的所在包名
 			register(registry, new PackageImport(metadata).getPackageName());
 		}
 

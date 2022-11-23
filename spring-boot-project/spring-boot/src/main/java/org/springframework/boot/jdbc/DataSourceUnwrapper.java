@@ -42,11 +42,14 @@ public final class DataSourceUnwrapper {
 	}
 
 	/**
+	 * 数据源解包
+	 * <p>
 	 * Return an object that implements the given {@code target} type, unwrapping delegate
 	 * or proxy if necessary.
+	 *
 	 * @param dataSource the datasource to handle
-	 * @param target the type that the result must implement
-	 * @param <T> the target type
+	 * @param target     the type that the result must implement
+	 * @param <T>        the target type
 	 * @return an object that implements the target type or {@code null}
 	 */
 	public static <T> T unwrap(DataSource dataSource, Class<T> target) {
@@ -77,8 +80,7 @@ public final class DataSourceUnwrapper {
 			if (wrapper.isWrapperFor(target)) {
 				return wrapper.unwrap(target);
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			// Continue
 		}
 		return null;

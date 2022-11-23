@@ -16,8 +16,6 @@
 
 package org.springframework.boot.autoconfigure.jdbc;
 
-import javax.sql.DataSource;
-
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -32,7 +30,11 @@ import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.jmx.support.JmxUtils;
 
+import javax.sql.DataSource;
+
 /**
+ * 通过 JNDI 查找注册 DataSource bean
+ * <p>
  * {@link EnableAutoConfiguration Auto-configuration} for a JNDI located
  * {@link DataSource}.
  *
@@ -41,8 +43,8 @@ import org.springframework.jmx.support.JmxUtils;
  * @since 1.2.0
  */
 @Configuration(proxyBeanMethods = false)
-@AutoConfigureBefore({ XADataSourceAutoConfiguration.class, DataSourceAutoConfiguration.class })
-@ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
+@AutoConfigureBefore({XADataSourceAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
 @ConditionalOnProperty(prefix = "spring.datasource", name = "jndi-name")
 @EnableConfigurationProperties(DataSourceProperties.class)
 public class JndiDataSourceAutoConfiguration {

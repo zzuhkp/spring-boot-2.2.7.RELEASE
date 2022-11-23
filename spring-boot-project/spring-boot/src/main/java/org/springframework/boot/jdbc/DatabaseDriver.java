@@ -262,6 +262,8 @@ public enum DatabaseDriver {
 	}
 
 	/**
+	 * 根据 URL 前缀判断驱动
+	 *
 	 * Find a {@link DatabaseDriver} for the given URL.
 	 * @param url the JDBC URL
 	 * @return the database driver or {@link #UNKNOWN} if not found

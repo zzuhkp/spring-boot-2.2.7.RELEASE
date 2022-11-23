@@ -39,11 +39,11 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
  * @since 1.4.0
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass({ DataSource.class, JdbcTemplate.class })
+@ConditionalOnClass({DataSource.class, JdbcTemplate.class})
 @ConditionalOnSingleCandidate(DataSource.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(JdbcProperties.class)
-@Import({ JdbcTemplateConfiguration.class, NamedParameterJdbcTemplateConfiguration.class })
+@Import({JdbcTemplateConfiguration.class, NamedParameterJdbcTemplateConfiguration.class})
 public class JdbcTemplateAutoConfiguration {
 
 }

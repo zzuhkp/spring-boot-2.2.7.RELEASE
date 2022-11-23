@@ -22,6 +22,8 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.artifact.filter.collection.ArtifactsFilter;
 
 /**
+ * include 过滤
+ * <p>
  * An {@link ArtifactsFilter} that filters out any artifact not matching an
  * {@link Include}.
  *

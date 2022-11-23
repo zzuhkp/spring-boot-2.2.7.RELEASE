@@ -45,6 +45,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.unit.DataSize;
 
 /**
+ * 基于 Jetty 的 WebServerFactory 自定义
+ *
  * Customization for Jetty-specific features common for both Servlet and Reactive servers.
  *
  * @author Brian Clozel

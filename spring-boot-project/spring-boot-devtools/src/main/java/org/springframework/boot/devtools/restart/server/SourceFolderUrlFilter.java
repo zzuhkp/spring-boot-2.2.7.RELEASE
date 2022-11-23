@@ -23,16 +23,21 @@ import java.net.URL;
  * classpath against source folders on a remote system.
  *
  * @author Phillip Webb
- * @since 1.3.0
  * @see DefaultSourceFolderUrlFilter
+ * @since 1.3.0
  */
 @FunctionalInterface
 public interface SourceFolderUrlFilter {
 
 	/**
+	 * 确定给定的目录是否匹配 URL
+	 * <p>
 	 * Determine if the specified URL matches a source folder.
-	 * @param sourceFolder the source folder
-	 * @param url the URL to check
+	 *
+	 * @param sourceFolder http 请求体中包含的目录
+	 *                     the source folder
+	 * @param url          类加载器对应类路径的 URL
+	 *                     the URL to check
 	 * @return {@code true} if the URL matches
 	 */
 	boolean isMatch(String sourceFolder, URL url);

@@ -39,6 +39,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * 用户目录下的文件作为属性源
+ * <p>
  * {@link EnvironmentPostProcessor} to add devtools properties from the user's home
  * folder.
  *
@@ -52,8 +54,8 @@ public class DevToolsHomePropertiesPostProcessor implements EnvironmentPostProce
 
 	private static final String LEGACY_FILE_NAME = ".spring-boot-devtools.properties";
 
-	private static final String[] FILE_NAMES = new String[] { "spring-boot-devtools.yml", "spring-boot-devtools.yaml",
-			"spring-boot-devtools.properties" };
+	private static final String[] FILE_NAMES = new String[]{"spring-boot-devtools.yml", "spring-boot-devtools.yaml",
+			"spring-boot-devtools.properties"};
 
 	private static final String CONFIG_PATH = "/.config/spring-boot/";
 
@@ -71,14 +73,22 @@ public class DevToolsHomePropertiesPostProcessor implements EnvironmentPostProce
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
 		if (DevToolsEnablementDeducer.shouldEnable(Thread.currentThread())) {
+			// 先获取用户目录下的 spring-boot-devtools.properties/yml/yaml 文件作为属性源
 			List<PropertySource<?>> propertySources = getPropertySources();
 			if (propertySources.isEmpty()) {
+				// 获取不到则获取用户目录下的 .spring-boot-devtools.properties 文件作为属性源
 				addPropertySource(propertySources, LEGACY_FILE_NAME, (file) -> "devtools-local");
 			}
+			// 添加 devtools 配置文件作为属性源
 			propertySources.forEach(environment.getPropertySources()::addFirst);
 		}
 	}
 
+	/**
+	 * 获取属性源
+	 *
+	 * @return
+	 */
 	private List<PropertySource<?>> getPropertySources() {
 		List<PropertySource<?>> propertySources = new ArrayList<>();
 		for (String fileName : FILE_NAMES) {
@@ -91,8 +101,16 @@ public class DevToolsHomePropertiesPostProcessor implements EnvironmentPostProce
 		return "devtools-local: [" + file.toURI() + "]";
 	}
 
+
+	/**
+	 * 添加属性源到列表
+	 *
+	 * @param propertySources
+	 * @param fileName
+	 * @param propertySourceNamer
+	 */
 	private void addPropertySource(List<PropertySource<?>> propertySources, String fileName,
-			Function<File, String> propertySourceNamer) {
+								   Function<File, String> propertySourceNamer) {
 		File home = getHomeFolder();
 		File file = (home != null) ? new File(home, fileName) : null;
 		FileSystemResource resource = (file != null) ? new FileSystemResource(file) : null;
@@ -101,8 +119,15 @@ public class DevToolsHomePropertiesPostProcessor implements EnvironmentPostProce
 		}
 	}
 
+	/**
+	 * 添加属性源到列表
+	 *
+	 * @param propertySources
+	 * @param resource
+	 * @param propertySourceNamer
+	 */
 	private void addPropertySource(List<PropertySource<?>> propertySources, FileSystemResource resource,
-			Function<File, String> propertySourceNamer) {
+								   Function<File, String> propertySourceNamer) {
 		try {
 			String name = propertySourceNamer.apply(resource.getFile());
 			for (PropertySourceLoader loader : PROPERTY_SOURCE_LOADERS) {
@@ -110,17 +135,28 @@ public class DevToolsHomePropertiesPostProcessor implements EnvironmentPostProce
 					propertySources.addAll(loader.load(name, resource));
 				}
 			}
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			throw new IllegalStateException("Unable to load " + resource.getFilename(), ex);
 		}
 	}
 
+	/**
+	 * 属性源加载器能否加载给定的配置文件
+	 *
+	 * @param loader
+	 * @param name
+	 * @return
+	 */
 	private boolean canLoadFileExtension(PropertySourceLoader loader, String name) {
 		return Arrays.stream(loader.getFileExtensions())
 				.anyMatch((fileExtension) -> StringUtils.endsWithIgnoreCase(name, fileExtension));
 	}
 
+	/**
+	 * 获取用户目录
+	 *
+	 * @return
+	 */
 	protected File getHomeFolder() {
 		String home = System.getProperty("user.home");
 		if (StringUtils.hasLength(home)) {

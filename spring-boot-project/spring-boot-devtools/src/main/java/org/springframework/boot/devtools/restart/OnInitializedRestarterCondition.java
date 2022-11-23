@@ -24,6 +24,8 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
+ * Restarter 是否已初始化
+ * <p>
  * {@link Condition} that checks that a {@link Restarter} is available and initialized.
  *
  * @author Phillip Webb
@@ -47,8 +49,7 @@ class OnInitializedRestarterCondition extends SpringBootCondition {
 	private Restarter getRestarter() {
 		try {
 			return Restarter.getInstance();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			return null;
 		}
 	}

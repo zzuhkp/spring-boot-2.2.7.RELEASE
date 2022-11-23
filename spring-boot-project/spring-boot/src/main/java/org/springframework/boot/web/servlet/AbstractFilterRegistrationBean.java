@@ -27,6 +27,8 @@ import javax.servlet.ServletContext;
 import java.util.*;
 
 /**
+ * Filter 注册
+ *
  * Abstract base {@link ServletContextInitializer} to register {@link Filter}s in a
  * Servlet 3.0+ container.
  *

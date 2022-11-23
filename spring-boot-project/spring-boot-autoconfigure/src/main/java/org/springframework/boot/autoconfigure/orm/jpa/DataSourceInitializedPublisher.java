@@ -93,7 +93,7 @@ class DataSourceInitializedPublisher implements BeanPostProcessor {
 	}
 
 	private void publishEventIfRequired(LocalContainerEntityManagerFactoryBean factoryBean,
-			EntityManagerFactory entityManagerFactory) {
+										EntityManagerFactory entityManagerFactory) {
 		DataSource dataSource = findDataSource(factoryBean, entityManagerFactory);
 		if (dataSource != null && isInitializingDatabase(dataSource)) {
 			this.applicationContext.publishEvent(new DataSourceSchemaCreatedEvent(dataSource));
@@ -101,7 +101,7 @@ class DataSourceInitializedPublisher implements BeanPostProcessor {
 	}
 
 	private DataSource findDataSource(LocalContainerEntityManagerFactoryBean factoryBean,
-			EntityManagerFactory entityManagerFactory) {
+									  EntityManagerFactory entityManagerFactory) {
 		Object dataSource = entityManagerFactory.getProperties().get("javax.persistence.nonJtaDataSource");
 		if (dataSource == null) {
 			dataSource = factoryBean.getPersistenceUnitInfo().getNonJtaDataSource();
@@ -131,7 +131,7 @@ class DataSourceInitializedPublisher implements BeanPostProcessor {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
-				BeanDefinitionRegistry registry) {
+											BeanDefinitionRegistry registry) {
 			if (!registry.containsBeanDefinition(BEAN_NAME)) {
 				GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
 				beanDefinition.setBeanClass(DataSourceInitializedPublisher.class);

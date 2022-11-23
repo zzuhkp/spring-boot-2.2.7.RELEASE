@@ -38,6 +38,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
 /**
+ * 默认的错误视图解析实现
+ *
  * Default {@link ErrorViewResolver} implementation that attempts to resolve error views
  * using well known conventions. Will search for templates and static assets under
  * {@code '/error'} using the {@link HttpStatus status code} and the

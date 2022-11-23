@@ -21,6 +21,8 @@ import javax.sql.XADataSource;
 import org.springframework.boot.jdbc.XADataSourceWrapper;
 
 /**
+ * Atomikos XADataSource 包装
+ * <p>
  * {@link XADataSourceWrapper} that uses an {@link AtomikosDataSourceBean} to wrap a
  * {@link XADataSource}.
  *

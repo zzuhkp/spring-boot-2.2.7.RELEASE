@@ -24,6 +24,8 @@ import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
 
 /**
+ * 过滤指定属性的 PropertySource
+ * <p>
  * Internal {@link PropertySource} implementation used by
  * {@link ConfigFileApplicationListener} to filter out properties for specific operations.
  *
@@ -47,7 +49,7 @@ class FilteredPropertySource extends PropertySource<PropertySource<?>> {
 	}
 
 	static void apply(ConfigurableEnvironment environment, String propertySourceName, Set<String> filteredProperties,
-			Consumer<PropertySource<?>> operation) {
+					  Consumer<PropertySource<?>> operation) {
 		MutablePropertySources propertySources = environment.getPropertySources();
 		PropertySource<?> original = propertySources.get(propertySourceName);
 		if (original == null) {
@@ -57,8 +59,7 @@ class FilteredPropertySource extends PropertySource<PropertySource<?>> {
 		propertySources.replace(propertySourceName, new FilteredPropertySource(original, filteredProperties));
 		try {
 			operation.accept(original);
-		}
-		finally {
+		} finally {
 			propertySources.replace(propertySourceName, original);
 		}
 	}
